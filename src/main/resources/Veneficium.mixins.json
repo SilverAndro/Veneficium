@@ -1,0 +1,15 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "net.vene.mixin",
+  "compatibilityLevel": "JAVA_8",
+  "mixins": [
+    "CollidableAccessorMixin",
+    "StringValueAccessorMixin"
+  ],
+  "client": [
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

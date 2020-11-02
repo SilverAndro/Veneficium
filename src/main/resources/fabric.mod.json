@@ -1,0 +1,45 @@
+{
+  "schemaVersion": 1,
+  "id": "veneficium",
+  "version": "${version}",
+  "name": "Veneficium",
+  "description": "A magic mod focused on customisation",
+  "authors": [
+    "TheoreticallyUseful"
+  ],
+  "contact": {},
+  "license": "MPL-2.0",
+  "icon": "assets/veneficium/icon.png",
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      {
+        "adapter": "kotlin",
+        "value": "net.vene.VeneMain"
+      }
+    ],
+    "client": [
+      {
+        "adapter": "kotlin",
+        "value": "net.vene.VeneMainClient"
+      }
+    ],
+    "cardinal-components-item": [
+      "net.vene.VeneCCAComponentRegistration"
+    ]
+  },
+  "mixins": [
+    "Veneficium.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": ">=0.9.3+build.207",
+    "fabric": "*",
+    "minecraft": ">=1.16.3",
+    "fabric-language-kotlin": ">=1.4.0"
+  },
+  "custom": {
+    "cardinal-components": [
+      "vene:spell_list"
+    ]
+  }
+}
