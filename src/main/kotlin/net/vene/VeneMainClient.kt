@@ -32,9 +32,13 @@ class VeneMainClient : ClientModInitializer {
             val isWorking = attachedData.readBoolean()
             packetContext.taskQueue.execute {
                 // Set the data on the client side
-                val blockEntity = packetContext.player.world.getBlockEntity(pos) as SCCSBlockEntity
-                blockEntity.heldItemStack = itemStack
-                blockEntity.isWorking = isWorking
+                try {
+                    val blockEntity = packetContext.player.world.getBlockEntity(pos) as SCCSBlockEntity
+                    blockEntity.heldItemStack = itemStack
+                    blockEntity.isWorking = isWorking
+                } catch(err: Throwable) {
+                    // prob a desync, should be fixed soon
+                }
             }
         }
     }

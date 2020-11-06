@@ -9,12 +9,16 @@ package net.vene.common.block
 import net.minecraft.block.BlockRenderType
 import net.minecraft.block.BlockState
 import net.minecraft.block.BlockWithEntity
+import net.minecraft.block.ShapeContext
 import net.minecraft.block.entity.BlockEntity
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.util.ActionResult
 import net.minecraft.util.Hand
 import net.minecraft.util.hit.BlockHitResult
 import net.minecraft.util.math.BlockPos
+import net.minecraft.util.math.Box
+import net.minecraft.util.shape.VoxelShape
+import net.minecraft.util.shape.VoxelShapes
 import net.minecraft.world.BlockView
 import net.minecraft.world.World
 import net.vene.common.block.entity.WandEditBlockEntity
@@ -38,5 +42,9 @@ class WandEditBlock(settings: Settings) : BlockWithEntity(settings) {
 
     override fun getRenderType(state: BlockState?): BlockRenderType? {
         return BlockRenderType.MODEL
+    }
+
+    override fun getOutlineShape(state: BlockState?, world: BlockView?, pos: BlockPos?, context: ShapeContext?): VoxelShape {
+        return VoxelShapes.cuboid(Box(0.05, 0.0, 0.05, 0.95, 0.8, 0.95))
     }
 }

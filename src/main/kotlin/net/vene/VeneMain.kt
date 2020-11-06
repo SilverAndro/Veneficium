@@ -18,6 +18,7 @@ import net.fabricmc.fabric.api.`object`.builder.v1.block.FabricBlockSettings
 import net.fabricmc.fabric.api.client.itemgroup.FabricItemGroupBuilder
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents
 import net.fabricmc.fabric.api.screenhandler.v1.ScreenHandlerRegistry
+import net.fabricmc.fabric.api.tool.attribute.v1.FabricToolTags
 import net.fabricmc.loader.api.FabricLoader
 import net.minecraft.block.Block
 import net.minecraft.block.Material
@@ -67,20 +68,30 @@ class VeneMain : ModInitializer {
 
         LOGGER.debug("Registering And Generating Items")
         StaticDataAdder.items()
+        // Dynamically create component items
+        // This is the most blessed code ive ever written
+
+        // Combine all lists of components into one iterable
         for (component in MATERIAL_COMPONENTS union MOVE_COMPONENTS union RESULT_COMPONENTS) {
+            // Create an item for the component
             val item = ComponentItem(Item.Settings().group(ITEM_GROUP_COMPONENTS).maxCount(1), component)
+            // Register the item
             Registry.register(
                     Registry.ITEM,
                     Identifier(MOD_ID, "${component.type.toString().toLowerCase()}/${component.name}"),
                     item
             )
 
+            // Put it into the big component list
             SPELL_COMPONENT_ITEMS[Identifier(MOD_ID, component.name)] = item
 
+            // Add translation
             lang.translate(
                     "item.vene.${component.type.toString().toLowerCase()}.${component.name}",
                     StringUtil.displayFromUnderscored(component.name)
             )
+
+            // Auto model so no json handling for new components
             RESOURCE_PACK.addModel(JModel.model("item/generated").textures(JTextures().layer0("vene:item/${component.type.toString().toLowerCase()}/${component.name}")), Identifier(MOD_ID, "item/${component.type.toString().toLowerCase()}/${component.name}"))
         }
 
@@ -103,16 +114,21 @@ class VeneMain : ModInitializer {
 
         LOGGER.debug("Adding files to RRP")
         RESOURCE_PACK.addLang(Identifier(MOD_ID, "en_us"), lang)
-        if (FabricLoader.getInstance().isDevelopmentEnvironment) {
-            RESOURCE_PACK.dump()
-        }
 
         LOGGER.debug("Adding recipes")
-        StaticDataAdder.recipes(SCCS_RECIPES)
+        StaticDataAdder.componentRecipes(SCCS_RECIPES)
+        StaticDataAdder.recipes(RESOURCE_PACK)
+
+        LOGGER.debug("Adding loot tables")
+        StaticDataAdder.lootTables(RESOURCE_PACK)
 
         LOGGER.debug("MaterialComponents contains ${MATERIAL_COMPONENTS.size} entries")
         LOGGER.debug("MoveComponents contains ${MOVE_COMPONENTS.size} entries")
         LOGGER.debug("ResultComponents contains ${RESULT_COMPONENTS.size} entries")
+
+        if (FabricLoader.getInstance().isDevelopmentEnvironment) {
+            RESOURCE_PACK.dump()
+        }
     }
 
     companion object {
@@ -156,8 +172,8 @@ class VeneMain : ModInitializer {
                         .nonOpaque()
                         .allowsSpawning { _, _, _, _ -> false }
         )
-        val WAND_EDIT_BLOCK = WandEditBlock(FabricBlockSettings.of(Material.METAL).nonOpaque())
-        val SCCS_BLOCK = SCCSBlock(FabricBlockSettings.of(Material.METAL))
+        val WAND_EDIT_BLOCK = WandEditBlock(FabricBlockSettings.of(Material.WOOD).nonOpaque().breakByTool(FabricToolTags.AXES).breakByHand(true).requiresTool().resistance(1.0f).hardness(1.0f).strength(1.0f))
+        val SCCS_BLOCK = SCCSBlock(FabricBlockSettings.of(Material.METAL).nonOpaque().breakByTool(FabricToolTags.PICKAXES, 1).breakByHand(false).requiresTool().resistance(2.0f).hardness(2.0f).strength(2.0f))
 
         // Block Entities
         var WAND_EDIT_BLOCK_ENTITY: BlockEntityType<WandEditBlockEntity> = Registry.register(Registry.BLOCK_ENTITY_TYPE, Identifier(MOD_ID, "wand_edit"), BlockEntityType.Builder.create(::WandEditBlockEntity, WAND_EDIT_BLOCK).build(null))
