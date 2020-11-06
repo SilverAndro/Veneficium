@@ -7,12 +7,16 @@
 package net.vene.init
 
 import net.devtech.arrp.api.RuntimeResourcePack
+import net.devtech.arrp.json.blockstate.JState.*
 import net.devtech.arrp.json.lang.JLang
 import net.devtech.arrp.json.loot.JLootTable.*
 import net.devtech.arrp.json.recipe.JIngredient.ingredient
+import net.devtech.arrp.json.recipe.JIngredients.ingredients
 import net.devtech.arrp.json.recipe.JKeys.keys
 import net.devtech.arrp.json.recipe.JPattern.pattern
+import net.devtech.arrp.json.recipe.JRecipe
 import net.devtech.arrp.json.recipe.JRecipe.shaped
+import net.devtech.arrp.json.recipe.JResult
 import net.devtech.arrp.json.recipe.JResult.item
 import net.minecraft.item.BlockItem
 import net.minecraft.item.Item
@@ -24,6 +28,7 @@ import net.vene.VeneMain.Companion.MOD_ID
 import net.vene.recipe.SCCSRecipe
 import net.vene.recipe.SCCSRecipeList
 
+
 // "Static" functions for init-ing data
 // Most usages are in VeneMain
 object StaticDataAdder {
@@ -31,6 +36,9 @@ object StaticDataAdder {
         lang.translate(
                 "item.vene.wand",
                 "Magic Wand"
+        ).translate(
+                "item.vene.magic_binding",
+                "Magic Binding"
         ).translate(
                 "itemGroup.vene.items",
                 "Veneficium Items"
@@ -52,6 +60,12 @@ object StaticDataAdder {
         )
     }
 
+    fun blockStates(pack: RuntimeResourcePack) {
+        pack.addBlockState(state(variant(model("vene:block/light"))), Identifier(MOD_ID, "light"))
+        pack.addBlockState(state(variant(model("vene:block/sccs"))), Identifier(MOD_ID, "sccs"))
+        pack.addBlockState(state(variant(model("vene:block/wand_edit"))), Identifier(MOD_ID, "wand_edit"))
+    }
+
     fun componentRecipes(recipes: SCCSRecipeList) {
         recipes.add(SCCSRecipe(
                 // Water
@@ -59,10 +73,10 @@ object StaticDataAdder {
                 mutableListOf(Items.WATER_BUCKET, Items.WATER_BUCKET, Items.WATER_BUCKET, Items.WATER_BUCKET),
                 VeneMain.SPELL_COMPONENT_ITEMS[Identifier(MOD_ID, "water")]!!
         )).add(SCCSRecipe(
-                // Fire
+                // Cobblestone
                 VeneMain.EMPTY_SPELL_COMPONENT,
-                mutableListOf(Items.FLINT_AND_STEEL, Items.LAVA_BUCKET, Items.FIRE_CHARGE, Items.BLAZE_ROD),
-                VeneMain.SPELL_COMPONENT_ITEMS[Identifier(MOD_ID, "fire")]!!
+                mutableListOf(Items.WATER_BUCKET, Items.LAVA_BUCKET, Items.WOODEN_PICKAXE, Items.CLOCK),
+                VeneMain.SPELL_COMPONENT_ITEMS[Identifier(MOD_ID, "cobblestone")]!!
         )).add(SCCSRecipe(
                 // Dirt
                 VeneMain.EMPTY_SPELL_COMPONENT,
@@ -73,11 +87,6 @@ object StaticDataAdder {
                 VeneMain.EMPTY_SPELL_COMPONENT,
                 mutableListOf(Items.GRAVEL, Items.GRAVEL, Items.GRAVEL, Items.GRAVEL),
                 VeneMain.SPELL_COMPONENT_ITEMS[Identifier(MOD_ID, "gravel")]!!
-        )).add(SCCSRecipe(
-                // Leaves
-                VeneMain.EMPTY_SPELL_COMPONENT,
-                mutableListOf(Items.OAK_LEAVES, Items.OAK_LEAVES, Items.OAK_LEAVES, Items.OAK_LEAVES),
-                VeneMain.SPELL_COMPONENT_ITEMS[Identifier(MOD_ID, "leaves")]!!
         )).add(SCCSRecipe(
                 // No Gravity
                 VeneMain.EMPTY_SPELL_COMPONENT,
@@ -142,7 +151,7 @@ object StaticDataAdder {
     }
 
     fun recipes(pack: RuntimeResourcePack) {
-        pack.addRecipe(Identifier(MOD_ID, "sccs"), shaped(
+        pack.addRecipe(Identifier(MOD_ID, "wand_edit"), shaped(
                 pattern(
                         " D ",
                         "POP",
@@ -161,7 +170,78 @@ object StaticDataAdder {
                                         .item(Items.OAK_PLANKS)
                         ),
                 item(VeneMain.WAND_EDIT_BLOCK.asItem())
-        ));
+        ))
+
+        pack.addRecipe(Identifier(MOD_ID, "sccs"), shaped(
+                pattern(
+                        "OOO",
+                        " Q ",
+                        "QQQ"
+                ),
+                keys()
+                        .key("O",
+                                ingredient()
+                                        .item(Items.OBSIDIAN)
+                        ).key("Q",
+                                ingredient()
+                                        .item(Items.QUARTZ_PILLAR)
+                        ),
+                item(VeneMain.SCCS_BLOCK.asItem())
+        ))
+
+        pack.addRecipe(Identifier(MOD_ID, "empty_component"), shaped(
+                pattern(
+                        "PPP",
+                        "PIP",
+                        "PPP"
+                ),
+                keys()
+                        .key("P",
+                                ingredient()
+                                        .item(Items.OAK_PLANKS)
+                        ).key("I",
+                                ingredient()
+                                        .item(Items.ITEM_FRAME)
+                        ),
+                item(VeneMain.EMPTY_SPELL_COMPONENT)
+        ))
+
+        pack.addRecipe(Identifier(MOD_ID, "wand"), shaped(
+                pattern(
+                        " BC",
+                        " PB",
+                        "P  "
+                ),
+                keys()
+                        .key("P",
+                                ingredient()
+                                        .item(Items.OAK_PLANKS)
+                        ).key("C",
+                                ingredient()
+                                        .item(Items.CRYING_OBSIDIAN)
+                        ).key("B",
+                                ingredient()
+                                        .item(VeneMain.MAGIC_BINDING)
+                        ),
+                item(VeneMain.WAND_ITEM)
+        ))
+
+        pack.addRecipe(Identifier(MOD_ID, "magic_binding"), JRecipe.shapeless(
+                ingredients()
+                        .add(
+                                ingredient()
+                                        .item(Items.MAGMA_CREAM)
+                        )
+                        .add(
+                                ingredient()
+                                        .item(Items.STRING)
+                        )
+                        .add(
+                                ingredient()
+                                        .item(Items.PHANTOM_MEMBRANE)
+                        ),
+                JResult.itemStack(VeneMain.MAGIC_BINDING, 1)
+        ))
     }
 
     fun lootTables(pack: RuntimeResourcePack) {

@@ -114,6 +114,7 @@ class VeneMain : ModInitializer {
 
         LOGGER.debug("Adding files to RRP")
         RESOURCE_PACK.addLang(Identifier(MOD_ID, "en_us"), lang)
+        StaticDataAdder.blockStates(RESOURCE_PACK)
 
         LOGGER.debug("Adding recipes")
         StaticDataAdder.componentRecipes(SCCS_RECIPES)

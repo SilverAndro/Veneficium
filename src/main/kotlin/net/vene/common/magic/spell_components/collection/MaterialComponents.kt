@@ -14,6 +14,5 @@ object MaterialComponents {
     val DIRT = MaterialComponent("dirt", Blocks.DIRT)
     val WATER = MaterialComponent("water", Blocks.WATER)
     val GRAVEL = MaterialComponent("gravel", Blocks.GRAVEL)
-    val FIRE = MaterialComponent("fire", Blocks.FIRE)
-    val LEAVES = MaterialComponent("leaves", Blocks.OAK_LEAVES)
+    val COBBLESTONE = MaterialComponent("cobblestone", Blocks.COBBLESTONE)
 }
