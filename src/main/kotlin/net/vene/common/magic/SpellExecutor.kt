@@ -54,9 +54,6 @@ class SpellExecutor(private val owner: PlayerEntity, private val world: ServerWo
         var speculative = VectorIterator(velocity, 0.01).iterator()
         var totalSteps = 0
 
-        var isInGround = false
-        var inGroundCount = 0
-
         // Check each block along the path
         val checked: MutableList<BlockPos> = mutableListOf()
         // While theres more steps and we haven't done 200 steps yet
@@ -70,15 +67,6 @@ class SpellExecutor(private val owner: PlayerEntity, private val world: ServerWo
                 display()
             }
 
-            if (isInGround) {
-                inGroundCount++
-            }
-
-            // If we are in the ground for more than 75 steps, start reducing the lifetime (quarter second per step in ground)
-            if (inGroundCount > 75) {
-                lifetime -= 5
-            }
-
             // If we haven't check this block yet
             if (!checked.contains(toBlockPos)) {
                 // Save that we checked it
@@ -88,7 +76,6 @@ class SpellExecutor(private val owner: PlayerEntity, private val world: ServerWo
                 val blockState = context.world.getBlockState(toBlockPos)
                 // We are in the ground
                 if (!blockState.isAir && (blockState.block as CollidableAccessor).collidable) {
-                    isInGround = true
 
                     if (lastChecked != null) {
                         // Save the direction we hit from and fire the hitGround event
@@ -105,8 +92,6 @@ class SpellExecutor(private val owner: PlayerEntity, private val world: ServerWo
                 } else {
                     // Save this as an air block
                     context.dataStorage["last_air_block"] = lastChecked ?: toBlockPos
-                    isInGround = false
-                    inGroundCount = 0
                 }
                 lastChecked = toBlockPos
             }
