@@ -106,11 +106,6 @@ class SpellExecutor(private val owner: PlayerEntity, private val world: ServerWo
         lifetime--
         if (lifetime <= 0 || queue.isEmpty()) {
             VeneMain.SPELLS_TO_BE_REMOVED.add(this)
-            if (queue.isEmpty()) {
-                VeneMain.LOGGER.info("Dead by empty queue")
-            } else {
-                VeneMain.LOGGER.info("Dead by lifetime")
-            }
         }
     }
 }
