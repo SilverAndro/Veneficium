@@ -32,7 +32,7 @@ repositories {
 
 // Licenser
 license {
-    header = rootProject.file('LICENSE_HEADER')
+    header = rootProject.file('LICENSE_FILE_HEADER')
     include '**/*.java'
     include '**/*.kt'
     style.java = 'BLOCK_COMMENT'
