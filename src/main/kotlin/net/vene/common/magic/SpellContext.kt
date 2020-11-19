@@ -15,7 +15,7 @@ import net.minecraft.util.math.Vec3d
 class SpellContext(val world: ServerWorld, caster: SpellCaster, val executor: SpellExecutor) {
     var targets: MutableList<SpellTarget> = mutableListOf()
 
-    val dataStorage: MutableMap<String, Any> = mutableMapOf()
+    var dataStorage: MutableMap<String, Any> = mutableMapOf()
 
     init {
         targets.add(SpellTarget(caster.entity.blockPos, caster.entity as LivingEntity))

@@ -2,56 +2,57 @@ package net.vene.common.magic.spell_components
 
 import net.vene.common.magic.event.EventListenerResult
 import net.vene.common.magic.handling.HandlerOperation
+import net.vene.common.magic.handling.SpellQueue
 import net.vene.common.magic.spell_components.types.ResultComponent
-import net.vene.common.util.LogicHelper
 import net.vene.common.util.LogicHelper.didFire
 import net.vene.common.util.LogicHelper.executeOnce
 import net.vene.common.util.LogicHelper.executeXTimes
 import net.vene.common.util.LogicHelper.fire
 import net.vene.common.util.LogicHelper.reset
 
-object ComponentFactory {
+object ComponentFactories {
     // Builds "Cast X Times" Components because their all basically the same
     fun castXTimesBuilder(times: Int): ResultComponent {
         return ResultComponent("cast_${times}_times") { context, modifiers, queue ->
-            val shouldCallOthersCounterKey = "cast_${times}_do_cast_counter"
-            val shouldCallOthersKey = "cast_${times}_do_cast"
-            val castRepeatedlyRegistered = "cast_${times}_registered"
-            val shouldUnregister = "cast_${times}_unregister"
+            val loadedCounter = "cast_${times}_do_cast_counter"
+            val doSaveState = "cast_${times}_has_saved"
 
-            executeOnce(context, castRepeatedlyRegistered) {
-                context.executor.events.physicsTick.register {
-                    if (executeXTimes(context, shouldCallOthersCounterKey, times)) {
-                        fire(context, shouldCallOthersKey)
-                    } else {
-                        reset(context, listOf(shouldCallOthersCounterKey, castRepeatedlyRegistered, shouldCallOthersKey))
-                        fire(context, shouldUnregister)
-                        return@register EventListenerResult.CONTINUE_REMOVE
-                    }
-                    return@register EventListenerResult.CONTINUE
+            val componentsSavedKey = "cast_${times}_components"
+            val datastorageKey = "cast_${times}_data"
+
+            executeOnce(context, doSaveState) {
+                // Save the states
+                context.dataStorage[componentsSavedKey] = queue.copy()
+                // haha yes epic serialization
+                // The reason for this is every time we read we unpack this once, so we nest it X times deep so on the Xth time reading it cleans itself up
+                //     and doesn't cause any ClassCastExceptions
+                for (i in 0 until times) {
+                    context.dataStorage[datastorageKey] = context.dataStorage.toMap()
                 }
             }
 
-            if (didFire(context, shouldUnregister)) {
-                queue.ignoreRemoveRequest = false
-                reset(context, listOf(shouldUnregister, shouldCallOthersCounterKey))
+            if (!executeXTimes(context, loadedCounter, times)) {
+                reset(context, listOf(loadedCounter, loadedCounter))
                 return@ResultComponent HandlerOperation.REMOVE_CONTINUE
             }
 
-            queue.ignoreRemoveRequest = true
-            return@ResultComponent if (didFire(context, shouldCallOthersKey)) {
-                HandlerOperation.STAY_CONTINUE
-            } else {
-                HandlerOperation.STAY_STOP
-            }
+            // Load the states
+            queue.acquireStateOfCopy(context.dataStorage[componentsSavedKey] as SpellQueue)
+
+            val executedCount = context.dataStorage[loadedCounter]
+            @Suppress("UNCHECKED_CAST")
+            context.dataStorage = context.dataStorage[datastorageKey] as MutableMap<String, Any>
+            // Reset this so we don't reset the amount of times we ran
+            context.dataStorage[loadedCounter] = executedCount as Any
+            return@ResultComponent HandlerOperation.STAY_CONTINUE
         }
     }
 
     fun waitXTicksBuilder(ticks: Int): ResultComponent {
         return ResultComponent("wait_${ticks / 20.0}_seconds") { context, modifiers, queue ->
             val counterKey = "wait_$ticks"
-            val shouldUnregister = "cast_${ticks}_unregister"
-            val isRegistered = "cast_${ticks}_registered"
+            val shouldUnregister = "wait_${ticks}_unregister"
+            val isRegistered = "wait_${ticks}_registered"
 
             executeOnce(context, isRegistered) {
                 context.executor.events.physicsTick.register {
@@ -69,7 +70,7 @@ object ComponentFactory {
                 return@ResultComponent HandlerOperation.REMOVE_CONTINUE
             }
 
-            HandlerOperation.STAY_STOP
+            HandlerOperation.FREEZE
         }
     }
 }

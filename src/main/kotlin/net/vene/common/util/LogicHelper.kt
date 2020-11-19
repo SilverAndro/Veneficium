@@ -24,6 +24,7 @@ object LogicHelper {
         if (!context.dataStorage.containsKey(key)) {
             context.dataStorage[key] = 0
         }
+
         return if ((context.dataStorage[key] as Int) < count) {
             context.dataStorage[key] = context.dataStorage[key] as Int + 1
             true
@@ -41,11 +42,7 @@ object LogicHelper {
     }
 
     fun reset(context: SpellContext, key: String) {
-        when (context.dataStorage[key]) {
-            is Boolean -> context.dataStorage[key] = false
-            is Int -> context.dataStorage[key] = 0
-            else -> VeneMain.LOGGER.error("Unable to reset object ${context.dataStorage[key]} with key $key")
-        }
+        context.dataStorage.remove(key)
     }
 
     fun reset(context: SpellContext, keys: List<String>) {

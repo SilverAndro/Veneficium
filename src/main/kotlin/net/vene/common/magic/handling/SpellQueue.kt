@@ -20,8 +20,6 @@ class SpellQueue {
     private var frozenContinue = 0
     private var tmpIndex = 0
 
-    var ignoreRemoveRequest = false
-
     fun run(context: SpellContext) {
         if (VeneConfig.SpellQueueTraceback) {
             devDebug("------ Queue Run ------")
@@ -68,15 +66,10 @@ class SpellQueue {
     fun handleOp(operation: HandlerOperation, magicEffect: MagicEffect): OpResult {
         when (operation) {
             HandlerOperation.REMOVE_CONTINUE -> {
-                if (!ignoreRemoveRequest) {
-                    componentList.remove(magicEffect)
-                    return OpResult(increment = false, stop = false)
-                }
-                return OpResult(increment = true, stop = false)
+                return OpResult(increment = false, stop = false)
             }
             HandlerOperation.REMOVE_STOP -> {
-                if (ignoreRemoveRequest)
-                    componentList.remove(magicEffect)
+                componentList.remove(magicEffect)
                 return OpResult(increment = false, stop = true)
             }
             HandlerOperation.STAY_CONTINUE -> {
@@ -88,13 +81,11 @@ class SpellQueue {
             HandlerOperation.MATERIAL_MOVE -> {
                 return if (magicEffect.type == ComponentType.MATERIAL) {
                     modifiers.add(magicEffect as MaterialComponent)
-                    if (!ignoreRemoveRequest)
-                        componentList.remove(magicEffect)
+                    componentList.remove(magicEffect)
                     OpResult(increment = false, stop = false)
                 } else {
                     // remove continue
-                    if (!ignoreRemoveRequest)
-                        componentList.remove(magicEffect)
+                    componentList.remove(magicEffect)
                     OpResult(increment = false, stop = false)
                 }
             }
@@ -117,7 +108,16 @@ class SpellQueue {
         val copy = SpellQueue()
         copy.componentList.addAll(componentList)
         copy.modifiers.addAll(modifiers)
+        copy.frozenContinue = frozenContinue
         return copy
+    }
+
+    fun acquireStateOfCopy(copy: SpellQueue) {
+        componentList.clear()
+        modifiers.clear()
+        componentList.addAll(copy.componentList)
+        modifiers.addAll(copy.modifiers)
+        frozenContinue = copy.frozenContinue
     }
 
     override fun toString(): String {

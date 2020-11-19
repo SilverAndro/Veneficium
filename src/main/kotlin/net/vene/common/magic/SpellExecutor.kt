@@ -35,9 +35,9 @@ class SpellExecutor(private val owner: PlayerEntity, private val world: ServerWo
     val events = EventInstance()
 
     fun tick() {
+        events.physicsTick.fire(context)
         queue.run(context)
         physics()
-        events.physicsTick.fire(context)
     }
 
     private fun display() {

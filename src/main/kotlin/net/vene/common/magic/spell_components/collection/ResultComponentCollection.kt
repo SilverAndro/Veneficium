@@ -18,9 +18,8 @@ import net.vene.VeneMain
 import net.vene.common.magic.SpellContext.SpellTarget
 import net.vene.common.magic.event.EventListenerResult
 import net.vene.common.magic.handling.HandlerOperation
-import net.vene.common.magic.spell_components.ComponentFactory
+import net.vene.common.magic.spell_components.ComponentFactories
 import net.vene.common.magic.spell_components.types.ResultComponent
-import net.vene.common.util.LogicHelper
 import net.vene.common.util.LogicHelper.didFire
 import net.vene.common.util.LogicHelper.executeOnce
 import net.vene.common.util.LogicHelper.fire
@@ -237,15 +236,15 @@ object ResultComponentCollection {
     This group is for meta components, components that change the execution of other components
 
     */
-    val CAST_2X = ComponentFactory.castXTimesBuilder(2)
-    val CAST_3X = ComponentFactory.castXTimesBuilder(3)
-    val CAST_5X = ComponentFactory.castXTimesBuilder(5)
-    val CAST_7X = ComponentFactory.castXTimesBuilder(7)
-    val CAST_10X = ComponentFactory.castXTimesBuilder(10)
+    val CAST_2X = ComponentFactories.castXTimesBuilder(2)
+    val CAST_3X = ComponentFactories.castXTimesBuilder(3)
+    val CAST_5X = ComponentFactories.castXTimesBuilder(5)
+    val CAST_7X = ComponentFactories.castXTimesBuilder(7)
+    val CAST_10X = ComponentFactories.castXTimesBuilder(10)
 
-    val WAIT_1 = ComponentFactory.waitXTicksBuilder(1)
-    val WAIT_3 = ComponentFactory.waitXTicksBuilder(3)
-    val WAIT_5 = ComponentFactory.waitXTicksBuilder(5)
-    val WAIT_10 = ComponentFactory.waitXTicksBuilder(10)
-    val WAIT_20 = ComponentFactory.waitXTicksBuilder(20)
+    val WAIT_1 = ComponentFactories.waitXTicksBuilder(1)
+    val WAIT_3 = ComponentFactories.waitXTicksBuilder(3)
+    val WAIT_5 = ComponentFactories.waitXTicksBuilder(5)
+    val WAIT_10 = ComponentFactories.waitXTicksBuilder(10)
+    val WAIT_20 = ComponentFactories.waitXTicksBuilder(20)
 }
