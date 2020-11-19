@@ -21,6 +21,10 @@ import net.vene.common.magic.handling.HandlerOperation
 import net.vene.common.magic.spell_components.ComponentFactory
 import net.vene.common.magic.spell_components.types.ResultComponent
 import net.vene.common.util.LogicHelper
+import net.vene.common.util.LogicHelper.didFire
+import net.vene.common.util.LogicHelper.executeOnce
+import net.vene.common.util.LogicHelper.fire
+import net.vene.common.util.LogicHelper.reset
 import net.vene.common.util.extension.blockpos
 import kotlin.random.Random
 
@@ -36,20 +40,20 @@ object ResultComponentCollection {
         val keyFired = "target_ground_fired"
         val keyRegistered = "target_ground_registered"
 
-        if (LogicHelper.executeOnce(context, keyRegistered)) {
+        executeOnce(context, keyRegistered) {
             context.executor.events.hitGround.register {
                 if (context.dataStorage["last_air_block"] is BlockPos) {
                     context.targets.add(SpellTarget(context.dataStorage["last_air_block"] as BlockPos, null))
                 } else {
                     context.targets.add(SpellTarget(context.executor.pos.blockpos(), null))
                 }
-                LogicHelper.fire(context, keyFired)
+                fire(context, keyFired)
                 EventListenerResult.CONTINUE_REMOVE
             }
         }
 
-        if (LogicHelper.didFire(context, keyFired)) {
-            LogicHelper.reset(context, listOf(keyFired, keyRegistered))
+        if (didFire(context, keyFired)) {
+            reset(context, listOf(keyFired, keyRegistered))
             HandlerOperation.REMOVE_CONTINUE
         } else {
             HandlerOperation.STAY_STOP
@@ -60,7 +64,7 @@ object ResultComponentCollection {
         val keyFired = "target_entity_fired"
         val keyRegistered = "entity_registered"
 
-        if (LogicHelper.executeOnce(context, keyRegistered)) {
+        executeOnce(context, keyRegistered) {
             context.executor.events.moveTick.register {
                 val colliding = it.world.getOtherEntities(null, VoxelShapes.cuboid(
                         it.executor.pos.x - 0.2,
@@ -74,14 +78,14 @@ object ResultComponentCollection {
                     EventListenerResult.STOP
                 } else {
                     it.targets.add(SpellTarget(it.executor.pos.blockpos(), colliding.first() as LivingEntity))
-                    LogicHelper.fire(context, keyFired)
+                    fire(context, keyFired)
                     EventListenerResult.CONTINUE_REMOVE
                 }
             }
         }
 
-        if (LogicHelper.didFire(context, keyFired)) {
-            LogicHelper.reset(context, listOf(keyFired, keyRegistered))
+        if (didFire(context, keyFired)) {
+            reset(context, listOf(keyFired, keyRegistered))
             HandlerOperation.REMOVE_CONTINUE
         } else {
             HandlerOperation.STAY_STOP
@@ -92,9 +96,9 @@ object ResultComponentCollection {
         val keyFired = "target_either"
         val keyRegistered = "either_registered"
 
-        if (LogicHelper.executeOnce(context, keyRegistered)) {
+        executeOnce(context, keyRegistered) {
             context.executor.events.hitGround.register {
-                if (LogicHelper.didFire(context, keyFired)) {
+                if (didFire(context, keyFired)) {
                     return@register EventListenerResult.CONTINUE_REMOVE
                 }
 
@@ -103,12 +107,12 @@ object ResultComponentCollection {
                 } else {
                     context.targets.add(SpellTarget(context.executor.pos.blockpos(), null))
                 }
-                LogicHelper.fire(context, keyFired)
+                fire(context, keyFired)
                 EventListenerResult.CONTINUE_REMOVE
             }
 
             context.executor.events.moveTick.register {
-                if (LogicHelper.didFire(context, keyFired)) {
+                if (didFire(context, keyFired)) {
                     return@register EventListenerResult.CONTINUE_REMOVE
                 }
 
@@ -125,7 +129,7 @@ object ResultComponentCollection {
                         EventListenerResult.STOP
                     } else {
                         it.targets.add(SpellTarget(it.executor.pos.blockpos(), colliding.first() as LivingEntity))
-                        LogicHelper.fire(context, keyFired)
+                        fire(context, keyFired)
                         EventListenerResult.CONTINUE_REMOVE
                     }
                 } else {
@@ -134,8 +138,8 @@ object ResultComponentCollection {
             }
         }
 
-        if (LogicHelper.didFire(context, keyFired)) {
-            LogicHelper.reset(context, listOf(keyFired, keyRegistered))
+        if (didFire(context, keyFired)) {
+            reset(context, listOf(keyFired, keyRegistered))
             HandlerOperation.REMOVE_CONTINUE
         } else {
             HandlerOperation.STAY_STOP
@@ -238,4 +242,10 @@ object ResultComponentCollection {
     val CAST_5X = ComponentFactory.castXTimesBuilder(5)
     val CAST_7X = ComponentFactory.castXTimesBuilder(7)
     val CAST_10X = ComponentFactory.castXTimesBuilder(10)
+
+    val WAIT_1 = ComponentFactory.waitXTicksBuilder(1)
+    val WAIT_3 = ComponentFactory.waitXTicksBuilder(3)
+    val WAIT_5 = ComponentFactory.waitXTicksBuilder(5)
+    val WAIT_10 = ComponentFactory.waitXTicksBuilder(10)
+    val WAIT_20 = ComponentFactory.waitXTicksBuilder(20)
 }

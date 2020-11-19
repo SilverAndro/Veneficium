@@ -17,6 +17,8 @@ import net.vene.common.util.extension.devDebug
 class SpellQueue {
     private val componentList: MutableList<MagicEffect> = mutableListOf()
     private val modifiers: MutableList<MaterialComponent> = mutableListOf()
+    private var frozenContinue = 0
+    private var tmpIndex = 0
 
     var ignoreRemoveRequest = false
 
@@ -25,7 +27,8 @@ class SpellQueue {
             devDebug("------ Queue Run ------")
         }
 
-        var tmpIndex = 0
+        tmpIndex = frozenContinue
+        frozenContinue = 0
         while (tmpIndex < componentList.size) {
             val magicEffect = componentList[tmpIndex]
             if (VeneConfig.SpellQueueTraceback) {
@@ -95,6 +98,10 @@ class SpellQueue {
                     OpResult(increment = false, stop = false)
                 }
             }
+            HandlerOperation.FREEZE -> {
+                frozenContinue = tmpIndex
+                return OpResult(increment = false, stop = true)
+            }
         }
     }
 
@@ -126,4 +133,5 @@ enum class HandlerOperation {
     STAY_CONTINUE,
     STAY_STOP,
     MATERIAL_MOVE,
+    FREEZE,
 }

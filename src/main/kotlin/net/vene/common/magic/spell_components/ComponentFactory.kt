@@ -4,6 +4,10 @@ import net.vene.common.magic.event.EventListenerResult
 import net.vene.common.magic.handling.HandlerOperation
 import net.vene.common.magic.spell_components.types.ResultComponent
 import net.vene.common.util.LogicHelper
+import net.vene.common.util.LogicHelper.didFire
+import net.vene.common.util.LogicHelper.executeOnce
+import net.vene.common.util.LogicHelper.executeXTimes
+import net.vene.common.util.LogicHelper.fire
 
 object ComponentFactory {
     // Builds "Cast X Times" Components because their all basically the same
@@ -14,31 +18,56 @@ object ComponentFactory {
             val castRepeatedlyRegistered = "cast_${times}_registered"
             val shouldUnregister = "cast_${times}_unregister"
 
-            if (LogicHelper.executeOnce(context, castRepeatedlyRegistered)) {
+            executeOnce(context, castRepeatedlyRegistered) {
                 context.executor.events.physicsTick.register {
-                    if (LogicHelper.executeXTimes(context, shouldCallOthersCounterKey, times)) {
-                        LogicHelper.fire(context, shouldCallOthersKey)
+                    if (executeXTimes(context, shouldCallOthersCounterKey, times)) {
+                        fire(context, shouldCallOthersKey)
                     } else {
                         LogicHelper.reset(context, listOf(shouldCallOthersCounterKey, castRepeatedlyRegistered, shouldCallOthersKey))
-                        LogicHelper.fire(context, shouldUnregister)
+                        fire(context, shouldUnregister)
                         return@register EventListenerResult.CONTINUE_REMOVE
                     }
                     return@register EventListenerResult.CONTINUE
                 }
             }
 
-            if (LogicHelper.didFire(context, shouldUnregister)) {
+            if (didFire(context, shouldUnregister)) {
                 queue.ignoreRemoveRequest = false
                 return@ResultComponent HandlerOperation.REMOVE_CONTINUE
             }
 
             queue.ignoreRemoveRequest = true
-            return@ResultComponent if (LogicHelper.didFire(context, shouldCallOthersKey)) {
-                LogicHelper.reset(context, shouldUnregister)
+            return@ResultComponent if (didFire(context, shouldCallOthersKey)) {
+                LogicHelper.reset(context, shouldCallOthersCounterKey)
                 HandlerOperation.STAY_CONTINUE
             } else {
                 HandlerOperation.STAY_STOP
             }
+        }
+    }
+
+    fun waitXTicksBuilder(ticks: Int): ResultComponent {
+        return ResultComponent("wait_${ticks / 20.0}_seconds") { context, modifiers, queue ->
+            val counterKey = "wait_$ticks"
+            val shouldUnregister = "cast_${ticks}_unregister"
+            val isRegistered = "cast_${ticks}_registered"
+
+            executeOnce(context, isRegistered) {
+                context.executor.events.physicsTick.register {
+                    if (executeXTimes(context, counterKey, ticks)) {
+                        return@register EventListenerResult.STOP
+                    } else {
+                        fire(context, shouldUnregister)
+                        return@register EventListenerResult.CONTINUE_REMOVE
+                    }
+                }
+            }
+
+            if (didFire(context, shouldUnregister)) {
+                return@ResultComponent HandlerOperation.REMOVE_CONTINUE
+            }
+
+            HandlerOperation.STAY_STOP
         }
     }
 }

@@ -44,13 +44,19 @@ object LogicHelper {
         when (context.dataStorage[key]) {
             is Boolean -> context.dataStorage[key] = false
             is Int -> context.dataStorage[key] = 0
-            else -> VeneMain.LOGGER.warn("Unable to reset object ${context.dataStorage[key]} with key $key")
+            else -> VeneMain.LOGGER.error("Unable to reset object ${context.dataStorage[key]} with key $key")
         }
     }
 
     fun reset(context: SpellContext, keys: List<String>) {
         for (key in keys) {
             reset(context, key)
+        }
+    }
+
+    fun executeOnce(context: SpellContext, key: String, method: ()->Unit) {
+        if (executeOnce(context, key)) {
+            method()
         }
     }
 }
