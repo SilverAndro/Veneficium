@@ -28,6 +28,7 @@ class SpellExecutor(private val owner: PlayerEntity, private val world: ServerWo
         SpellContext(world, SpellContext.SpellCaster(owner, owner.pos, velocity), this)
     }
 
+    var age = 0
     var lifetime = 20 * 7
     var gravity = 0.03
 
@@ -69,7 +70,7 @@ class SpellExecutor(private val owner: PlayerEntity, private val world: ServerWo
 
             // If we haven't check this block yet
             if (!checked.contains(toBlockPos)) {
-                events.physicsTick.fire(context)
+                events.moveTick.fire(context)
 
                 // Save that we checked it
                 checked.add(toBlockPos)
@@ -106,6 +107,7 @@ class SpellExecutor(private val owner: PlayerEntity, private val world: ServerWo
         }
 
         lifetime--
+        age++
         if (lifetime <= 0 || queue.isEmpty()) {
             VeneMain.SPELLS_TO_BE_REMOVED.add(this)
         }

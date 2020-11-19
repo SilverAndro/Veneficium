@@ -21,6 +21,9 @@ object LogicHelper {
     }
 
     fun executeXTimes(context: SpellContext, key: String, count: Int): Boolean {
+        if (!context.dataStorage.containsKey(key)) {
+            context.dataStorage[key] = 0
+        }
         return if ((context.dataStorage[key] as Int) < count) {
             context.dataStorage[key] = context.dataStorage[key] as Int + 1
             true

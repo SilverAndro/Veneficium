@@ -18,13 +18,20 @@ import net.vene.VeneMain
 import net.vene.common.magic.SpellContext.SpellTarget
 import net.vene.common.magic.event.EventListenerResult
 import net.vene.common.magic.handling.HandlerOperation
-import net.vene.common.magic.spell_components.ResultComponent
+import net.vene.common.magic.spell_components.ComponentFactory
+import net.vene.common.magic.spell_components.types.ResultComponent
 import net.vene.common.util.LogicHelper
 import net.vene.common.util.extension.blockpos
 import kotlin.random.Random
 
 @Suppress("unused")
 object ResultComponentCollection {
+    /*
+
+    TARGETING
+    This group is for components that add targets
+
+    */
     val TARGET_GROUND_HIT = ResultComponent("target_ground") { context, modifiers, queue ->
         val keyFired = "target_ground_fired"
         val keyRegistered = "target_ground_registered"
@@ -49,6 +56,103 @@ object ResultComponentCollection {
         }
     }
 
+    val TARGET_ENTITY = ResultComponent("target_entity") { context, modifiers, queue ->
+        val keyFired = "target_entity_fired"
+        val keyRegistered = "entity_registered"
+
+        if (LogicHelper.executeOnce(context, keyRegistered)) {
+            context.executor.events.moveTick.register {
+                val colliding = it.world.getOtherEntities(null, VoxelShapes.cuboid(
+                        it.executor.pos.x - 0.2,
+                        it.executor.pos.y - 0.2,
+                        it.executor.pos.z - 0.2,
+                        it.executor.pos.x + 0.2,
+                        it.executor.pos.y + 0.2,
+                        it.executor.pos.z + 0.2,
+                ).boundingBox)
+                return@register if (colliding.isEmpty() || colliding.first() !is LivingEntity) {
+                    EventListenerResult.STOP
+                } else {
+                    it.targets.add(SpellTarget(it.executor.pos.blockpos(), colliding.first() as LivingEntity))
+                    LogicHelper.fire(context, keyFired)
+                    EventListenerResult.CONTINUE_REMOVE
+                }
+            }
+        }
+
+        if (LogicHelper.didFire(context, keyFired)) {
+            LogicHelper.reset(context, listOf(keyFired, keyRegistered))
+            HandlerOperation.REMOVE_CONTINUE
+        } else {
+            HandlerOperation.STAY_STOP
+        }
+    }
+
+    val TARGET_ENTITY_OR_GROUND = ResultComponent("target_entity_or_ground") { context, modifiers, queue ->
+        val keyFired = "target_either"
+        val keyRegistered = "either_registered"
+
+        if (LogicHelper.executeOnce(context, keyRegistered)) {
+            context.executor.events.hitGround.register {
+                if (LogicHelper.didFire(context, keyFired)) {
+                    return@register EventListenerResult.CONTINUE_REMOVE
+                }
+
+                if (context.dataStorage["last_air_block"] is BlockPos) {
+                    context.targets.add(SpellTarget(context.dataStorage["last_air_block"] as BlockPos, null))
+                } else {
+                    context.targets.add(SpellTarget(context.executor.pos.blockpos(), null))
+                }
+                LogicHelper.fire(context, keyFired)
+                EventListenerResult.CONTINUE_REMOVE
+            }
+
+            context.executor.events.moveTick.register {
+                if (LogicHelper.didFire(context, keyFired)) {
+                    return@register EventListenerResult.CONTINUE_REMOVE
+                }
+
+                if (context.executor.age > 3) {
+                    val colliding = it.world.getOtherEntities(null, VoxelShapes.cuboid(
+                            it.executor.pos.x - 0.2,
+                            it.executor.pos.y - 0.2,
+                            it.executor.pos.z - 0.2,
+                            it.executor.pos.x + 0.2,
+                            it.executor.pos.y + 0.2,
+                            it.executor.pos.z + 0.2,
+                    ).boundingBox)
+                    return@register if (colliding.isEmpty() || colliding.first() !is LivingEntity) {
+                        EventListenerResult.STOP
+                    } else {
+                        it.targets.add(SpellTarget(it.executor.pos.blockpos(), colliding.first() as LivingEntity))
+                        LogicHelper.fire(context, keyFired)
+                        EventListenerResult.CONTINUE_REMOVE
+                    }
+                } else {
+                    EventListenerResult.STOP
+                }
+            }
+        }
+
+        if (LogicHelper.didFire(context, keyFired)) {
+            LogicHelper.reset(context, listOf(keyFired, keyRegistered))
+            HandlerOperation.REMOVE_CONTINUE
+        } else {
+            HandlerOperation.STAY_STOP
+        }
+    }
+
+    val TARGET_CURRENT = ResultComponent("target_current") { context, modifiers, queue ->
+        context.targets.add(SpellTarget(context.executor.pos.blockpos(), null))
+        HandlerOperation.REMOVE_CONTINUE
+    }
+
+    /*
+
+    EFFECTS
+    This group is for components that have some effect on the world
+
+    */
     val EXPLODE = ResultComponent("explode") { context, modifiers, queue ->
         val spellTarget = context.targets.last()
         val explosion = context.world.createExplosion(null, spellTarget.pos.x + 0.5, spellTarget.pos.y + 0.5, spellTarget.pos.z + 0.5, 1.6F, false, Explosion.DestructionType.DESTROY)
@@ -92,38 +196,6 @@ object ResultComponentCollection {
         HandlerOperation.REMOVE_CONTINUE
     }
 
-    val TARGET_ENTITY = ResultComponent("target_entity") { context, modifiers, queue ->
-        val keyFired = "target_entity_fired"
-        val keyRegistered = "entity_registered"
-
-        if (LogicHelper.executeOnce(context, keyRegistered)) {
-            context.executor.events.moveTick.register {
-                val colliding = it.world.getOtherEntities(null, VoxelShapes.cuboid(
-                        it.executor.pos.x - 0.5,
-                        it.executor.pos.y - 0.5,
-                        it.executor.pos.z - 0.5,
-                        it.executor.pos.x + 0.5,
-                        it.executor.pos.y + 0.5,
-                        it.executor.pos.z + 0.5,
-                ).boundingBox)
-                return@register if (colliding.isEmpty() || colliding.first() !is LivingEntity) {
-                    EventListenerResult.STOP
-                } else {
-                    it.targets.add(SpellTarget(it.executor.pos.blockpos(), colliding.first() as LivingEntity))
-                    LogicHelper.fire(context, keyFired)
-                    EventListenerResult.CONTINUE_REMOVE
-                }
-            }
-        }
-
-        if (LogicHelper.didFire(context, keyFired)) {
-            LogicHelper.reset(context, listOf(keyFired, keyRegistered))
-            HandlerOperation.REMOVE_CONTINUE
-        } else {
-            HandlerOperation.STAY_STOP
-        }
-    }
-
     val CREATE_MATERIAL = ResultComponent("create_material") { context, modifiers, queue ->
         val spellTarget = context.targets.last()
         if (modifiers.lastOrNull() != null) {
@@ -155,53 +227,15 @@ object ResultComponentCollection {
         HandlerOperation.REMOVE_CONTINUE
     }
 
-    val TARGET_ENTITY_OR_GROUND = ResultComponent("target_entity_or_ground") { context, modifiers, queue ->
-        val keyFired = "target_either"
-        val keyRegistered = "either_registered"
+    /*
 
-        if (LogicHelper.executeOnce(context, keyRegistered)) {
-            context.executor.events.hitGround.register {
-                if (LogicHelper.didFire(context, keyFired)) {
-                    return@register EventListenerResult.CONTINUE_REMOVE
-                }
+    META
+    This group is for meta components, components that change the execution of other components
 
-                if (context.dataStorage["last_air_block"] is BlockPos) {
-                    context.targets.add(SpellTarget(context.dataStorage["last_air_block"] as BlockPos, null))
-                } else {
-                    context.targets.add(SpellTarget(context.executor.pos.blockpos(), null))
-                }
-                LogicHelper.fire(context, keyFired)
-                EventListenerResult.CONTINUE_REMOVE
-            }
-
-            context.executor.events.moveTick.register {
-                if (LogicHelper.didFire(context, keyFired)) {
-                    return@register EventListenerResult.CONTINUE_REMOVE
-                }
-                
-                val colliding = it.world.getOtherEntities(null, VoxelShapes.cuboid(
-                        it.executor.pos.x - 0.5,
-                        it.executor.pos.y - 0.5,
-                        it.executor.pos.z - 0.5,
-                        it.executor.pos.x + 0.5,
-                        it.executor.pos.y + 0.5,
-                        it.executor.pos.z + 0.5,
-                ).boundingBox)
-                return@register if (colliding.isEmpty() || colliding.first() !is LivingEntity) {
-                    EventListenerResult.STOP
-                } else {
-                    it.targets.add(SpellTarget(it.executor.pos.blockpos(), colliding.first() as LivingEntity))
-                    LogicHelper.fire(context, keyFired)
-                    EventListenerResult.CONTINUE_REMOVE
-                }
-            }
-        }
-
-        if (LogicHelper.didFire(context, keyFired)) {
-            LogicHelper.reset(context, listOf(keyFired, keyRegistered))
-            HandlerOperation.REMOVE_CONTINUE
-        } else {
-            HandlerOperation.STAY_STOP
-        }
-    }
+    */
+    val CAST_2X = ComponentFactory.castXTimesBuilder(2)
+    val CAST_3X = ComponentFactory.castXTimesBuilder(3)
+    val CAST_5X = ComponentFactory.castXTimesBuilder(5)
+    val CAST_7X = ComponentFactory.castXTimesBuilder(7)
+    val CAST_10X = ComponentFactory.castXTimesBuilder(10)
 }

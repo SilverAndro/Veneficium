@@ -37,9 +37,9 @@ import net.vene.common.block.entity.WandEditBlockEntity
 import net.vene.common.item.ComponentItem
 import net.vene.common.item.WandItem
 import net.vene.common.magic.SpellExecutor
-import net.vene.common.magic.spell_components.MaterialComponent
-import net.vene.common.magic.spell_components.MoveComponent
-import net.vene.common.magic.spell_components.ResultComponent
+import net.vene.common.magic.spell_components.types.MaterialComponent
+import net.vene.common.magic.spell_components.types.MoveComponent
+import net.vene.common.magic.spell_components.types.ResultComponent
 import net.vene.common.magic.spell_components.collection.MaterialComponentCollection
 import net.vene.common.magic.spell_components.collection.MoveComponentCollection
 import net.vene.common.magic.spell_components.collection.ResultComponentCollection

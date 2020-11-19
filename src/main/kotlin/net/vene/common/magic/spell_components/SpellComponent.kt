@@ -9,8 +9,10 @@ package net.vene.common.magic.spell_components
 import net.vene.common.magic.SpellContext
 import net.vene.common.magic.handling.HandlerOperation
 import net.vene.common.magic.handling.SpellQueue
+import net.vene.common.magic.spell_components.types.ComponentType
+import net.vene.common.magic.spell_components.types.MaterialComponent
 
-typealias SpellRunnable = (SpellContext, MutableList<MaterialComponent>, SpellQueue) -> HandlerOperation
+typealias SpellRunnable = (SpellContext, modifiers: MutableList<MaterialComponent>, SpellQueue) -> HandlerOperation
 
 abstract class MagicEffect(open val name: String, private val spellMethod: SpellRunnable) {
     abstract val type: ComponentType

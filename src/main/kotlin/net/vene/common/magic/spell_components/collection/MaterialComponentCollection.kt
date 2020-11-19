@@ -7,7 +7,7 @@
 package net.vene.common.magic.spell_components.collection
 
 import net.minecraft.block.Blocks
-import net.vene.common.magic.spell_components.MaterialComponent
+import net.vene.common.magic.spell_components.types.MaterialComponent
 
 @Suppress("unused")
 object MaterialComponentCollection {

@@ -7,7 +7,7 @@
 package net.vene.common.magic.spell_components.collection
 
 import net.minecraft.util.math.Direction
-import net.vene.common.magic.spell_components.MoveComponent
+import net.vene.common.magic.spell_components.types.MoveComponent
 import net.vene.common.magic.event.EventListenerResult
 import net.vene.common.magic.handling.HandlerOperation
 import net.vene.common.util.LogicHelper
