@@ -10,5 +10,4 @@ class EventInstance {
     val moveTick = SpellEvent()
     val physicsTick = SpellEvent()
     val hitGround = SpellEvent()
-    val inGround = SpellEvent()
 }

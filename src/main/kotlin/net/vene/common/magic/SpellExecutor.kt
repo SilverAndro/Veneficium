@@ -36,7 +36,7 @@ class SpellExecutor(private val owner: PlayerEntity, private val world: ServerWo
     fun tick() {
         queue.run(context)
         physics()
-        events.moveTick.fire(context)
+        events.physicsTick.fire(context)
     }
 
     private fun display() {
@@ -69,6 +69,8 @@ class SpellExecutor(private val owner: PlayerEntity, private val world: ServerWo
 
             // If we haven't check this block yet
             if (!checked.contains(toBlockPos)) {
+                events.physicsTick.fire(context)
+
                 // Save that we checked it
                 checked.add(toBlockPos)
 
