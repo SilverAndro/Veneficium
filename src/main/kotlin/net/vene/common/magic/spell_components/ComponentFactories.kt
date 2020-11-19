@@ -8,6 +8,7 @@ import net.vene.common.util.LogicHelper.didFire
 import net.vene.common.util.LogicHelper.executeOnce
 import net.vene.common.util.LogicHelper.executeXTimes
 import net.vene.common.util.LogicHelper.fire
+import net.vene.common.util.LogicHelper.reset
 
 object ComponentFactory {
     // Builds "Cast X Times" Components because their all basically the same
@@ -23,7 +24,7 @@ object ComponentFactory {
                     if (executeXTimes(context, shouldCallOthersCounterKey, times)) {
                         fire(context, shouldCallOthersKey)
                     } else {
-                        LogicHelper.reset(context, listOf(shouldCallOthersCounterKey, castRepeatedlyRegistered, shouldCallOthersKey))
+                        reset(context, listOf(shouldCallOthersCounterKey, castRepeatedlyRegistered, shouldCallOthersKey))
                         fire(context, shouldUnregister)
                         return@register EventListenerResult.CONTINUE_REMOVE
                     }
@@ -33,12 +34,12 @@ object ComponentFactory {
 
             if (didFire(context, shouldUnregister)) {
                 queue.ignoreRemoveRequest = false
+                reset(context, listOf(shouldUnregister, shouldCallOthersCounterKey))
                 return@ResultComponent HandlerOperation.REMOVE_CONTINUE
             }
 
             queue.ignoreRemoveRequest = true
             return@ResultComponent if (didFire(context, shouldCallOthersKey)) {
-                LogicHelper.reset(context, shouldCallOthersCounterKey)
                 HandlerOperation.STAY_CONTINUE
             } else {
                 HandlerOperation.STAY_STOP
@@ -64,6 +65,7 @@ object ComponentFactory {
             }
 
             if (didFire(context, shouldUnregister)) {
+                reset(context, shouldUnregister)
                 return@ResultComponent HandlerOperation.REMOVE_CONTINUE
             }
 
