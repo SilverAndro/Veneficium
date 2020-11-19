@@ -12,6 +12,7 @@ import net.vene.common.magic.SpellContext
 import net.vene.common.magic.spell_components.ComponentType
 import net.vene.common.magic.spell_components.MagicEffect
 import net.vene.common.magic.spell_components.MaterialComponent
+import net.vene.common.util.extension.devDebug
 
 class SpellQueue {
     private val componentList: MutableList<MagicEffect> = mutableListOf()
@@ -21,7 +22,7 @@ class SpellQueue {
 
     fun run(context: SpellContext) {
         if (VeneConfig.SpellQueueTraceback) {
-            VeneMain.LOGGER.debug("------ Queue Run ------")
+            devDebug("------ Queue Run ------")
         }
 
         var tmpIndex = 0
@@ -29,7 +30,7 @@ class SpellQueue {
 
             val magicEffect = componentList[tmpIndex]
             if (VeneConfig.SpellQueueTraceback) {
-                VeneMain.LOGGER.debug("Executing component $magicEffect")
+                devDebug("Executing component $magicEffect")
             }
 
             val operation: HandlerOperation
@@ -46,7 +47,7 @@ class SpellQueue {
                 continue
             }
             if (VeneConfig.SpellQueueTraceback) {
-                VeneMain.LOGGER.debug("Returned Operation is $operation")
+                devDebug("Returned Operation is $operation")
             }
 
             val result = handleOp(operation, magicEffect)

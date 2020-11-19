@@ -10,7 +10,7 @@ import net.minecraft.block.Blocks
 import net.vene.common.magic.spell_components.MaterialComponent
 
 @Suppress("unused")
-object MaterialComponents {
+object MaterialComponentCollection {
     val DIRT = MaterialComponent("dirt", Blocks.DIRT)
     val WATER = MaterialComponent("water", Blocks.WATER)
     val GRAVEL = MaterialComponent("gravel", Blocks.GRAVEL)

@@ -12,34 +12,19 @@ import net.minecraft.nbt.CompoundTag
 import net.minecraft.nbt.ListTag
 import net.minecraft.nbt.StringTag
 import net.vene.VeneMain
-import net.vene.access.StringValueAccessor
 import net.vene.common.magic.spell_components.MagicEffect
+import net.vene.mixin.StringValueAccessorMixin
 
 class WandSpellsComponent : ComponentV3 {
     private var spells: MutableList<MagicEffect> = mutableListOf()
 
     override fun readFromNbt(tag: CompoundTag) {
         // Iterates over all component lists in order
-        // TODO: Replace with "union" keyword to compress
         next@ for (saved_component in tag.getList("spells", 8)) {
             saved_component as StringTag
 
-            val componentName = (saved_component as StringValueAccessor).value
-            for (possible_component in VeneMain.RESULT_COMPONENTS) {
-                if (possible_component.name == componentName) {
-                    spells.add(possible_component)
-                    continue@next
-                }
-            }
-
-            for (possible_component in VeneMain.MOVE_COMPONENTS) {
-                if (possible_component.name == componentName) {
-                    spells.add(possible_component)
-                    continue@next
-                }
-            }
-
-            for (possible_component in VeneMain.MATERIAL_COMPONENTS) {
+            val componentName = (saved_component as StringValueAccessorMixin).value
+            for (possible_component in VeneMain.RESULT_COMPONENTS union VeneMain.MOVE_COMPONENTS union VeneMain.MATERIAL_COMPONENTS) {
                 if (possible_component.name == componentName) {
                     spells.add(possible_component)
                     continue@next

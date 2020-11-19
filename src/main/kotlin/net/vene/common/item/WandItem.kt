@@ -22,8 +22,8 @@ import net.vene.VeneMain
 import net.vene.cca_component.WandSpellsComponent
 import net.vene.common.magic.SpellExecutor
 import net.vene.common.magic.handling.SpellQueue
-import net.vene.common.magic.util.StringUtil
-import net.vene.common.magic.util.math.MathUtil
+import net.vene.common.util.StringUtil
+import net.vene.common.util.math.MathUtil
 
 class WandItem(settings: Settings) : Item(settings) {
     override fun getRarity(stack: ItemStack?): Rarity {

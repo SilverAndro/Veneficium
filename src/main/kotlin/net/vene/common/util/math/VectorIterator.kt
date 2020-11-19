@@ -4,7 +4,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-package net.vene.common.magic.util.math
+package net.vene.common.util.math
 
 import net.minecraft.util.math.Vec3d
 

@@ -40,11 +40,12 @@ import net.vene.common.magic.SpellExecutor
 import net.vene.common.magic.spell_components.MaterialComponent
 import net.vene.common.magic.spell_components.MoveComponent
 import net.vene.common.magic.spell_components.ResultComponent
-import net.vene.common.magic.spell_components.collection.MaterialComponents
-import net.vene.common.magic.spell_components.collection.MoveComponents
-import net.vene.common.magic.spell_components.collection.ResultComponents
-import net.vene.common.magic.util.StringUtil
+import net.vene.common.magic.spell_components.collection.MaterialComponentCollection
+import net.vene.common.magic.spell_components.collection.MoveComponentCollection
+import net.vene.common.magic.spell_components.collection.ResultComponentCollection
+import net.vene.common.util.StringUtil
 import net.vene.common.screen.WandEditScreenHandler
+import net.vene.common.util.extension.devDebug
 import net.vene.init.StaticDataAdder
 import net.vene.recipe.SCCSRecipeList
 import org.apache.logging.log4j.LogManager
@@ -58,15 +59,15 @@ class VeneMain : ModInitializer {
 
         // Forcibly loads the component lists
         // Try to remove in future
-        MaterialComponents
-        MoveComponents
-        ResultComponents
+        MaterialComponentCollection
+        MoveComponentCollection
+        ResultComponentCollection
 
-        LOGGER.debug("Registering RRP")
+        devDebug("Registering RRP")
         val lang = lang()
         RRPCallback.EVENT.register(RRPCallback { a: MutableList<ResourcePack> -> a.add(RESOURCE_PACK) })
 
-        LOGGER.debug("Registering And Generating Items")
+        devDebug("Registering and Generating Items")
         StaticDataAdder.items()
         // Dynamically create component items
         // This is the most blessed code ive ever written
@@ -95,10 +96,10 @@ class VeneMain : ModInitializer {
             RESOURCE_PACK.addModel(JModel.model("item/generated").textures(JTextures().layer0("vene:item/${component.type.toString().toLowerCase()}/${component.name}")), Identifier(MOD_ID, "item/${component.type.toString().toLowerCase()}/${component.name}"))
         }
 
-        LOGGER.debug("Registering Blocks")
+        devDebug("Registering Blocks")
         StaticDataAdder.blocks()
 
-        LOGGER.debug("Registering event listeners")
+        devDebug("Registering event listeners")
         ServerTickEvents.END_SERVER_TICK.register(ServerTickEvents.EndTick {
             for (executor in ACTIVE_SPELLS) {
                 executor.tick()
@@ -109,23 +110,23 @@ class VeneMain : ModInitializer {
             SPELLS_TO_BE_REMOVED.clear()
         })
 
-        LOGGER.debug("Adding Extra lang entries to lang")
+        devDebug("Adding Extra lang entries to lang")
         StaticDataAdder.lang(lang)
 
-        LOGGER.debug("Adding files to RRP")
+        devDebug("Adding files to RRP")
         RESOURCE_PACK.addLang(Identifier(MOD_ID, "en_us"), lang)
         StaticDataAdder.blockStates(RESOURCE_PACK)
 
-        LOGGER.debug("Adding recipes")
+        devDebug("Adding recipes")
         StaticDataAdder.componentRecipes(SCCS_RECIPES)
         StaticDataAdder.recipes(RESOURCE_PACK)
 
-        LOGGER.debug("Adding loot tables")
+        devDebug("Adding loot tables")
         StaticDataAdder.lootTables(RESOURCE_PACK)
 
-        LOGGER.debug("MaterialComponents contains ${MATERIAL_COMPONENTS.size} entries")
-        LOGGER.debug("MoveComponents contains ${MOVE_COMPONENTS.size} entries")
-        LOGGER.debug("ResultComponents contains ${RESULT_COMPONENTS.size} entries")
+        devDebug("MaterialComponentCollection contains ${MATERIAL_COMPONENTS.size} entries")
+        devDebug("MoveComponentCollection contains ${MOVE_COMPONENTS.size} entries")
+        devDebug("ResultComponentCollection contains ${RESULT_COMPONENTS.size} entries")
 
         if (FabricLoader.getInstance().isDevelopmentEnvironment) {
             RESOURCE_PACK.dump()

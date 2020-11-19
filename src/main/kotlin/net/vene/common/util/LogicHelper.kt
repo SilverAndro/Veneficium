@@ -4,7 +4,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-package net.vene.common.magic.util
+package net.vene.common.util
 
 import net.vene.VeneMain
 import net.vene.common.magic.SpellContext

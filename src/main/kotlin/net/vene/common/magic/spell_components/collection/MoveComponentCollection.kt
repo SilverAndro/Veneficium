@@ -10,10 +10,10 @@ import net.minecraft.util.math.Direction
 import net.vene.common.magic.spell_components.MoveComponent
 import net.vene.common.magic.event.EventListenerResult
 import net.vene.common.magic.handling.HandlerOperation
-import net.vene.common.magic.util.LogicHelper
+import net.vene.common.util.LogicHelper
 
 @Suppress("unused")
-object MoveComponents {
+object MoveComponentCollection {
     val NO_GRAV = MoveComponent("no_gravity") { context, modifiers, queue ->
         context.executor.gravity = 0.0
         HandlerOperation.REMOVE_CONTINUE

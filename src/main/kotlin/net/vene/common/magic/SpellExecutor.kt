@@ -14,11 +14,11 @@ import net.minecraft.server.world.ServerWorld
 import net.minecraft.util.math.BlockPos
 import net.minecraft.util.math.Vec3d
 import net.vene.VeneMain
-import net.vene.access.CollidableAccessor
 import net.vene.common.magic.event.EventInstance
 import net.vene.common.magic.handling.SpellQueue
-import net.vene.common.magic.util.math.MathUtil
-import net.vene.common.magic.util.math.VectorIterator
+import net.vene.common.util.math.MathUtil
+import net.vene.common.util.math.VectorIterator
+import net.vene.mixin.CollidableAccessorMixin
 import kotlin.random.Random
 
 // This is basically a projectile but implemented as only math and particles because the entity system pains me
@@ -36,7 +36,7 @@ class SpellExecutor(private val owner: PlayerEntity, private val world: ServerWo
     fun tick() {
         queue.run(context)
         physics()
-        events.tick.fire(context)
+        events.moveTick.fire(context)
     }
 
     private fun display() {
@@ -75,7 +75,7 @@ class SpellExecutor(private val owner: PlayerEntity, private val world: ServerWo
                 // Check the block
                 val blockState = context.world.getBlockState(toBlockPos)
                 // We are in the ground
-                if (!blockState.isAir && (blockState.block as CollidableAccessor).collidable) {
+                if (!blockState.isAir && (blockState.block as CollidableAccessorMixin).collidable) {
 
                     if (lastChecked != null) {
                         // Save the direction we hit from and fire the hitGround event
