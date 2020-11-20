@@ -20,8 +20,8 @@ import net.minecraft.util.math.Vec3d
 import net.minecraft.world.World
 import net.vene.VeneMain
 import net.vene.cca_component.WandSpellsComponent
-import net.vene.common.magic.SpellExecutor
-import net.vene.common.magic.handling.SpellQueue
+import net.vene.magic.SpellExecutor
+import net.vene.magic.handling.SpellQueue
 import net.vene.common.util.StringUtil
 import net.vene.common.util.math.MathUtil
 

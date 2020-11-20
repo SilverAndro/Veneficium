@@ -4,10 +4,10 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-package net.vene.common.magic.event
+package net.vene.magic.event
 
 import net.vene.VeneMain
-import net.vene.common.magic.SpellContext
+import net.vene.magic.SpellContext
 
 class SpellEvent {
 

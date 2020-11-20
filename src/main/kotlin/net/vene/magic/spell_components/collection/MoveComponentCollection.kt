@@ -4,12 +4,12 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-package net.vene.common.magic.spell_components.collection
+package net.vene.magic.spell_components.collection
 
 import net.minecraft.util.math.Direction
-import net.vene.common.magic.spell_components.types.MoveComponent
-import net.vene.common.magic.event.EventListenerResult
-import net.vene.common.magic.handling.HandlerOperation
+import net.vene.magic.spell_components.types.MoveComponent
+import net.vene.magic.event.EventListenerResult
+import net.vene.magic.handling.HandlerOperation
 import net.vene.common.util.LogicHelper
 
 @Suppress("unused")

@@ -4,7 +4,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-package net.vene.common.magic.spell_components.types
+package net.vene.magic.spell_components.types
 
 enum class ComponentType {
     MOVE,

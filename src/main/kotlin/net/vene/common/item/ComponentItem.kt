@@ -7,7 +7,7 @@
 package net.vene.common.item
 
 import net.minecraft.item.Item
-import net.vene.common.magic.spell_components.MagicEffect
+import net.vene.magic.spell_components.MagicEffect
 
 // Only for differentiation and storing effects with items
 class ComponentItem(settings: Settings, val effect: MagicEffect) : Item(settings)

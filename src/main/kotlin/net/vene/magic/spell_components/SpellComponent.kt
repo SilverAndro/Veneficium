@@ -4,13 +4,13 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-package net.vene.common.magic.spell_components
+package net.vene.magic.spell_components
 
-import net.vene.common.magic.SpellContext
-import net.vene.common.magic.handling.HandlerOperation
-import net.vene.common.magic.handling.SpellQueue
-import net.vene.common.magic.spell_components.types.ComponentType
-import net.vene.common.magic.spell_components.types.MaterialComponent
+import net.vene.magic.SpellContext
+import net.vene.magic.handling.HandlerOperation
+import net.vene.magic.handling.SpellQueue
+import net.vene.magic.spell_components.types.ComponentType
+import net.vene.magic.spell_components.types.MaterialComponent
 
 typealias SpellRunnable = (SpellContext, modifiers: MutableList<MaterialComponent>, SpellQueue) -> HandlerOperation
 

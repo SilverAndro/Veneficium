@@ -12,7 +12,7 @@ import net.minecraft.nbt.CompoundTag
 import net.minecraft.nbt.ListTag
 import net.minecraft.nbt.StringTag
 import net.vene.VeneMain
-import net.vene.common.magic.spell_components.MagicEffect
+import net.vene.magic.spell_components.MagicEffect
 import net.vene.mixin.StringValueAccessorMixin
 
 class WandSpellsComponent : ComponentV3 {

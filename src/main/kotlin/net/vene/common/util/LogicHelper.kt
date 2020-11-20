@@ -6,8 +6,7 @@
 
 package net.vene.common.util
 
-import net.vene.VeneMain
-import net.vene.common.magic.SpellContext
+import net.vene.magic.SpellContext
 
 @Suppress("MemberVisibilityCanBePrivate")
 object LogicHelper {

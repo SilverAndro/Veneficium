@@ -4,10 +4,10 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-package net.vene.common.magic.spell_components.collection
+package net.vene.magic.spell_components.collection
 
 import net.minecraft.block.Blocks
-import net.vene.common.magic.spell_components.types.MaterialComponent
+import net.vene.magic.spell_components.types.MaterialComponent
 
 @Suppress("unused")
 object MaterialComponentCollection {

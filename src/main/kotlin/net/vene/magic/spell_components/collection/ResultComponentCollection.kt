@@ -4,7 +4,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-package net.vene.common.magic.spell_components.collection
+package net.vene.magic.spell_components.collection
 
 import net.minecraft.block.Blocks
 import net.minecraft.entity.LivingEntity
@@ -15,11 +15,11 @@ import net.minecraft.util.math.Vec3d
 import net.minecraft.util.shape.VoxelShapes
 import net.minecraft.world.explosion.Explosion
 import net.vene.VeneMain
-import net.vene.common.magic.SpellContext.SpellTarget
-import net.vene.common.magic.event.EventListenerResult
-import net.vene.common.magic.handling.HandlerOperation
-import net.vene.common.magic.spell_components.ComponentFactories
-import net.vene.common.magic.spell_components.types.ResultComponent
+import net.vene.magic.SpellContext.SpellTarget
+import net.vene.magic.event.EventListenerResult
+import net.vene.magic.handling.HandlerOperation
+import net.vene.magic.spell_components.ComponentFactories
+import net.vene.magic.spell_components.types.ResultComponent
 import net.vene.common.util.LogicHelper.didFire
 import net.vene.common.util.LogicHelper.executeOnce
 import net.vene.common.util.LogicHelper.fire

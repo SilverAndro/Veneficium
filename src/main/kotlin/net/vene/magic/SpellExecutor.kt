@@ -6,7 +6,7 @@
 
 @file:Suppress("MemberVisibilityCanBePrivate")
 
-package net.vene.common.magic
+package net.vene.magic
 
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.particle.ParticleTypes
@@ -14,8 +14,8 @@ import net.minecraft.server.world.ServerWorld
 import net.minecraft.util.math.BlockPos
 import net.minecraft.util.math.Vec3d
 import net.vene.VeneMain
-import net.vene.common.magic.event.EventInstance
-import net.vene.common.magic.handling.SpellQueue
+import net.vene.magic.event.EventInstance
+import net.vene.magic.handling.SpellQueue
 import net.vene.common.util.math.MathUtil
 import net.vene.common.util.math.VectorIterator
 import net.vene.mixin.CollidableAccessorMixin

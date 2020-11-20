@@ -4,14 +4,14 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-package net.vene.common.magic.handling
+package net.vene.magic.handling
 
 import net.vene.VeneConfig
 import net.vene.VeneMain
-import net.vene.common.magic.SpellContext
-import net.vene.common.magic.spell_components.types.ComponentType
-import net.vene.common.magic.spell_components.MagicEffect
-import net.vene.common.magic.spell_components.types.MaterialComponent
+import net.vene.magic.SpellContext
+import net.vene.magic.spell_components.types.ComponentType
+import net.vene.magic.spell_components.MagicEffect
+import net.vene.magic.spell_components.types.MaterialComponent
 import net.vene.common.util.extension.devDebug
 
 class SpellQueue {

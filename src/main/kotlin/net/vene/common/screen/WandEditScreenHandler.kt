@@ -18,7 +18,7 @@ import net.vene.cca_component.WandSpellsComponent
 import net.vene.common.inventory.WandEditInventory
 import net.vene.common.item.ComponentItem
 import net.vene.common.item.WandItem
-import net.vene.common.magic.spell_components.MagicEffect
+import net.vene.magic.spell_components.MagicEffect
 import net.vene.common.screen.slot.ComponentOnlySlot
 import net.vene.common.screen.slot.WandOnlySlot
 

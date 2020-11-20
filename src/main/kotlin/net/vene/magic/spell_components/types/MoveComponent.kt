@@ -4,11 +4,11 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-package net.vene.common.magic.spell_components.types
+package net.vene.magic.spell_components.types
 
 import net.vene.VeneMain
-import net.vene.common.magic.spell_components.MagicEffect
-import net.vene.common.magic.spell_components.SpellRunnable
+import net.vene.magic.spell_components.MagicEffect
+import net.vene.magic.spell_components.SpellRunnable
 
 class MoveComponent(override val name: String, spellMethod: SpellRunnable) : MagicEffect(name, spellMethod) {
     override val type: ComponentType = ComponentType.MOVE

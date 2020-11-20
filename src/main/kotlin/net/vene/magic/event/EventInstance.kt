@@ -4,11 +4,10 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-package net.vene.common.magic.event
+package net.vene.magic.event
 
-enum class EventListenerResult {
-    CONTINUE,
-    STOP,
-    CONTINUE_REMOVE,
-    STOP_REMOVE
+class EventInstance {
+    val moveTick = SpellEvent()
+    val physicsTick = SpellEvent()
+    val hitGround = SpellEvent()
 }

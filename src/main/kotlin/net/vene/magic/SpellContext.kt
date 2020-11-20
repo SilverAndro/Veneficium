@@ -4,7 +4,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-package net.vene.common.magic
+package net.vene.magic
 
 import net.minecraft.entity.Entity
 import net.minecraft.entity.LivingEntity
