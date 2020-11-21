@@ -8,6 +8,6 @@ package net.vene.magic.event
 
 class EventInstance {
     val moveTick = SpellEvent()
-    val physicsTick = SpellEvent()
+    val gameTick = SpellEvent()
     val hitGround = SpellEvent()
 }

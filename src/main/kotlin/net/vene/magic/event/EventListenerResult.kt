@@ -7,8 +7,8 @@
 package net.vene.magic.event
 
 enum class EventListenerResult {
-    CONTINUE,
-    STOP,
-    CONTINUE_REMOVE,
-    STOP_REMOVE
+    STAY_CONTINUE,
+    STAY_STOP,
+    REMOVE_CONTINUE,
+    REMOVE_STOP
 }

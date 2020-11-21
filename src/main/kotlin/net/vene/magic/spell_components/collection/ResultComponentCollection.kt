@@ -47,7 +47,7 @@ object ResultComponentCollection {
                     context.targets.add(SpellTarget(context.executor.pos.blockpos(), null))
                 }
                 fire(context, keyFired)
-                EventListenerResult.CONTINUE_REMOVE
+                EventListenerResult.REMOVE_CONTINUE
             }
         }
 
@@ -74,11 +74,11 @@ object ResultComponentCollection {
                         it.executor.pos.z + 0.2,
                 ).boundingBox)
                 return@register if (colliding.isEmpty() || colliding.first() !is LivingEntity) {
-                    EventListenerResult.STOP
+                    EventListenerResult.STAY_STOP
                 } else {
                     it.targets.add(SpellTarget(it.executor.pos.blockpos(), colliding.first() as LivingEntity))
                     fire(context, keyFired)
-                    EventListenerResult.CONTINUE_REMOVE
+                    EventListenerResult.REMOVE_CONTINUE
                 }
             }
         }
@@ -98,7 +98,7 @@ object ResultComponentCollection {
         executeOnce(context, keyRegistered) {
             context.executor.events.hitGround.register {
                 if (didFire(context, keyFired)) {
-                    return@register EventListenerResult.CONTINUE_REMOVE
+                    return@register EventListenerResult.REMOVE_CONTINUE
                 }
 
                 if (context.dataStorage["last_air_block"] is BlockPos) {
@@ -107,12 +107,12 @@ object ResultComponentCollection {
                     context.targets.add(SpellTarget(context.executor.pos.blockpos(), null))
                 }
                 fire(context, keyFired)
-                EventListenerResult.CONTINUE_REMOVE
+                EventListenerResult.REMOVE_CONTINUE
             }
 
             context.executor.events.moveTick.register {
                 if (didFire(context, keyFired)) {
-                    return@register EventListenerResult.CONTINUE_REMOVE
+                    return@register EventListenerResult.REMOVE_CONTINUE
                 }
 
                 if (context.executor.age > 3) {
@@ -125,14 +125,14 @@ object ResultComponentCollection {
                             it.executor.pos.z + 0.2,
                     ).boundingBox)
                     return@register if (colliding.isEmpty() || colliding.first() !is LivingEntity) {
-                        EventListenerResult.STOP
+                        EventListenerResult.STAY_STOP
                     } else {
                         it.targets.add(SpellTarget(it.executor.pos.blockpos(), colliding.first() as LivingEntity))
                         fire(context, keyFired)
-                        EventListenerResult.CONTINUE_REMOVE
+                        EventListenerResult.REMOVE_CONTINUE
                     }
                 } else {
-                    EventListenerResult.STOP
+                    EventListenerResult.STAY_STOP
                 }
             }
         }

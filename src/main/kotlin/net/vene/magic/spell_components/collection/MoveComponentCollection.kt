@@ -51,7 +51,7 @@ object MoveComponentCollection {
                 }.multiply(0.95)
 
                 LogicHelper.fire(context, keyFired)
-                EventListenerResult.CONTINUE_REMOVE
+                EventListenerResult.REMOVE_CONTINUE
             }
         }
 
@@ -63,9 +63,37 @@ object MoveComponentCollection {
         }
     }
 
-    val SLOW = MoveComponent("slow_down") { context, modifiers, queue ->
+    val SLOW_DOWN = MoveComponent("slow_down") { context, modifiers, queue ->
         context.executor.velocity = context.executor.velocity.multiply(0.5)
         context.executor.gravity *= 0.5
         HandlerOperation.REMOVE_CONTINUE
+    }
+
+    val SPEED_UP = MoveComponent("speed_up") { context, modifiers, queue ->
+        context.executor.velocity = context.executor.velocity.multiply(2.0)
+        context.executor.gravity *= 2
+        HandlerOperation.REMOVE_CONTINUE
+    }
+
+    val ACCELERATE = MoveComponent("accelerate") { context, modifiers, queue ->
+        val executeCount = "accelerate_execute_count"
+        val shouldUnregister = "accelerate_unregister"
+
+        context.executor.events.gameTick.register {
+            if (LogicHelper.executeXTimes(context, executeCount, 20)) {
+                context.executor.velocity = context.executor.velocity.multiply(1.1)
+                context.executor.gravity *= 1.1
+                return@register EventListenerResult.STAY_CONTINUE
+            }
+            LogicHelper.fire(context, shouldUnregister)
+            EventListenerResult.REMOVE_CONTINUE
+        }
+
+        if (LogicHelper.didFire(context, shouldUnregister)) {
+            LogicHelper.reset(context, listOf(executeCount, shouldUnregister))
+            return@MoveComponent HandlerOperation.REMOVE_CONTINUE
+        }
+
+        HandlerOperation.STAY_CONTINUE
     }
 }

@@ -61,12 +61,12 @@ object ComponentFactories {
             val isRegistered = "wait_${ticks}_registered"
 
             executeOnce(context, isRegistered) {
-                context.executor.events.physicsTick.register {
+                context.executor.events.gameTick.register {
                     if (executeXTimes(context, counterKey, ticks)) {
-                        return@register EventListenerResult.STOP
+                        return@register EventListenerResult.STAY_STOP
                     } else {
                         fire(context, shouldUnregister)
-                        return@register EventListenerResult.CONTINUE_REMOVE
+                        return@register EventListenerResult.REMOVE_CONTINUE
                     }
                 }
             }

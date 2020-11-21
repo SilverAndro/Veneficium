@@ -21,12 +21,12 @@ class SpellEvent {
                 val listener = listeners[tmpIndex]
                 // Run listener and get the result
                 when (listener(context)) {
-                    EventListenerResult.CONTINUE -> {
+                    EventListenerResult.STAY_CONTINUE -> {
                         tmpIndex++
                     }
-                    EventListenerResult.STOP -> break
-                    EventListenerResult.CONTINUE_REMOVE -> listeners.remove(listener)
-                    EventListenerResult.STOP_REMOVE -> {
+                    EventListenerResult.STAY_STOP -> break
+                    EventListenerResult.REMOVE_CONTINUE -> listeners.remove(listener)
+                    EventListenerResult.REMOVE_STOP -> {
                         toBeRemoved.add(listener)
                         break
                     }
