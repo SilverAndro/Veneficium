@@ -62,4 +62,10 @@ object MoveComponentCollection {
             HandlerOperation.STAY_STOP
         }
     }
+
+    val SLOW = MoveComponent("slow_down") { context, modifiers, queue ->
+        context.executor.velocity = context.executor.velocity.multiply(0.5)
+        context.executor.gravity *= 0.5
+        HandlerOperation.REMOVE_CONTINUE
+    }
 }

@@ -66,6 +66,7 @@ class SpellQueue {
     fun handleOp(operation: HandlerOperation, magicEffect: MagicEffect): OpResult {
         when (operation) {
             HandlerOperation.REMOVE_CONTINUE -> {
+                componentList.remove(magicEffect)
                 return OpResult(increment = false, stop = false)
             }
             HandlerOperation.REMOVE_STOP -> {
