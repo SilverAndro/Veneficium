@@ -48,7 +48,7 @@ object MoveComponentCollection {
                     Direction.DOWN, Direction.UP -> context.executor.velocity.multiply(1.0, -1.0, 1.0)
                     Direction.NORTH, Direction.SOUTH -> context.executor.velocity.multiply(1.0, 1.0, -1.0)
                     Direction.WEST, Direction.EAST -> context.executor.velocity.multiply(-1.0, 1.0, 1.0)
-                }.multiply(0.95)
+                }.multiply(0.9)
 
                 LogicHelper.fire(context, keyFired)
                 EventListenerResult.REMOVE_CONTINUE

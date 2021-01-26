@@ -11,10 +11,10 @@ object StringUtil {
     fun displayFromUnderscored(input: String): String {
         val split = input.split("_")
 
-        val builder = StringBuilder()
-        for (i in split.indices) {
-            builder.append(split[i].capitalize() + " ")
-        }
-        return builder.trim().toString()
+        return buildString {
+            for (i in split.indices) {
+                append(split[i].capitalize() + " ")
+            }
+        }.trim()
     }
 }

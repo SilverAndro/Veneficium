@@ -12,7 +12,7 @@ import net.minecraft.server.world.ServerWorld
 import net.minecraft.util.math.BlockPos
 import net.minecraft.util.math.Vec3d
 
-class SpellContext(val world: ServerWorld, caster: SpellCaster, val executor: SpellExecutor) {
+class SpellContext(val world: ServerWorld, val caster: SpellCaster, val executor: SpellExecutor) {
     var targets: MutableList<SpellTarget> = mutableListOf()
 
     var dataStorage: MutableMap<String, Any> = mutableMapOf()

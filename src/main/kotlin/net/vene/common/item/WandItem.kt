@@ -47,7 +47,7 @@ class WandItem(settings: Settings) : Item(settings) {
             // Create an executor
             val executor = SpellExecutor(user, world, Vec3d(user.x, user.eyeY, user.z), velocity, queue.copy())
             // Cooldown
-            user.itemCooldownManager[this] = 20
+            user.itemCooldownManager[this] = 40
             // Add it to active executors
             VeneMain.ACTIVE_SPELLS.add(executor)
         }

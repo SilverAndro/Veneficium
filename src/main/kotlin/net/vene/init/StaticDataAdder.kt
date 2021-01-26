@@ -113,10 +113,44 @@ object StaticDataAdder {
                 mutableListOf(Items.SLIME_BALL, Items.SLIME_BALL, Items.SLIME_BALL, Items.SLIME_BALL),
                 VeneMain.SPELL_COMPONENT_ITEMS[Identifier(MOD_ID, "bounce")]!!
         )).add(SCCSRecipe(
+                // Slow Down
+                VeneMain.EMPTY_SPELL_COMPONENT,
+                mutableListOf(Items.COBWEB, Items.SOUL_SAND, Items.HONEY_BLOCK, Items.SCUTE),
+                VeneMain.SPELL_COMPONENT_ITEMS[Identifier(MOD_ID, "slow_down")]!!
+        )).add(SCCSRecipe(
+                // Speed Up
+                VeneMain.EMPTY_SPELL_COMPONENT,
+                mutableListOf(Items.SUGAR, Items.SUGAR, Items.SUGAR, Items.SUGAR),
+                VeneMain.SPELL_COMPONENT_ITEMS[Identifier(MOD_ID, "speed_up")]!!
+        )).add(SCCSRecipe(
+                // Accelerate
+                VeneMain.EMPTY_SPELL_COMPONENT,
+                mutableListOf(Items.SUGAR, Items.SUGAR,
+                        VeneMain.SPELL_COMPONENT_ITEMS[Identifier(MOD_ID, "speed_up")]!!,
+                        VeneMain.SPELL_COMPONENT_ITEMS[Identifier(MOD_ID, "wait_0.05_seconds")]!!),
+                VeneMain.SPELL_COMPONENT_ITEMS[Identifier(MOD_ID, "accelerate")]!!
+        )).add(SCCSRecipe(
                 // Target Ground
                 VeneMain.EMPTY_SPELL_COMPONENT,
                 mutableListOf(Items.BOW, Items.BOW, Items.CROSSBOW, Items.CROSSBOW),
                 VeneMain.SPELL_COMPONENT_ITEMS[Identifier(MOD_ID, "target_ground")]!!
+        )).add(SCCSRecipe(
+                // Target Entity
+                VeneMain.EMPTY_SPELL_COMPONENT,
+                mutableListOf(Items.GUNPOWDER, Items.ROTTEN_FLESH,
+                        VeneMain.MAGIC_BINDING,
+                        VeneMain.SPELL_COMPONENT_ITEMS[Identifier(MOD_ID, "target_ground")]!!),
+                VeneMain.SPELL_COMPONENT_ITEMS[Identifier(MOD_ID, "target_entity")]!!
+        )).add(SCCSRecipe(
+                // Target Entity or Ground
+                VeneMain.EMPTY_SPELL_COMPONENT,
+                mutableListOf(
+                        VeneMain.MAGIC_BINDING,
+                        VeneMain.MAGIC_BINDING,
+                        VeneMain.SPELL_COMPONENT_ITEMS[Identifier(MOD_ID, "target_entity")]!!,
+                        VeneMain.SPELL_COMPONENT_ITEMS[Identifier(MOD_ID, "target_ground")]!!
+                ),
+                VeneMain.SPELL_COMPONENT_ITEMS[Identifier(MOD_ID, "target_entity")]!!
         )).add(SCCSRecipe(
                 // Explode
                 VeneMain.EMPTY_SPELL_COMPONENT,
@@ -238,7 +272,7 @@ object StaticDataAdder {
                         )
                         .add(
                                 ingredient()
-                                        .item(Items.PHANTOM_MEMBRANE)
+                                        .item(Items.HONEYCOMB)
                         ),
                 JResult.itemStack(VeneMain.MAGIC_BINDING, 1)
         ))

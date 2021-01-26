@@ -18,7 +18,7 @@ import net.vene.magic.event.EventInstance
 import net.vene.magic.handling.SpellQueue
 import net.vene.common.util.math.MathUtil
 import net.vene.common.util.math.VectorIterator
-import net.vene.mixin.CollidableAccessorMixin
+import net.vene.common.util.extension.isCollidable
 import kotlin.random.Random
 
 // This is basically a projectile but implemented as only math and particles because the entity system pains me
@@ -27,6 +27,8 @@ class SpellExecutor(private val owner: PlayerEntity, private val world: ServerWo
     private val context by lazy {
         SpellContext(world, SpellContext.SpellCaster(owner, owner.pos, velocity), this)
     }
+
+    var trailEffect = ParticleTypes.ENCHANTED_HIT
 
     var age = 0
     var lifetime = 20 * 7
@@ -42,7 +44,9 @@ class SpellExecutor(private val owner: PlayerEntity, private val world: ServerWo
 
     private fun display() {
         world.players.forEach {
-            world.spawnParticles(it, ParticleTypes.ENCHANTED_HIT, true, pos.x, pos.y, pos.z, 1, 0.03, 0.03, 0.03, 0.0)
+            if (Random.nextBoolean()) {
+                world.spawnParticles(it, trailEffect, true, pos.x, pos.y, pos.z, 1, 0.03, 0.03, 0.03, 0.0)
+            }
         }
     }
 
@@ -64,7 +68,7 @@ class SpellExecutor(private val owner: PlayerEntity, private val world: ServerWo
             val toBlockPos = BlockPos(next)
 
             pos = next
-            if (Random.nextBoolean()) {
+            if (Random.nextBoolean() && lifetime > 0) {
                 display()
             }
 
@@ -78,8 +82,7 @@ class SpellExecutor(private val owner: PlayerEntity, private val world: ServerWo
                 // Check the block
                 val blockState = context.world.getBlockState(toBlockPos)
                 // We are in the ground
-                if (!blockState.isAir && (blockState.block as CollidableAccessorMixin).collidable) {
-
+                if (!blockState.isAir && blockState.block.isCollidable()) {
                     if (lastChecked != null) {
                         // Save the direction we hit from and fire the hitGround event
                         context.dataStorage["hit_ground_direction"] = MathUtil.blockPosChangeToDirection(lastChecked!!, toBlockPos)
@@ -90,6 +93,10 @@ class SpellExecutor(private val owner: PlayerEntity, private val world: ServerWo
                             // Update our system and starting moving that way
                             lastVelocity = velocity
                             speculative = VectorIterator(velocity, 0.01).iterator()
+                        } else {
+                            lifetime /= 2
+                            lifetime -= 20
+                            lifetime -= lifetime / 4
                         }
                     }
                 } else {

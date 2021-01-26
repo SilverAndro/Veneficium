@@ -8,6 +8,7 @@ package net.vene.magic.spell_components.collection
 
 import net.minecraft.block.Blocks
 import net.minecraft.entity.LivingEntity
+import net.minecraft.entity.damage.DamageSource
 import net.minecraft.entity.effect.StatusEffectInstance
 import net.minecraft.entity.effect.StatusEffects
 import net.minecraft.util.math.BlockPos
@@ -73,7 +74,7 @@ object ResultComponentCollection {
                         it.executor.pos.y + 0.2,
                         it.executor.pos.z + 0.2,
                 ).boundingBox)
-                return@register if (colliding.isEmpty() || colliding.first() !is LivingEntity) {
+                return@register if (colliding.isEmpty() || colliding.first() !is LivingEntity || colliding.first() == context.caster.entity) {
                     EventListenerResult.STAY_STOP
                 } else {
                     it.targets.add(SpellTarget(it.executor.pos.blockpos(), colliding.first() as LivingEntity))
@@ -124,7 +125,7 @@ object ResultComponentCollection {
                             it.executor.pos.y + 0.2,
                             it.executor.pos.z + 0.2,
                     ).boundingBox)
-                    return@register if (colliding.isEmpty() || colliding.first() !is LivingEntity) {
+                    return@register if (colliding.isEmpty() || colliding.first() !is LivingEntity || colliding.first() == context.caster.entity) {
                         EventListenerResult.STAY_STOP
                     } else {
                         it.targets.add(SpellTarget(it.executor.pos.blockpos(), colliding.first() as LivingEntity))
@@ -156,6 +157,14 @@ object ResultComponentCollection {
     This group is for components that have some effect on the world
 
     */
+    val DAMAGE_ENTITY = ResultComponent("damage_entity") { context, modifiers, queue ->
+        val spellTarget = context.targets.last()
+        if (spellTarget.entity != null) {
+            spellTarget.entity.damage(DamageSource.magic(context.caster.entity, null), 4f)
+        }
+        HandlerOperation.REMOVE_CONTINUE
+    }
+
     val EXPLODE = ResultComponent("explode") { context, modifiers, queue ->
         val spellTarget = context.targets.last()
         val explosion = context.world.createExplosion(null, spellTarget.pos.x + 0.5, spellTarget.pos.y + 0.5, spellTarget.pos.z + 0.5, 1.6F, false, Explosion.DestructionType.DESTROY)
@@ -236,12 +245,6 @@ object ResultComponentCollection {
     This group is for meta components, components that change the execution of other components
 
     */
-    val CAST_2X = ComponentFactories.castXTimesBuilder(2)
-    val CAST_3X = ComponentFactories.castXTimesBuilder(3)
-    val CAST_5X = ComponentFactories.castXTimesBuilder(5)
-    val CAST_7X = ComponentFactories.castXTimesBuilder(7)
-    val CAST_10X = ComponentFactories.castXTimesBuilder(10)
-
     val WAIT_1 = ComponentFactories.waitXTicksBuilder(1)
     val WAIT_3 = ComponentFactories.waitXTicksBuilder(3)
     val WAIT_5 = ComponentFactories.waitXTicksBuilder(5)

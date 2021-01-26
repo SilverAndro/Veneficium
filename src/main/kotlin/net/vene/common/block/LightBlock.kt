@@ -6,8 +6,6 @@
 
 package net.vene.common.block
 
-import net.fabricmc.api.EnvType
-import net.fabricmc.api.Environment
 import net.minecraft.block.Block
 import net.minecraft.block.BlockRenderType
 import net.minecraft.block.BlockState
@@ -22,26 +20,24 @@ import net.minecraft.world.World
 import java.util.*
 
 class LightBlock(settings: Settings?) : Block(settings) {
-    override fun randomDisplayTick(state: BlockState?, world: World?, pos: BlockPos?, random: Random?) {
-        if (pos != null) {
-            world?.addParticle(ParticleTypes.FLAME,
-                    pos.x + randomDisplayOffset(world),
-                    pos.y + randomDisplayOffset(world),
-                    pos.z + randomDisplayOffset(world),
-                    0.0, 0.0, 0.0)
-            world?.addParticle(ParticleTypes.FLAME,
-                    pos.x + randomDisplayOffset(world),
-                    pos.y + randomDisplayOffset(world),
-                    pos.z + randomDisplayOffset(world),
-                    0.0, 0.0, 0.0)
-            world?.addParticle(ParticleTypes.FLAME,
-                    true,
-                    pos.x + randomDisplayOffset(world),
-                    pos.y + randomDisplayOffset(world),
-                    pos.z + randomDisplayOffset(world),
-                    0.0, 0.0, 0.0)
-            world?.addParticle(ParticleTypes.SMOKE, pos.x + randomDisplayOffset(world), pos.y + 0.5, pos.z + 0.5, 0.0, 0.0, 0.0)
-        }
+    override fun randomDisplayTick(state: BlockState, world: World, pos: BlockPos, random: Random?) {
+        world.addParticle(ParticleTypes.FLAME,
+            pos.x + randomDisplayOffset(world),
+            pos.y + randomDisplayOffset(world),
+            pos.z + randomDisplayOffset(world),
+            0.0, 0.0, 0.0)
+        world.addParticle(ParticleTypes.FLAME,
+            pos.x + randomDisplayOffset(world),
+            pos.y + randomDisplayOffset(world),
+            pos.z + randomDisplayOffset(world),
+            0.0, 0.0, 0.0)
+        world.addParticle(ParticleTypes.FLAME,
+            true,
+            pos.x + randomDisplayOffset(world),
+            pos.y + randomDisplayOffset(world),
+            pos.z + randomDisplayOffset(world),
+            0.0, 0.0, 0.0)
+        world.addParticle(ParticleTypes.SMOKE, pos.x + randomDisplayOffset(world), pos.y + 0.5, pos.z + 0.5, 0.0, 0.0, 0.0)
     }
 
     override fun getOpacity(state: BlockState?, world: BlockView?, pos: BlockPos?): Int {

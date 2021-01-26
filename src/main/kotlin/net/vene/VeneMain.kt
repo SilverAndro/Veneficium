@@ -168,7 +168,7 @@ class VeneMain : ModInitializer {
                         .of(Material.PORTAL)
                         .hardness(0.0f)
                         .collidable(false)
-                        .lightLevel(15)
+                        .luminance(15)
                         .resistance(0.0f)
                         .dropsNothing()
                         .nonOpaque()
@@ -182,7 +182,7 @@ class VeneMain : ModInitializer {
         var SCCS_BLOCK_ENTITY: BlockEntityType<SCCSBlockEntity> = Registry.register(Registry.BLOCK_ENTITY_TYPE, Identifier(MOD_ID, "sccs"), BlockEntityType.Builder.create(::SCCSBlockEntity, SCCS_BLOCK).build(null))
 
         // Screen Handlers
-        val BOX_SCREEN_HANDLER: ScreenHandlerType<WandEditScreenHandler> = ScreenHandlerRegistry.registerSimple(Identifier(MOD_ID, "wand_edit"), ::WandEditScreenHandler);
+        val BOX_SCREEN_HANDLER: ScreenHandlerType<WandEditScreenHandler> = ScreenHandlerRegistry.registerSimple(Identifier(MOD_ID, "wand_edit"), ::WandEditScreenHandler)
 
         // Components
         val WAND_SPELLS_COMPONENT: ComponentKey<WandSpellsComponent> = ComponentRegistryV3.INSTANCE.getOrCreate(Identifier(MOD_ID, "spell_list"), WandSpellsComponent::class.java)

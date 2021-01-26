@@ -7,20 +7,18 @@
 package net.vene.common.block.entity
 
 import io.netty.buffer.Unpooled
-import net.fabricmc.fabric.api.network.ServerSidePacketRegistry
-import net.fabricmc.fabric.api.server.PlayerStream
+import net.fabricmc.fabric.api.networking.v1.PlayerLookup
+import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking
 import net.minecraft.block.BlockState
 import net.minecraft.block.entity.BeaconBlockEntity.BeamSegment
 import net.minecraft.block.entity.BlockEntity
 import net.minecraft.entity.EntityType
-import net.minecraft.entity.LightningEntity
 import net.minecraft.item.Item
 import net.minecraft.item.ItemStack
 import net.minecraft.item.Items
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.network.PacketByteBuf
 import net.minecraft.network.packet.s2c.play.PlaySoundIdS2CPacket
-import net.minecraft.particle.ParticleEffect
 import net.minecraft.particle.ParticleTypes
 import net.minecraft.server.network.ServerPlayerEntity
 import net.minecraft.server.world.ServerWorld
@@ -128,7 +126,7 @@ class SCCSBlockEntity : BlockEntity(VeneMain.SCCS_BLOCK_ENTITY), Tickable {
                     }
 
                     // Play a sound effect
-                    val watching = PlayerStream.watching(this)
+                    val watching = PlayerLookup.tracking(this)
                     for (player in watching) {
                         (player as ServerPlayerEntity).networkHandler.sendPacket(PlaySoundIdS2CPacket(
                                 SoundEvents.ENTITY_ENDER_EYE_DEATH.id,
@@ -238,12 +236,12 @@ class SCCSBlockEntity : BlockEntity(VeneMain.SCCS_BLOCK_ENTITY), Tickable {
             return
         }
         // Send held item and if we are working
-        val watchingPlayers = PlayerStream.watching(this)
+        val watchingPlayers = PlayerLookup.tracking(this)
         val passedData = PacketByteBuf(Unpooled.buffer())
         passedData.writeBlockPos(pos)
         passedData.writeItemStack(heldItemStack)
         passedData.writeBoolean(isWorking)
-        watchingPlayers.forEach { ServerSidePacketRegistry.INSTANCE.sendToPlayer(it, VeneMain.UPDATE_HELD_ITEM, passedData) }
+        watchingPlayers.forEach { ServerPlayNetworking.send(it, VeneMain.UPDATE_HELD_ITEM, passedData) }
     }
 
     override fun onSyncedBlockEvent(type: Int, data: Int): Boolean {

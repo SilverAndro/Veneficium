@@ -11,6 +11,7 @@ import net.minecraft.item.Items
 
 data class SCCSRecipe(val core: Item, val ingredients: MutableList<Item>, val result: Item)
 
+// Actual recipes are under root/init/StaticDataAdder.kt
 class SCCSRecipeList {
     private val recipes: MutableList<SCCSRecipe> = mutableListOf()
 

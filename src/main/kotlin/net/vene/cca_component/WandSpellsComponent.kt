@@ -12,8 +12,8 @@ import net.minecraft.nbt.CompoundTag
 import net.minecraft.nbt.ListTag
 import net.minecraft.nbt.StringTag
 import net.vene.VeneMain
+import net.vene.common.util.extension.getRawValue
 import net.vene.magic.spell_components.MagicEffect
-import net.vene.mixin.StringValueAccessorMixin
 
 class WandSpellsComponent : ComponentV3 {
     private var spells: MutableList<MagicEffect> = mutableListOf()
@@ -23,7 +23,7 @@ class WandSpellsComponent : ComponentV3 {
         next@ for (saved_component in tag.getList("spells", 8)) {
             saved_component as StringTag
 
-            val componentName = (saved_component as StringValueAccessorMixin).value
+            val componentName = saved_component.getRawValue()
             for (possible_component in VeneMain.RESULT_COMPONENTS union VeneMain.MOVE_COMPONENTS union VeneMain.MATERIAL_COMPONENTS) {
                 if (possible_component.name == componentName) {
                     spells.add(possible_component)

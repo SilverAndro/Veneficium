@@ -113,14 +113,6 @@ class SpellQueue {
         return copy
     }
 
-    fun acquireStateOfCopy(copy: SpellQueue) {
-        componentList.clear()
-        modifiers.clear()
-        componentList.addAll(copy.componentList)
-        modifiers.addAll(copy.modifiers)
-        frozenContinue = copy.frozenContinue
-    }
-
     override fun toString(): String {
         return "SpellQueue[Components: $componentList, Materials: $modifiers]"
     }
