@@ -79,6 +79,12 @@ object StaticDataAdder {
             add(spellComponent("normal_trail"), spellComponent("no_trail"), listOf(Items.FIREWORK_ROCKET, Items.FIREWORK_ROCKET, Items.FIREWORK_ROCKET, Items.FIREWORK_ROCKET))
             // Fire trail
             add(spellComponent("fire_trail"), spellComponent("no_trail"), listOf(Items.FIREWORK_ROCKET, Items.FIREWORK_ROCKET, Items.TORCH, Items.FLINT))
+            // Soul fire trail
+            add(spellComponent("soul_fire_trail"), spellComponent("no_trail"), listOf(Items.FIREWORK_ROCKET, Items.FIREWORK_ROCKET, Items.SOUL_TORCH, Items.SOUL_CAMPFIRE))
+            // Heart trail
+            add(spellComponent("heart_trail"), spellComponent("no_trail"), listOf(Items.FIREWORK_ROCKET, Items.FIREWORK_ROCKET, Items.EGG, Items.EGG))
+            // Magic trail
+            add(spellComponent("magic_trail"), spellComponent("no_trail"), listOf(Items.FIREWORK_ROCKET, Items.FIREWORK_ROCKET, Items.BREWING_STAND, Items.DRAGON_BREATH))
 
             /**
              * Material
@@ -121,6 +127,10 @@ object StaticDataAdder {
             add(spellComponent("target_entity"), EMPTY_COMPONENT, listOf(Items.GUNPOWDER, Items.ROTTEN_FLESH, VeneMain.MAGIC_BINDING, spellComponent("target_ground")))
             // Target entity or ground
             add(spellComponent("target_entity_or_ground"), EMPTY_COMPONENT, listOf(VeneMain.MAGIC_BINDING, VeneMain.MAGIC_BINDING, spellComponent("target_entity"), spellComponent("target_ground")))
+            // Target current
+            add(spellComponent("target_current"), EMPTY_COMPONENT, listOf(Items.ARROW, Items.ARROW, Items.REDSTONE, Items.REDSTONE))
+            // Damage entity
+            add(spellComponent("damage_entity"), EMPTY_COMPONENT, listOf(Items.WOODEN_SWORD, Items.STONE_SWORD, Items.IRON_SWORD, Items.DIAMOND_SWORD))
             // Explode
             add(spellComponent("explode"), EMPTY_COMPONENT, listOf(Items.TNT, Items.TNT, Items.TNT, Items.TNT))
             // Large explode
@@ -129,6 +139,8 @@ object StaticDataAdder {
             add(spellComponent("create_force"), EMPTY_COMPONENT, listOf(spellComponent("explode"), spellComponent("explode"), Items.WATER_BUCKET, VeneMain.MAGIC_BINDING))
             // Create light
             add(spellComponent("create_light"), EMPTY_COMPONENT, listOf(Items.TORCH, Items.LANTERN, Items.SEA_LANTERN, Items.GLOWSTONE))
+            // Freeze
+            add(spellComponent("freeze"), EMPTY_COMPONENT, listOf(Items.PACKED_ICE, Items.SNOW_BLOCK, spellComponent("slow_down"), spellComponent("slow_down")))
 
             finalize()
         }
