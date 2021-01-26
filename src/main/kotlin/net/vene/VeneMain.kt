@@ -47,6 +47,8 @@ import net.vene.common.util.StringUtil
 import net.vene.common.screen.WandEditScreenHandler
 import net.vene.common.util.extension.devDebug
 import net.vene.init.StaticDataAdder
+import net.vene.magic.spell_components.collection.CosmeticComponentCollection
+import net.vene.magic.spell_components.types.CosmeticComponent
 import net.vene.recipe.SCCSRecipeList
 import org.apache.logging.log4j.LogManager
 import org.apache.logging.log4j.Logger
@@ -59,6 +61,7 @@ class VeneMain : ModInitializer {
 
         // Forcibly loads the component lists
         // Try to remove in future
+        CosmeticComponentCollection
         MaterialComponentCollection
         MoveComponentCollection
         ResultComponentCollection
@@ -73,7 +76,7 @@ class VeneMain : ModInitializer {
         // This is the most blessed code ive ever written
 
         // Combine all lists of components into one iterable
-        for (component in MATERIAL_COMPONENTS union MOVE_COMPONENTS union RESULT_COMPONENTS) {
+        for (component in COSMETIC_COMPONENTS union MATERIAL_COMPONENTS union MOVE_COMPONENTS union RESULT_COMPONENTS) {
             // Create an item for the component
             val item = ComponentItem(Item.Settings().group(ITEM_GROUP_COMPONENTS).maxCount(1), component)
             // Register the item
@@ -124,6 +127,7 @@ class VeneMain : ModInitializer {
         devDebug("Adding loot tables")
         StaticDataAdder.lootTables(RESOURCE_PACK)
 
+        devDebug("CosmeticComponentCollection contains ${COSMETIC_COMPONENTS.size} entries")
         devDebug("MaterialComponentCollection contains ${MATERIAL_COMPONENTS.size} entries")
         devDebug("MoveComponentCollection contains ${MOVE_COMPONENTS.size} entries")
         devDebug("ResultComponentCollection contains ${RESULT_COMPONENTS.size} entries")
@@ -144,6 +148,7 @@ class VeneMain : ModInitializer {
         val RESOURCE_PACK: RuntimeResourcePack = RuntimeResourcePack.create(Identifier(MOD_ID, "rrp").toString())
 
         // Arrays so I don't have to rely on dirty reflection later (also maybe compatibility)
+        val COSMETIC_COMPONENTS: MutableList<CosmeticComponent> = mutableListOf()
         val MATERIAL_COMPONENTS: MutableList<MaterialComponent> = mutableListOf()
         val MOVE_COMPONENTS: MutableList<MoveComponent> = mutableListOf()
         val RESULT_COMPONENTS: MutableList<ResultComponent> = mutableListOf()

@@ -9,5 +9,6 @@ package net.vene.magic.spell_components.types
 enum class ComponentType {
     MOVE,
     MATERIAL,
-    RESULT
+    RESULT,
+    COSMETIC
 }

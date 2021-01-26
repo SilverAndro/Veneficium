@@ -9,16 +9,17 @@
 package net.vene.magic
 
 import net.minecraft.entity.player.PlayerEntity
+import net.minecraft.particle.ParticleEffect
 import net.minecraft.particle.ParticleTypes
 import net.minecraft.server.world.ServerWorld
 import net.minecraft.util.math.BlockPos
 import net.minecraft.util.math.Vec3d
 import net.vene.VeneMain
-import net.vene.magic.event.EventInstance
-import net.vene.magic.handling.SpellQueue
+import net.vene.common.util.extension.isCollidable
 import net.vene.common.util.math.MathUtil
 import net.vene.common.util.math.VectorIterator
-import net.vene.common.util.extension.isCollidable
+import net.vene.magic.event.EventInstance
+import net.vene.magic.handling.SpellQueue
 import kotlin.random.Random
 
 // This is basically a projectile but implemented as only math and particles because the entity system pains me
@@ -28,7 +29,7 @@ class SpellExecutor(private val owner: PlayerEntity, private val world: ServerWo
         SpellContext(world, SpellContext.SpellCaster(owner, owner.pos, velocity), this)
     }
 
-    var trailEffect = ParticleTypes.ENCHANTED_HIT
+    var trailEffect: ParticleEffect? = ParticleTypes.ENCHANTED_HIT
 
     var age = 0
     var lifetime = 20 * 7
@@ -45,7 +46,9 @@ class SpellExecutor(private val owner: PlayerEntity, private val world: ServerWo
     private fun display() {
         world.players.forEach {
             if (Random.nextBoolean()) {
-                world.spawnParticles(it, trailEffect, true, pos.x, pos.y, pos.z, 1, 0.03, 0.03, 0.03, 0.0)
+                if (trailEffect != null) {
+                    world.spawnParticles(it, trailEffect, true, pos.x, pos.y, pos.z, 1, 0.03, 0.03, 0.03, 0.0)
+                }
             }
         }
     }

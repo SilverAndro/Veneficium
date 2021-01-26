@@ -24,7 +24,7 @@ class WandSpellsComponent : ComponentV3 {
             saved_component as StringTag
 
             val componentName = saved_component.getRawValue()
-            for (possible_component in VeneMain.RESULT_COMPONENTS union VeneMain.MOVE_COMPONENTS union VeneMain.MATERIAL_COMPONENTS) {
+            for (possible_component in VeneMain.COSMETIC_COMPONENTS union VeneMain.RESULT_COMPONENTS union VeneMain.MOVE_COMPONENTS union VeneMain.MATERIAL_COMPONENTS) {
                 if (possible_component.name == componentName) {
                     spells.add(possible_component)
                     continue@next

@@ -6,17 +6,25 @@
 
 package net.vene.magic.spell_components
 
-import net.vene.magic.event.EventListenerResult
-import net.vene.magic.handling.HandlerOperation
-import net.vene.magic.handling.SpellQueue
-import net.vene.magic.spell_components.types.ResultComponent
+import net.minecraft.particle.ParticleEffect
 import net.vene.common.util.LogicHelper.didFire
 import net.vene.common.util.LogicHelper.executeOnce
 import net.vene.common.util.LogicHelper.executeXTimes
 import net.vene.common.util.LogicHelper.fire
 import net.vene.common.util.LogicHelper.reset
+import net.vene.magic.event.EventListenerResult
+import net.vene.magic.handling.HandlerOperation
+import net.vene.magic.spell_components.types.CosmeticComponent
+import net.vene.magic.spell_components.types.ResultComponent
 
 object ComponentFactories {
+    fun trailParticleBuilder(particleName: String, particle: ParticleEffect?): CosmeticComponent {
+        return CosmeticComponent("${particleName}_trail") { context, modifiers, queue ->
+            context.executor.trailEffect = particle
+            HandlerOperation.REMOVE_CONTINUE
+        }
+    }
+
     fun waitXTicksBuilder(ticks: Int): ResultComponent {
         return ResultComponent("wait_${ticks / 20.0}_seconds") { context, modifiers, queue ->
             val counterKey = "wait_$ticks"
