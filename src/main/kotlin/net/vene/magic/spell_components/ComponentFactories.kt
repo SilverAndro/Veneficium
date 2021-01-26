@@ -43,7 +43,7 @@ object ComponentFactories {
             }
 
             if (didFire(context, shouldUnregister)) {
-                reset(context, shouldUnregister)
+                reset(context, listOf(shouldUnregister, counterKey, isRegistered))
                 return@ResultComponent HandlerOperation.REMOVE_CONTINUE
             }
 
