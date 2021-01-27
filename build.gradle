@@ -1,5 +1,5 @@
 plugins {
-    id 'fabric-loom' version '0.5-SNAPSHOT'
+    id 'fabric-loom' version '0.6-SNAPSHOT'
     id 'maven-publish'
     id 'org.jetbrains.kotlin.jvm' version '1.4.21'
     id 'net.minecrell.licenser' version "0.4.1"
@@ -28,6 +28,7 @@ repositories {
         url = 'https://raw.githubusercontent.com/Devan-Kerman/Devan-Repo/master/'
     }
     mavenCentral()
+    jcenter()
 }
 
 // Licenser
@@ -60,8 +61,8 @@ dependencies {
     modImplementation group: 'net.devtech', name: 'arrp', version: '0.2.9'
 
     // REI
-    modCompileOnly "me.shedaniel:RoughlyEnoughItems-api:5.7.1"
-    modRuntime "me.shedaniel:RoughlyEnoughItems:5.7.1"
+    modCompileOnly "me.shedaniel:RoughlyEnoughItems-api:${project.rei_version}"
+    modRuntime "me.shedaniel:RoughlyEnoughItems:${project.rei_version}"
 }
 
 processResources {

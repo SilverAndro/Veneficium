@@ -26,6 +26,9 @@
     ],
     "cardinal-components-item": [
       "net.vene.VeneCCAComponentRegistration"
+    ],
+    "rei_plugins": [
+      "net.vene.compat.REIPlugin"
     ]
   },
   "mixins": [
