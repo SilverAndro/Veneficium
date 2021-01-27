@@ -24,6 +24,7 @@ import net.minecraft.block.Block
 import net.minecraft.block.Material
 import net.minecraft.block.entity.BlockEntityType
 import net.minecraft.item.*
+import net.minecraft.recipe.AbstractCookingRecipe
 import net.minecraft.resource.ResourcePack
 import net.minecraft.screen.ScreenHandlerType
 import net.minecraft.util.Identifier
@@ -52,6 +53,11 @@ import net.vene.magic.spell_components.types.CosmeticComponent
 import net.vene.recipe.SCCSRecipeList
 import org.apache.logging.log4j.LogManager
 import org.apache.logging.log4j.Logger
+import net.minecraft.recipe.RecipeType
+import net.vene.recipe.SCCSRecipe
+import net.minecraft.recipe.CookingRecipeSerializer
+import net.minecraft.recipe.RecipeSerializer
+import net.vene.recipe.SCCSRecipeSerializer
 
 
 @Suppress("MemberVisibilityCanBePrivate")
@@ -121,7 +127,7 @@ class VeneMain : ModInitializer {
         StaticDataAdder.blockStates(RESOURCE_PACK)
 
         devDebug("Adding recipes")
-        StaticDataAdder.componentRecipes(SCCS_RECIPES)
+        StaticDataAdder.componentRecipes(RESOURCE_PACK)
         StaticDataAdder.recipes(RESOURCE_PACK)
 
         devDebug("Adding loot tables")
@@ -189,6 +195,16 @@ class VeneMain : ModInitializer {
         // Screen Handlers
         val BOX_SCREEN_HANDLER: ScreenHandlerType<WandEditScreenHandler> = ScreenHandlerRegistry.registerSimple(Identifier(MOD_ID, "wand_edit"), ::WandEditScreenHandler)
 
+        // Recipes
+        val SCCS_RECIPE: RecipeType<SCCSRecipe> = Registry.register(Registry.RECIPE_TYPE, Identifier(MOD_ID, "sccs"),
+            object : RecipeType<SCCSRecipe> {
+                override fun toString(): String {
+                    return "sccs"
+                }
+            }
+        )
+        val SCCS_RECIPE_SERIALIZER: SCCSRecipeSerializer = Registry.register(Registry.RECIPE_SERIALIZER, Identifier(MOD_ID, "sccs"), SCCSRecipeSerializer())
+
         // Components
         val WAND_SPELLS_COMPONENT: ComponentKey<WandSpellsComponent> = ComponentRegistryV3.INSTANCE.getOrCreate(Identifier(MOD_ID, "spell_list"), WandSpellsComponent::class.java)
 
@@ -198,6 +214,5 @@ class VeneMain : ModInitializer {
         // Misc
         val ACTIVE_SPELLS: MutableList<SpellExecutor> = mutableListOf()
         val SPELLS_TO_BE_REMOVED: MutableList<SpellExecutor> = mutableListOf()
-        val SCCS_RECIPES = SCCSRecipeList()
     }
 }

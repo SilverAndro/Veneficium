@@ -22,4 +22,8 @@ class WeavingCategory : TransferRecipeCategory<WeavingDisplay> {
     override fun getLogo(): EntryStack {
         return REIPlugin.weavingEntry
     }
+
+    override fun setupDisplay(recipeDisplay: WeavingDisplay, bounds: Rectangle): MutableList<Widget> {
+        return super.setupDisplay(recipeDisplay, bounds)
+    }
 }

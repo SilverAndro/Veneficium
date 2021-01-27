@@ -30,6 +30,7 @@ import net.minecraft.util.math.Vec3d
 import net.minecraft.world.Heightmap
 import net.vene.VeneMain
 import net.vene.common.block.SCCSBlock
+import net.vene.recipe.SCCSRecipeList
 
 class SCCSBlockEntity : BlockEntity(VeneMain.SCCS_BLOCK_ENTITY), Tickable {
     var canWork = false
@@ -108,9 +109,9 @@ class SCCSBlockEntity : BlockEntity(VeneMain.SCCS_BLOCK_ENTITY), Tickable {
             }
 
             // If we can make something from this (and we arent already making something)
-            if (VeneMain.SCCS_RECIPES.coreHasRecipe(heldItemStack.item) && !isWorking) {
+            if (SCCSRecipeList.coreHasRecipe(heldItemStack.item) && !isWorking) {
                 // Cache the result
-                toCraftResult = VeneMain.SCCS_RECIPES.craft(heldItemStack.item, ingredients)
+                toCraftResult = SCCSRecipeList.craft(heldItemStack.item, ingredients)
 
                 // If its a valid result and we can make something
                 if (toCraftResult != Items.AIR && canWork) {

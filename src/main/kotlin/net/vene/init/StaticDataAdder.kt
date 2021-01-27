@@ -21,12 +21,12 @@ import net.devtech.arrp.json.recipe.JResult.item
 import net.minecraft.item.BlockItem
 import net.minecraft.item.Item
 import net.minecraft.item.Items
+import net.minecraft.resource.ResourceType
 import net.minecraft.util.Identifier
 import net.minecraft.util.registry.Registry
 import net.vene.VeneMain
 import net.vene.VeneMain.Companion.MOD_ID
-import net.vene.recipe.SCCSRecipe
-import net.vene.recipe.SCCSRecipeList
+import java.nio.charset.Charset
 
 
 // "Static" functions for init-ing data
@@ -68,81 +68,179 @@ object StaticDataAdder {
         pack.addBlockState(state(variant(model("vene:block/wand_edit"))), Identifier(MOD_ID, "wand_edit"))
     }
 
-    fun componentRecipes(recipes: SCCSRecipeList) {
-        RecipeBuilder(recipes) {
+    fun componentRecipes(pack: RuntimeResourcePack) {
+        RecipeBuilder(pack) {
             /**
              * Cosmetic
              */
             // No trail
-            add(spellComponent("no_trail"), EMPTY_COMPONENT, listOf(Items.GOLDEN_CARROT, Items.FERMENTED_SPIDER_EYE))
+            add(EMPTY_COMPONENT, listOf(Items.GOLDEN_CARROT, Items.FERMENTED_SPIDER_EYE), spellComponent("no_trail"))
             // Normal trail
-            add(spellComponent("normal_trail"), spellComponent("no_trail"), listOf(Items.FIREWORK_ROCKET, Items.FIREWORK_ROCKET, Items.FIREWORK_ROCKET, Items.FIREWORK_ROCKET))
+            add(
+                spellComponent("no_trail"),
+                listOf(Items.FIREWORK_ROCKET, Items.FIREWORK_ROCKET, Items.FIREWORK_ROCKET, Items.FIREWORK_ROCKET),
+                spellComponent("normal_trail")
+            )
             // Fire trail
-            add(spellComponent("fire_trail"), spellComponent("no_trail"), listOf(Items.FIREWORK_ROCKET, Items.FIREWORK_ROCKET, Items.TORCH, Items.FLINT))
+            add(
+                spellComponent("no_trail"),
+                listOf(Items.FIREWORK_ROCKET, Items.FIREWORK_ROCKET, Items.TORCH, Items.FLINT),
+                spellComponent("fire_trail")
+            )
             // Soul fire trail
-            add(spellComponent("soul_fire_trail"), spellComponent("no_trail"), listOf(Items.FIREWORK_ROCKET, Items.FIREWORK_ROCKET, Items.SOUL_TORCH, Items.SOUL_CAMPFIRE))
+            add(
+                spellComponent("no_trail"),
+                listOf(Items.FIREWORK_ROCKET, Items.FIREWORK_ROCKET, Items.SOUL_TORCH, Items.SOUL_CAMPFIRE),
+                spellComponent("soul_fire_trail")
+            )
             // Heart trail
-            add(spellComponent("heart_trail"), spellComponent("no_trail"), listOf(Items.FIREWORK_ROCKET, Items.FIREWORK_ROCKET, Items.EGG, Items.EGG))
+            add(
+                spellComponent("no_trail"),
+                listOf(Items.FIREWORK_ROCKET, Items.FIREWORK_ROCKET, Items.EGG, Items.EGG),
+                spellComponent("heart_trail")
+            )
             // Magic trail
-            add(spellComponent("magic_trail"), spellComponent("no_trail"), listOf(Items.FIREWORK_ROCKET, Items.FIREWORK_ROCKET, Items.BREWING_STAND, Items.DRAGON_BREATH))
+            add(
+                spellComponent("no_trail"),
+                listOf(Items.FIREWORK_ROCKET, Items.FIREWORK_ROCKET, Items.BREWING_STAND, Items.DRAGON_BREATH),
+                spellComponent("magic_trail")
+            )
 
             /**
              * Material
              */
             // Water
-            add(spellComponent("water"), EMPTY_COMPONENT, listOf(Items.WATER_BUCKET, Items.WATER_BUCKET, Items.WATER_BUCKET, Items.WATER_BUCKET))
+            add(
+                EMPTY_COMPONENT,
+                listOf(Items.WATER_BUCKET, Items.WATER_BUCKET, Items.WATER_BUCKET, Items.WATER_BUCKET),
+                spellComponent("water")
+            )
             // Cobblestone
-            add(spellComponent("cobblestone"), EMPTY_COMPONENT, listOf(Items.WATER_BUCKET, Items.LAVA_BUCKET, Items.WOODEN_PICKAXE, Items.CLOCK))
+            add(
+                EMPTY_COMPONENT,
+                listOf(Items.WATER_BUCKET, Items.LAVA_BUCKET, Items.WOODEN_PICKAXE, Items.CLOCK),
+                spellComponent("cobblestone")
+            )
             // Dirt
-            add(spellComponent("dirt"), EMPTY_COMPONENT, listOf(Items.DIRT, Items.DIRT, Items.COARSE_DIRT, Items.PODZOL))
+            add(
+                EMPTY_COMPONENT,
+                listOf(Items.DIRT, Items.DIRT, Items.COARSE_DIRT, Items.PODZOL),
+                spellComponent("dirt")
+            )
             // Gravel
-            add(spellComponent("gravel"), EMPTY_COMPONENT, listOf(Items.GRAVEL, Items.GRAVEL, Items.GRAVEL, Items.GRAVEL))
+            add(
+                EMPTY_COMPONENT,
+                listOf(Items.GRAVEL, Items.GRAVEL, Items.GRAVEL, Items.GRAVEL),
+                spellComponent("gravel")
+            )
 
             /**
              * Move
              */
             // No gravity
-            add(spellComponent("no_gravity"), EMPTY_COMPONENT, listOf(Items.PHANTOM_MEMBRANE, Items.PHANTOM_MEMBRANE, Items.PHANTOM_MEMBRANE, Items.PHANTOM_MEMBRANE))
+            add(
+                EMPTY_COMPONENT,
+                listOf(Items.PHANTOM_MEMBRANE, Items.PHANTOM_MEMBRANE, Items.PHANTOM_MEMBRANE, Items.PHANTOM_MEMBRANE),
+                spellComponent("no_gravity")
+            )
             // High gravity
-            add(spellComponent("high_gravity"), EMPTY_COMPONENT, listOf(Items.ANVIL, Items.BRICK, Items.BRICK, Items.BRICK))
+            add(
+                EMPTY_COMPONENT,
+                listOf(Items.ANVIL, Items.BRICK, Items.BRICK, Items.BRICK),
+                spellComponent("high_gravity")
+            )
             // Low gravity
-            add(spellComponent("low_gravity"), EMPTY_COMPONENT, listOf(Items.PHANTOM_MEMBRANE, Items.PHANTOM_MEMBRANE, Items.STRING, Items.STRING))
+            add(
+                EMPTY_COMPONENT,
+                listOf(Items.PHANTOM_MEMBRANE, Items.PHANTOM_MEMBRANE, Items.STRING, Items.STRING),
+                spellComponent("low_gravity")
+            )
             // Reverse gravity
-            add(spellComponent("reverse_gravity"), EMPTY_COMPONENT, listOf(Items.PHANTOM_MEMBRANE, Items.PHANTOM_MEMBRANE, Items.FERMENTED_SPIDER_EYE, Items.FERMENTED_SPIDER_EYE))
+            add(
+                EMPTY_COMPONENT,
+                listOf(Items.PHANTOM_MEMBRANE, Items.PHANTOM_MEMBRANE, Items.FERMENTED_SPIDER_EYE, Items.FERMENTED_SPIDER_EYE),
+                spellComponent("reverse_gravity")
+            )
             // Bounce
-            add(spellComponent("bounce"), EMPTY_COMPONENT, listOf(Items.SLIME_BALL, Items.SLIME_BALL, Items.SLIME_BALL, Items.SLIME_BALL))
+            add(
+                EMPTY_COMPONENT,
+                listOf(Items.SLIME_BALL, Items.SLIME_BALL, Items.SLIME_BALL, Items.SLIME_BALL),
+                spellComponent("bounce")
+            )
             // Slow down
-            add(spellComponent("slow_down"), EMPTY_COMPONENT, listOf(Items.COBWEB, Items.SOUL_SAND, Items.HONEY_BLOCK, Items.SCUTE))
+            add(
+                EMPTY_COMPONENT,
+                listOf(Items.COBWEB, Items.SOUL_SAND, Items.HONEY_BLOCK, Items.SCUTE),
+                spellComponent("slow_down")
+            )
             // Speed up
-            add(spellComponent("speed_up"), EMPTY_COMPONENT, listOf(Items.SUGAR, Items.SUGAR, Items.SUGAR, Items.SUGAR))
+            add(EMPTY_COMPONENT, listOf(Items.SUGAR, Items.SUGAR, Items.SUGAR, Items.SUGAR), spellComponent("speed_up"))
             // Accelerate
-            add(spellComponent("accelerate"), EMPTY_COMPONENT, listOf(Items.SUGAR, Items.SUGAR, spellComponent("speed_up"), spellComponent("wait_0.05_seconds")))
+            add(
+                EMPTY_COMPONENT,
+                listOf(Items.SUGAR, Items.SUGAR, spellComponent("speed_up"), spellComponent("wait_0.05_seconds")),
+                spellComponent("accelerate")
+            )
 
             /**
              * Result
              */
             // Target ground
-            add(spellComponent("target_ground"), EMPTY_COMPONENT, listOf(Items.BOW, Items.BOW, Items.CROSSBOW, Items.CROSSBOW))
+            add(
+                EMPTY_COMPONENT,
+                listOf(Items.BOW, Items.BOW, Items.CROSSBOW, Items.CROSSBOW),
+                spellComponent("target_ground")
+            )
             // Target entity
-            add(spellComponent("target_entity"), EMPTY_COMPONENT, listOf(Items.GUNPOWDER, Items.ROTTEN_FLESH, VeneMain.MAGIC_BINDING, spellComponent("target_ground")))
+            add(
+                EMPTY_COMPONENT,
+                listOf(Items.GUNPOWDER, Items.ROTTEN_FLESH, VeneMain.MAGIC_BINDING, spellComponent("target_ground")),
+                spellComponent("target_entity")
+            )
             // Target entity or ground
-            add(spellComponent("target_entity_or_ground"), EMPTY_COMPONENT, listOf(VeneMain.MAGIC_BINDING, VeneMain.MAGIC_BINDING, spellComponent("target_entity"), spellComponent("target_ground")))
+            add(
+                EMPTY_COMPONENT,
+                listOf(VeneMain.MAGIC_BINDING, VeneMain.MAGIC_BINDING, spellComponent("target_entity"), spellComponent("target_ground")),
+                spellComponent("target_entity_or_ground")
+            )
             // Target current
-            add(spellComponent("target_current"), EMPTY_COMPONENT, listOf(Items.ARROW, Items.ARROW, Items.REDSTONE, Items.REDSTONE))
+            add(
+                EMPTY_COMPONENT,
+                listOf(Items.ARROW, Items.ARROW, Items.REDSTONE, Items.REDSTONE),
+                spellComponent("target_current")
+            )
             // Damage entity
-            add(spellComponent("damage_entity"), EMPTY_COMPONENT, listOf(Items.WOODEN_SWORD, Items.STONE_SWORD, Items.IRON_SWORD, Items.DIAMOND_SWORD))
+            add(
+                EMPTY_COMPONENT,
+                listOf(Items.WOODEN_SWORD, Items.STONE_SWORD, Items.IRON_SWORD, Items.DIAMOND_SWORD),
+                spellComponent("damage_entity")
+            )
             // Explode
-            add(spellComponent("explode"), EMPTY_COMPONENT, listOf(Items.TNT, Items.TNT, Items.TNT, Items.TNT))
+            add(EMPTY_COMPONENT, listOf(Items.TNT, Items.TNT, Items.TNT, Items.TNT), spellComponent("explode"))
             // Large explode
-            add(spellComponent("large_explode"), EMPTY_COMPONENT, listOf(spellComponent("explode"), spellComponent("explode"), spellComponent("explode"), VeneMain.MAGIC_BINDING))
+            add(
+                EMPTY_COMPONENT,
+                listOf(spellComponent("explode"), spellComponent("explode"), spellComponent("explode"), VeneMain.MAGIC_BINDING),
+                spellComponent("large_explode")
+            )
             // Create force
-            add(spellComponent("create_force"), EMPTY_COMPONENT, listOf(spellComponent("explode"), spellComponent("explode"), Items.WATER_BUCKET, VeneMain.MAGIC_BINDING))
+            add(
+                EMPTY_COMPONENT,
+                listOf(spellComponent("explode"), spellComponent("explode"), Items.WATER_BUCKET, VeneMain.MAGIC_BINDING),
+                spellComponent("create_force")
+            )
             // Create light
-            add(spellComponent("create_light"), EMPTY_COMPONENT, listOf(Items.TORCH, Items.LANTERN, Items.SEA_LANTERN, Items.GLOWSTONE))
+            add(
+                EMPTY_COMPONENT,
+                listOf(Items.TORCH, Items.LANTERN, Items.SEA_LANTERN, Items.GLOWSTONE),
+                spellComponent("create_light")
+            )
             // Freeze
-            add(spellComponent("freeze"), EMPTY_COMPONENT, listOf(Items.PACKED_ICE, Items.SNOW_BLOCK, spellComponent("slow_down"), spellComponent("slow_down")))
-
-            finalize()
+            add(
+                EMPTY_COMPONENT,
+                listOf(Items.PACKED_ICE, Items.SNOW_BLOCK, spellComponent("slow_down"), spellComponent("slow_down")),
+                spellComponent("freeze")
+            )
         }
     }
 
@@ -318,21 +416,29 @@ object StaticDataAdder {
         return VeneMain.SPELL_COMPONENT_ITEMS[Identifier(MOD_ID, name)]!!
     }
 
-    private class RecipeBuilder(val recipes: SCCSRecipeList, lambda: RecipeBuilder.() -> Unit) {
-        private val newRecipes: MutableList<SCCSRecipe> = mutableListOf()
-
+    private class RecipeBuilder(val pack: RuntimeResourcePack, lambda: RecipeBuilder.() -> Unit) {
         init {
             lambda()
         }
 
-        fun add(result: Item, core: Item, ingredients: List<Item>) {
-            newRecipes.add(SCCSRecipe(core, ingredients.toMutableList(), result))
+        fun add(core: Item, ingredients: List<Item>, result: Item) {
+            val output = buildString {
+                append("{\"type\":\"vene:sccs\",")
+                append("\"core\":${itemID(core)},")
+                append("\"ingredients\": [")
+                ingredients.forEachIndexed { i: Int, item: Item ->
+                    append(if (ingredients.lastIndex != i) itemID(item) + "," else itemID(item))
+                }
+                append("],")
+                append("\"result\":${itemID(result)}")
+                append("}")
+            }
+            println(output)
+            pack.addResource(ResourceType.SERVER_DATA, Identifier(MOD_ID, "recipes/components/${itemID(result).split("/").last().replace("\"", "")}.json"), output.toByteArray(Charset.forName("UTF-8")))
         }
 
-        fun finalize() {
-            newRecipes.forEach {
-                recipes.add(it)
-            }
+        private fun itemID(item: Item): String {
+            return '"' + Registry.ITEM.getId(item).toString() + '"'
         }
     }
 }

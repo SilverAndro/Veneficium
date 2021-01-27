@@ -58,7 +58,7 @@ dependencies {
     modImplementation "io.github.onyxstudios.Cardinal-Components-API:cardinal-components-item:${project.cca_version}"
 
     // ARRP
-    modImplementation group: 'net.devtech', name: 'arrp', version: '0.2.9'
+    modImplementation group: 'net.devtech', name: 'arrp', version: '0.3.4'
 
     // REI
     modCompileOnly "me.shedaniel:RoughlyEnoughItems-api:${project.rei_version}"

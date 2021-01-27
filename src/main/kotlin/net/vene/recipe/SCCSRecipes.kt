@@ -15,8 +15,9 @@ import net.minecraft.recipe.RecipeSerializer
 import net.minecraft.recipe.RecipeType
 import net.minecraft.util.Identifier
 import net.minecraft.world.World
+import net.vene.VeneMain
 
-data class SCCSRecipe(val core: Item, val ingredients: MutableList<Item>, val result: Item) : Recipe<SimpleInventory> {
+data class SCCSRecipe(val identifier: Identifier, val core: Item, val ingredients: List<Item>, val result: Item) : Recipe<SimpleInventory> {
     override fun matches(inv: SimpleInventory, world: World): Boolean {
         TODO("Not yet implemented")
     }
@@ -30,25 +31,28 @@ data class SCCSRecipe(val core: Item, val ingredients: MutableList<Item>, val re
     }
 
     override fun getOutput(): ItemStack {
-        println("Result requested! $result")
         return ItemStack(result)
     }
 
     override fun getId(): Identifier {
-        TODO("Not yet implemented")
+        return identifier
     }
 
     override fun getSerializer(): RecipeSerializer<*> {
-        TODO("Not yet implemented")
+        return VeneMain.SCCS_RECIPE_SERIALIZER
     }
 
     override fun getType(): RecipeType<*> {
-        TODO("Not yet implemented")
+        return VeneMain.SCCS_RECIPE
+    }
+
+    override fun toString(): String {
+        return "SCCSRecipe(core=$core, ingredients=$ingredients, result=$result)"
     }
 }
 
 // Actual recipes are under root/init/StaticDataAdder.kt
-class SCCSRecipeList {
+object SCCSRecipeList {
     private val recipes: MutableList<SCCSRecipe> = mutableListOf()
 
     fun add(recipe: SCCSRecipe): SCCSRecipeList {
