@@ -10,7 +10,7 @@ import net.minecraft.screen.ScreenHandler
 import net.minecraft.util.Identifier
 import net.vene.recipe.SCCSRecipe
 
-class WeavingDisplay(private val recipe: SCCSRecipe) : TransferRecipeDisplay {
+class WeavingDisplay(val recipe: SCCSRecipe) : TransferRecipeDisplay {
     @ExperimentalStdlibApi
     val usedItems: MutableList<EntryStack> = buildList {
         addAll(EntryStack.ofItems(listOf(recipe.core)))
