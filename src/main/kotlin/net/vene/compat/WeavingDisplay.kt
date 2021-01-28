@@ -33,11 +33,11 @@ class WeavingDisplay(val recipe: SCCSRecipe) : TransferRecipeDisplay {
     }
 
     override fun getWidth(): Int {
-        TODO("Not yet implemented")
+        return -1
     }
 
     override fun getHeight(): Int {
-        TODO("Not yet implemented")
+        return -1
     }
 
     @ExperimentalStdlibApi
@@ -46,5 +46,9 @@ class WeavingDisplay(val recipe: SCCSRecipe) : TransferRecipeDisplay {
         container: ScreenHandler?
     ): MutableList<MutableList<EntryStack>> {
         return mutableListOf(usedItems)
+    }
+
+    override fun getResultingEntries(): MutableList<MutableList<EntryStack>> {
+        return mutableListOf(mutableListOf(EntryStack.create(recipe.result)))
     }
 }
