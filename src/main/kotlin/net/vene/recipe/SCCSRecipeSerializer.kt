@@ -7,10 +7,13 @@
 package net.vene.recipe
 
 import com.google.gson.JsonObject
+import net.minecraft.item.Item
 import net.minecraft.network.PacketByteBuf
 import net.minecraft.recipe.RecipeSerializer
 import net.minecraft.util.Identifier
 import net.minecraft.util.registry.Registry
+import net.vene.common.util.extension.id
+import net.vene.common.util.extension.toItem
 
 class SCCSRecipeSerializer : RecipeSerializer<SCCSRecipe> {
     @ExperimentalStdlibApi
@@ -20,7 +23,7 @@ class SCCSRecipeSerializer : RecipeSerializer<SCCSRecipe> {
 
         val ingredients = buildList {
             json.get("ingredients").asJsonArray.forEach {
-                add(Registry.ITEM.get(Identifier(it.asString)))
+                add(Identifier(it.asString).toItem())
             }
         }
 
@@ -35,14 +38,22 @@ class SCCSRecipeSerializer : RecipeSerializer<SCCSRecipe> {
     }
 
     override fun read(id: Identifier, buf: PacketByteBuf): SCCSRecipe {
-        println(id)
-        println(buf)
-        TODO("Not yet implemented")
+        val result = buf.readIdentifier().toItem()
+        val core = buf.readIdentifier().toItem()
+        val ingredients: MutableList<Item> = mutableListOf()
+        repeat(buf.readByte().toInt()) {
+            ingredients.add(buf.readIdentifier().toItem())
+        }
+
+        return SCCSRecipe(id, core, ingredients, result)
     }
 
     override fun write(buf: PacketByteBuf, recipe: SCCSRecipe) {
-        println(buf)
-        println(recipe)
-        TODO("Not yet implemented")
+        buf.writeIdentifier(recipe.result.id())
+        buf.writeIdentifier(recipe.core.id())
+        buf.writeByte(recipe.ingredients.size)
+        recipe.ingredients.forEach {
+            buf.writeIdentifier(it.id())
+        }
     }
 }

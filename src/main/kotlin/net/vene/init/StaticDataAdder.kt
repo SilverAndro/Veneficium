@@ -26,6 +26,7 @@ import net.minecraft.util.Identifier
 import net.minecraft.util.registry.Registry
 import net.vene.VeneMain
 import net.vene.VeneMain.Companion.MOD_ID
+import net.vene.common.util.extension.formattedID
 import java.nio.charset.Charset
 
 
@@ -35,28 +36,28 @@ object StaticDataAdder {
     private val EMPTY_COMPONENT = VeneMain.EMPTY_SPELL_COMPONENT
 
     fun lang(lang: JLang) {
-        lang.translate(
+        lang.entry(
             "item.vene.wand",
             "Magic Wand"
-        ).translate(
+        ).entry(
             "item.vene.magic_binding",
             "Magic Binding"
-        ).translate(
+        ).entry(
             "itemGroup.vene.items",
             "Veneficium Items"
-        ).translate(
+        ).entry(
             "itemGroup.vene.components",
             "Veneficium Spell Components"
-        ).translate(
+        ).entry(
             "vene.screen.wand_edit.title",
             "Edit Wands"
-        ).translate(
+        ).entry(
             "item.vene.empty_component",
             "Blank Spell Component"
-        ).translate(
+        ).entry(
             "block.vene.sccs",
             "Weave Focus"
-        ).translate(
+        ).entry(
             "block.vene.wand_edit",
             "Wand Edit Block"
         )
@@ -370,7 +371,7 @@ object StaticDataAdder {
                                 .type("minecraft:item")
                                 .name(Identifier(MOD_ID, "wand_edit").toString())
                         )
-                        .condition(condition("minecraft:survives_explosion"))
+                        .condition(predicate("minecraft:survives_explosion"))
                 )
         )
 
@@ -385,7 +386,7 @@ object StaticDataAdder {
                                 .type("minecraft:item")
                                 .name(Identifier(MOD_ID, "sccs").toString())
                         )
-                        .condition(condition("minecraft:survives_explosion"))
+                        .condition(predicate("minecraft:survives_explosion"))
                 )
         )
     }
@@ -424,21 +425,17 @@ object StaticDataAdder {
         fun add(core: Item, ingredients: List<Item>, result: Item) {
             val output = buildString {
                 append("{\"type\":\"vene:sccs\",")
-                append("\"core\":${itemID(core)},")
+                append("\"core\":${core.formattedID()},")
                 append("\"ingredients\": [")
                 ingredients.forEachIndexed { i: Int, item: Item ->
-                    append(if (ingredients.lastIndex != i) itemID(item) + "," else itemID(item))
+                    append(if (ingredients.lastIndex != i) item.formattedID() + "," else item.formattedID())
                 }
                 append("],")
-                append("\"result\":${itemID(result)}")
+                append("\"result\":${result.formattedID()}")
                 append("}")
             }
             println(output)
-            pack.addResource(ResourceType.SERVER_DATA, Identifier(MOD_ID, "recipes/components/${itemID(result).split("/").last().replace("\"", "")}.json"), output.toByteArray(Charset.forName("UTF-8")))
-        }
-
-        private fun itemID(item: Item): String {
-            return '"' + Registry.ITEM.getId(item).toString() + '"'
+            pack.addResource(ResourceType.SERVER_DATA, Identifier(MOD_ID, "recipes/components/${result.formattedID().split("/").last().replace("\"", "")}.json"), output.toByteArray(Charset.forName("UTF-8")))
         }
     }
 }
