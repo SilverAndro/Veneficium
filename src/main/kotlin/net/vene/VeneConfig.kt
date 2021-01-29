@@ -13,15 +13,19 @@ import mc.microconfig.MicroConfig
 class VeneConfig : ConfigData {
     @JvmField
     @Comment("Debugging - This will generate a massive amount of debug output that traces the actions taken by every spell every tick")
-    val spellQueueTraceback = false
+    var spellQueueTraceback = false
 
     @JvmField
     @Comment("Debugging - This will dump all runtime generated assets (including loot tables, recipes, and lang files) to rrp.debug/vene;rrp")
-    val dumpRuntimeGeneratedAssets = false
+    var dumpRuntimeGeneratedAssets = false
 
     @JvmField
     @Comment("Allows explosions to create materials (Can be powerful tool for griefing)\nNote that this doesn't disable \"Create Material\"")
-    val explosionsCreateMaterials = true
+    var explosionsCreateMaterials = true
+
+    @JvmField
+    @Comment("Delay until wands can be used again after crafting (in ticks)")
+    var wandCastDelay = 40
 }
 
 val ConfigInstance: VeneConfig by lazy { MicroConfig.getOrCreate("veneficium", VeneConfig()) }

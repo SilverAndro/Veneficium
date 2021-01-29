@@ -23,7 +23,7 @@ import net.vene.common.screen.slot.ComponentOnlySlot
 import net.vene.common.screen.slot.WandOnlySlot
 
 
-class WandEditScreenHandler(syncId: Int, playerInventory: PlayerInventory) : ScreenHandler(VeneMain.BOX_SCREEN_HANDLER, syncId) {
+class WandEditScreenHandler(syncId: Int, playerInventory: PlayerInventory) : ScreenHandler(VeneMain.WAND_EDIT_SCREEN_HANDLER, syncId) {
     private val inventory: Inventory = WandEditInventory(this)
     private var lastKnownInventory = SimpleInventory(10)
 

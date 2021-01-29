@@ -18,6 +18,7 @@ import net.minecraft.util.Rarity
 import net.minecraft.util.TypedActionResult
 import net.minecraft.util.math.Vec3d
 import net.minecraft.world.World
+import net.vene.ConfigInstance
 import net.vene.VeneMain
 import net.vene.cca_component.WandSpellsComponent
 import net.vene.magic.SpellExecutor
@@ -32,7 +33,7 @@ class WandItem(settings: Settings) : Item(settings) {
 
     override fun use(world: World?, user: PlayerEntity?, hand: Hand?): TypedActionResult<ItemStack> {
         if (user != null && world is ServerWorld) {
-            // generate the relevant info
+            // Generate the relevant info
             val queue = SpellQueue()
             val stack = user.getStackInHand(hand)
             val spells = WandSpellsComponent.getSpellsFrom(stack)
@@ -47,7 +48,7 @@ class WandItem(settings: Settings) : Item(settings) {
             // Create an executor
             val executor = SpellExecutor(user, world, Vec3d(user.x, user.eyeY, user.z), velocity, queue.copy())
             // Cooldown
-            user.itemCooldownManager[this] = 40
+            user.itemCooldownManager[this] = ConfigInstance.wandCastDelay
             // Add it to active executors
             VeneMain.ACTIVE_SPELLS.add(executor)
         }

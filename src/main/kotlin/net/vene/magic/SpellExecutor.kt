@@ -8,6 +8,7 @@
 
 package net.vene.magic
 
+import net.minecraft.block.FluidBlock
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.particle.ParticleEffect
 import net.minecraft.particle.ParticleTypes
@@ -24,7 +25,7 @@ import kotlin.random.Random
 
 // This is basically a projectile but implemented as only math and particles because the entity system pains me
 class SpellExecutor(private val owner: PlayerEntity, private val world: ServerWorld, var pos: Vec3d, var velocity : Vec3d, private val queue: SpellQueue) {
-    // I don't remember why this is lazy, but it was probably important
+    // I don't remember why this is lazy, but it was probably initialisation order stuff
     private val context by lazy {
         SpellContext(world, SpellContext.SpellCaster(owner, owner.pos, velocity), this)
     }
@@ -71,7 +72,7 @@ class SpellExecutor(private val owner: PlayerEntity, private val world: ServerWo
             val toBlockPos = BlockPos(next)
 
             pos = next
-            if (Random.nextBoolean() && lifetime > 0) {
+            if (Random.nextBoolean() && lifetime > 0 && !queue.isEmpty()) {
                 display()
             }
 
@@ -97,12 +98,17 @@ class SpellExecutor(private val owner: PlayerEntity, private val world: ServerWo
                             lastVelocity = velocity
                             speculative = VectorIterator(velocity, 0.01).iterator()
                         } else {
+                            // Achieved through trial and error, no real meaning
                             lifetime /= 2
                             lifetime -= 20
                             lifetime -= lifetime / 4
                         }
                     }
-                } else {
+                } else if (!blockState.block.isCollidable()) {
+                    if (blockState.block is FluidBlock) {
+                        velocity = velocity.multiply(0.85)
+                    }
+                }else {
                     // Save this as an air block
                     context.dataStorage["last_air_block"] = lastChecked ?: toBlockPos
                 }

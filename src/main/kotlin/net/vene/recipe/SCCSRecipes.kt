@@ -17,6 +17,7 @@ import net.minecraft.util.Identifier
 import net.minecraft.world.World
 import net.vene.VeneMain
 
+// Recipe part is only partially implemented because its not important/used
 data class SCCSRecipe(val identifier: Identifier, val core: Item, val ingredients: List<Item>, val result: Item) : Recipe<SimpleInventory> {
     override fun matches(inv: SimpleInventory, world: World): Boolean {
         return false

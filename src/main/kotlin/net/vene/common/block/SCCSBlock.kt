@@ -76,10 +76,12 @@ class SCCSBlock(settings: Settings) : BlockWithEntity(settings) {
                     ItemScatterer.spawn(world, pos.x + 0.5, pos.y + 1.1, pos.z + 0.5, blockEntity.heldItemStack)
                 }
 
-                // Take 1 from the player and put it on the SCCS pillar
-                blockEntity.heldItemStack = itemUsed.copy()
-                blockEntity.heldItemStack.count = 1
-                itemUsed.decrement(1)
+                // Take 1 from the player (if not creative) and put it on the SCCS pillar
+                if (!player.isCreative) {
+                    blockEntity.heldItemStack = itemUsed.copy()
+                    blockEntity.heldItemStack.count = 1
+                    itemUsed.decrement(1)
+                }
 
                 // Play some sounds
                 (player as ServerPlayerEntity).networkHandler.sendPacket(PlaySoundIdS2CPacket(

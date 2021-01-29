@@ -52,7 +52,7 @@ class SCCSBlockEntity : BlockEntity(VeneMain.SCCS_BLOCK_ENTITY), Tickable {
         val height = world!!.getTopY(Heightmap.Type.WORLD_SURFACE, pos.x, pos.z)
         canWork = height <= pos.y + 1
 
-        // Get rid of beam if we dont need it
+        // Get rid of beam if we don't need it or cant work
         if (!canWork || !isWorking) {
             beamSegments.clear()
         }
@@ -116,7 +116,7 @@ class SCCSBlockEntity : BlockEntity(VeneMain.SCCS_BLOCK_ENTITY), Tickable {
                 // If its a valid result and we can make something
                 if (toCraftResult != Items.AIR && canWork) {
 
-                    // Display beam and dont allow taking out the item (for all pillars)
+                    // Display beam and don't allow taking out the item (for all pillars)
                     isWorking = true
                     lockItem = true
                     sendUpdateStatus()
@@ -145,7 +145,7 @@ class SCCSBlockEntity : BlockEntity(VeneMain.SCCS_BLOCK_ENTITY), Tickable {
 
             // Currently making something
             if (isWorking) {
-                // Check to make sure someone hasnt broken a pillar
+                // Check to make sure someone hasn't broken a pillar
                 val newBlockEntities: MutableList<SCCSBlockEntity> = mutableListOf()
                 for (pos in states.keys) {
                     val result = world!!.getBlockEntity(pos)

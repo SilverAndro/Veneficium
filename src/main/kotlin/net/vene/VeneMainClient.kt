@@ -10,8 +10,6 @@ import net.fabricmc.api.ClientModInitializer
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking
 import net.fabricmc.fabric.api.client.rendereregistry.v1.BlockEntityRendererRegistry
 import net.fabricmc.fabric.api.client.screenhandler.v1.ScreenRegistry
-import net.fabricmc.fabric.api.network.ClientSidePacketRegistry
-import net.fabricmc.fabric.api.network.PacketContext
 import net.fabricmc.fabric.api.networking.v1.PacketSender
 import net.minecraft.client.MinecraftClient
 import net.minecraft.client.network.ClientPlayNetworkHandler
@@ -24,7 +22,7 @@ import net.vene.common.screen.WandEditScreen
 class VeneMainClient : ClientModInitializer {
     override fun onInitializeClient() {
         // Screen
-        ScreenRegistry.register(VeneMain.BOX_SCREEN_HANDLER, ::WandEditScreen)
+        ScreenRegistry.register(VeneMain.WAND_EDIT_SCREEN_HANDLER, ::WandEditScreen)
 
         // BERs
         BlockEntityRendererRegistry.INSTANCE.register(VeneMain.SCCS_BLOCK_ENTITY, ::SCCSBlockEntityRender)

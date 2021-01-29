@@ -24,7 +24,6 @@ import net.minecraft.block.Block
 import net.minecraft.block.Material
 import net.minecraft.block.entity.BlockEntityType
 import net.minecraft.item.*
-import net.minecraft.recipe.AbstractCookingRecipe
 import net.minecraft.resource.ResourcePack
 import net.minecraft.screen.ScreenHandlerType
 import net.minecraft.util.Identifier
@@ -47,16 +46,13 @@ import net.vene.magic.spell_components.collection.ResultComponentCollection
 import net.vene.common.util.StringUtil
 import net.vene.common.screen.WandEditScreenHandler
 import net.vene.common.util.extension.devDebug
-import net.vene.init.StaticDataAdder
+import net.vene.data.StaticDataAdder
 import net.vene.magic.spell_components.collection.CosmeticComponentCollection
 import net.vene.magic.spell_components.types.CosmeticComponent
-import net.vene.recipe.SCCSRecipeList
 import org.apache.logging.log4j.LogManager
 import org.apache.logging.log4j.Logger
 import net.minecraft.recipe.RecipeType
 import net.vene.recipe.SCCSRecipe
-import net.minecraft.recipe.CookingRecipeSerializer
-import net.minecraft.recipe.RecipeSerializer
 import net.vene.recipe.SCCSRecipeSerializer
 
 
@@ -75,6 +71,9 @@ class VeneMain : ModInitializer {
         devDebug("Registering RRP")
         val lang = lang()
         RRPCallback.EVENT.register(RRPCallback { a: MutableList<ResourcePack> -> a.add(RESOURCE_PACK) })
+
+        devDebug("Adding Extra lang entries to lang")
+        StaticDataAdder.lang(lang)
 
         devDebug("Registering and Generating Items")
         StaticDataAdder.items()
@@ -96,7 +95,7 @@ class VeneMain : ModInitializer {
             SPELL_COMPONENT_ITEMS[Identifier(MOD_ID, component.name)] = item
 
             // Add translation
-            lang.translate(
+            lang.entry(
                     "item.vene.${component.type.toString().toLowerCase()}.${component.name}",
                     StringUtil.displayFromUnderscored(component.name)
             )
@@ -119,8 +118,6 @@ class VeneMain : ModInitializer {
             SPELLS_TO_BE_REMOVED.clear()
         })
 
-        devDebug("Adding Extra lang entries to lang")
-        StaticDataAdder.lang(lang)
 
         devDebug("Adding files to RRP")
         RESOURCE_PACK.addLang(Identifier(MOD_ID, "en_us"), lang)
@@ -138,6 +135,7 @@ class VeneMain : ModInitializer {
         devDebug("MoveComponentCollection contains ${MOVE_COMPONENTS.size} entries")
         devDebug("ResultComponentCollection contains ${RESULT_COMPONENTS.size} entries")
 
+        // Dump ARRP data if dev env or enabled
         if (FabricLoader.getInstance().isDevelopmentEnvironment || ConfigInstance.dumpRuntimeGeneratedAssets) {
             RESOURCE_PACK.dump()
         }
@@ -193,7 +191,7 @@ class VeneMain : ModInitializer {
         var SCCS_BLOCK_ENTITY: BlockEntityType<SCCSBlockEntity> = Registry.register(Registry.BLOCK_ENTITY_TYPE, Identifier(MOD_ID, "sccs"), BlockEntityType.Builder.create(::SCCSBlockEntity, SCCS_BLOCK).build(null))
 
         // Screen Handlers
-        val BOX_SCREEN_HANDLER: ScreenHandlerType<WandEditScreenHandler> = ScreenHandlerRegistry.registerSimple(Identifier(MOD_ID, "wand_edit"), ::WandEditScreenHandler)
+        val WAND_EDIT_SCREEN_HANDLER: ScreenHandlerType<WandEditScreenHandler> = ScreenHandlerRegistry.registerSimple(Identifier(MOD_ID, "wand_edit"), ::WandEditScreenHandler)
 
         // Recipes
         val SCCS_RECIPE: RecipeType<SCCSRecipe> = Registry.register(Registry.RECIPE_TYPE, Identifier(MOD_ID, "sccs"),

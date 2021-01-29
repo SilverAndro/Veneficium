@@ -38,7 +38,7 @@ object MoveComponentCollection {
         val keyFired = "bounce_fired"
         val keyRegistered = "bounce_registered"
 
-        if (LogicHelper.executeOnce(context, keyRegistered)) {
+        LogicHelper.executeOnce(context, keyRegistered) {
             context.executor.events.hitGround.register {
                 val velocity = context.executor.velocity
 
