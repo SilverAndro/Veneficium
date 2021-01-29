@@ -7,5 +7,5 @@
 package net.vene
 
 object VeneConfig {
-    val SpellQueueTraceback = true
+    val SpellQueueTraceback = false
 }
