@@ -15,6 +15,8 @@ import net.minecraft.util.math.BlockPos
 import net.minecraft.util.math.Vec3d
 import net.minecraft.util.shape.VoxelShapes
 import net.minecraft.world.explosion.Explosion
+import net.vene.ConfigInstance
+import net.vene.VeneConfig
 import net.vene.VeneMain
 import net.vene.magic.SpellContext.SpellTarget
 import net.vene.magic.event.EventListenerResult
@@ -168,7 +170,7 @@ object ResultComponentCollection {
     val EXPLODE = ResultComponent("explode") { context, modifiers, queue ->
         val spellTarget = context.targets.last()
         val explosion = context.world.createExplosion(null, spellTarget.pos.x + 0.5, spellTarget.pos.y + 0.5, spellTarget.pos.z + 0.5, 1.6F, false, Explosion.DestructionType.DESTROY)
-        if (modifiers.lastOrNull() != null) {
+        if (modifiers.lastOrNull() != null && ConfigInstance.explosionsCreateMaterials) {
             val material = modifiers.removeLast()
             for (blockPos in explosion.affectedBlocks) {
                 if (Random.nextBoolean() && context.world.getBlockState(blockPos).isAir) {
@@ -182,7 +184,7 @@ object ResultComponentCollection {
     val LARGE_EXPLODE = ResultComponent("large_explode") { context, modifiers, queue ->
         val spellTarget = context.targets.last()
         val explosion = context.world.createExplosion(null, spellTarget.pos.x + 0.5, spellTarget.pos.y + 0.5, spellTarget.pos.z + 0.5, 3.2F, false, Explosion.DestructionType.DESTROY)
-        if (modifiers.lastOrNull() != null) {
+        if (modifiers.lastOrNull() != null && ConfigInstance.explosionsCreateMaterials) {
             val material = modifiers.removeLast()
             for (blockPos in explosion.affectedBlocks) {
                 if (Random.nextBoolean() && context.world.getBlockState(blockPos).isAir) {

@@ -138,7 +138,7 @@ class VeneMain : ModInitializer {
         devDebug("MoveComponentCollection contains ${MOVE_COMPONENTS.size} entries")
         devDebug("ResultComponentCollection contains ${RESULT_COMPONENTS.size} entries")
 
-        if (FabricLoader.getInstance().isDevelopmentEnvironment) {
+        if (FabricLoader.getInstance().isDevelopmentEnvironment || ConfigInstance.dumpRuntimeGeneratedAssets) {
             RESOURCE_PACK.dump()
         }
     }

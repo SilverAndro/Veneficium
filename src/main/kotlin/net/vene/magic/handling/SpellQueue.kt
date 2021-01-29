@@ -6,6 +6,7 @@
 
 package net.vene.magic.handling
 
+import net.vene.ConfigInstance
 import net.vene.VeneConfig
 import net.vene.VeneMain
 import net.vene.magic.SpellContext
@@ -21,7 +22,7 @@ class SpellQueue {
     var tmpIndex = 0
 
     fun run(context: SpellContext) {
-        if (VeneConfig.SpellQueueTraceback) {
+        if (ConfigInstance.spellQueueTraceback) {
             devDebug("------ Queue Run ------")
         }
 
@@ -29,7 +30,7 @@ class SpellQueue {
         frozenContinue = 0
         while (tmpIndex < componentList.size) {
             val magicEffect = componentList[tmpIndex]
-            if (VeneConfig.SpellQueueTraceback) {
+            if (ConfigInstance.spellQueueTraceback) {
                 devDebug("Executing component $magicEffect")
             }
 
@@ -46,7 +47,7 @@ class SpellQueue {
                 componentList.remove(magicEffect)
                 continue
             }
-            if (VeneConfig.SpellQueueTraceback) {
+            if (ConfigInstance.spellQueueTraceback) {
                 devDebug("Returned Operation is $operation")
             }
 

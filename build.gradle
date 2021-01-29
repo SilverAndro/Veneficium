@@ -27,6 +27,9 @@ repositories {
     maven {
         url = 'https://raw.githubusercontent.com/Devan-Kerman/Devan-Repo/master/'
     }
+    maven {
+        url = 'https://jitpack.io'
+    }
     mavenCentral()
     jcenter()
 }
@@ -63,6 +66,10 @@ dependencies {
     // REI
     modCompileOnly "me.shedaniel:RoughlyEnoughItems-api:${project.rei_version}"
     modRuntime "me.shedaniel:RoughlyEnoughItems:${project.rei_version}"
+
+    // Microconfig
+    modImplementation 'com.github.P03W:Microconfig:1.0.7'
+    include 'com.github.P03W:Microconfig:1.0.7'
 }
 
 processResources {
