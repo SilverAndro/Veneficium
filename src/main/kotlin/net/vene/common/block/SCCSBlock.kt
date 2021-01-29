@@ -77,9 +77,9 @@ class SCCSBlock(settings: Settings) : BlockWithEntity(settings) {
                 }
 
                 // Take 1 from the player (if not creative) and put it on the SCCS pillar
+                blockEntity.heldItemStack = itemUsed.copy()
+                blockEntity.heldItemStack.count = 1
                 if (!player.isCreative) {
-                    blockEntity.heldItemStack = itemUsed.copy()
-                    blockEntity.heldItemStack.count = 1
                     itemUsed.decrement(1)
                 }
 
