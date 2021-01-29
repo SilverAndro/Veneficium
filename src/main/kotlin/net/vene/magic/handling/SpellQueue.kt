@@ -15,10 +15,10 @@ import net.vene.magic.spell_components.types.MaterialComponent
 import net.vene.common.util.extension.devDebug
 
 class SpellQueue {
-    private val componentList: MutableList<MagicEffect> = mutableListOf()
+    val componentList: MutableList<MagicEffect> = mutableListOf()
     private val modifiers: MutableList<MaterialComponent> = mutableListOf()
     private var frozenContinue = 0
-    private var tmpIndex = 0
+    var tmpIndex = 0
 
     fun run(context: SpellContext) {
         if (VeneConfig.SpellQueueTraceback) {

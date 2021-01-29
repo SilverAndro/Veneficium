@@ -250,4 +250,13 @@ object ResultComponentCollection {
     val WAIT_5 = ComponentFactories.waitXTicksBuilder(5)
     val WAIT_10 = ComponentFactories.waitXTicksBuilder(10)
     val WAIT_20 = ComponentFactories.waitXTicksBuilder(20)
+
+    val CHANCE_50 = ResultComponent("chance_50") { context, modifiers, queue ->
+        if (Random.nextBoolean()) {
+            try {
+                queue.handleOp(HandlerOperation.REMOVE_CONTINUE, queue.componentList[queue.tmpIndex + 1])
+            } catch (ignored: IndexOutOfBoundsException) {}
+        }
+        HandlerOperation.REMOVE_CONTINUE
+    }
 }

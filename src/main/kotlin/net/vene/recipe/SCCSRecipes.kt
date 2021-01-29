@@ -19,15 +19,15 @@ import net.vene.VeneMain
 
 data class SCCSRecipe(val identifier: Identifier, val core: Item, val ingredients: List<Item>, val result: Item) : Recipe<SimpleInventory> {
     override fun matches(inv: SimpleInventory, world: World): Boolean {
-        TODO("Not yet implemented")
+        return false
     }
 
     override fun craft(inv: SimpleInventory?): ItemStack {
-        TODO("Not yet implemented")
+        return ItemStack.EMPTY
     }
 
     override fun fits(width: Int, height: Int): Boolean {
-        TODO("Not yet implemented")
+        return false
     }
 
     override fun getOutput(): ItemStack {

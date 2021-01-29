@@ -434,7 +434,6 @@ object StaticDataAdder {
                 append("\"result\":${result.formattedID()}")
                 append("}")
             }
-            println(output)
             pack.addResource(ResourceType.SERVER_DATA, Identifier(MOD_ID, "recipes/components/${result.formattedID().split("/").last().replace("\"", "")}.json"), output.toByteArray(Charset.forName("UTF-8")))
         }
     }
