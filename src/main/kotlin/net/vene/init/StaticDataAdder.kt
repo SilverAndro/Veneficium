@@ -25,6 +25,7 @@ import net.minecraft.resource.ResourceType
 import net.minecraft.util.Identifier
 import net.minecraft.util.registry.Registry
 import net.vene.VeneMain
+import net.vene.VeneMain.Companion.MAGIC_BINDING
 import net.vene.VeneMain.Companion.MOD_ID
 import net.vene.common.util.extension.formattedID
 import java.nio.charset.Charset
@@ -51,6 +52,9 @@ object StaticDataAdder {
         ).entry(
             "vene.screen.wand_edit.title",
             "Edit Wands"
+        ).entry(
+            "vene.screen.compat.category.weaving",
+            "Weaving"
         ).entry(
             "item.vene.empty_component",
             "Blank Spell Component"
@@ -195,13 +199,13 @@ object StaticDataAdder {
             // Target entity
             add(
                 EMPTY_COMPONENT,
-                listOf(Items.GUNPOWDER, Items.ROTTEN_FLESH, VeneMain.MAGIC_BINDING, spellComponent("target_ground")),
+                listOf(Items.GUNPOWDER, Items.ROTTEN_FLESH, MAGIC_BINDING, spellComponent("target_ground")),
                 spellComponent("target_entity")
             )
             // Target entity or ground
             add(
                 EMPTY_COMPONENT,
-                listOf(VeneMain.MAGIC_BINDING, VeneMain.MAGIC_BINDING, spellComponent("target_entity"), spellComponent("target_ground")),
+                listOf(MAGIC_BINDING, MAGIC_BINDING, spellComponent("target_entity"), spellComponent("target_ground")),
                 spellComponent("target_entity_or_ground")
             )
             // Target current
@@ -221,13 +225,13 @@ object StaticDataAdder {
             // Large explode
             add(
                 EMPTY_COMPONENT,
-                listOf(spellComponent("explode"), spellComponent("explode"), spellComponent("explode"), VeneMain.MAGIC_BINDING),
+                listOf(spellComponent("explode"), spellComponent("explode"), spellComponent("explode"), MAGIC_BINDING),
                 spellComponent("large_explode")
             )
             // Create force
             add(
                 EMPTY_COMPONENT,
-                listOf(spellComponent("explode"), spellComponent("explode"), Items.WATER_BUCKET, VeneMain.MAGIC_BINDING),
+                listOf(spellComponent("explode"), spellComponent("explode"), Items.WATER_BUCKET, MAGIC_BINDING),
                 spellComponent("create_force")
             )
             // Create light
@@ -241,6 +245,42 @@ object StaticDataAdder {
                 EMPTY_COMPONENT,
                 listOf(Items.PACKED_ICE, Items.SNOW_BLOCK, spellComponent("slow_down"), spellComponent("slow_down")),
                 spellComponent("freeze")
+            )
+            // Wait 0.05 seconds
+            add(
+                EMPTY_COMPONENT,
+                listOf(Items.CLOCK, Items.CLOCK, Items.REPEATER, Items.REPEATER),
+                spellComponent("wait_0.05_seconds")
+            )
+            // Wait 0.15 seconds
+            add(
+                spellComponent("wait_0.05_seconds"),
+                listOf(spellComponent("wait_0.05_seconds"), spellComponent("wait_0.05_seconds"), MAGIC_BINDING, MAGIC_BINDING),
+                spellComponent("wait_0.15_seconds")
+            )
+            // Wait 0.25 seconds
+            add(
+                spellComponent("wait_0.15_seconds"),
+                listOf(spellComponent("wait_0.05_seconds"), spellComponent("wait_0.05_seconds"), MAGIC_BINDING, MAGIC_BINDING),
+                spellComponent("wait_0.25_seconds")
+            )
+            // Wait 0.5 seconds
+            add(
+                spellComponent("wait_0.25_seconds"),
+                listOf(spellComponent("wait_0.25_seconds"), Items.CLOCK, MAGIC_BINDING, MAGIC_BINDING),
+                spellComponent("wait_0.5_seconds")
+            )
+            // Wait 0.5 seconds
+            add(
+                spellComponent("wait_0.5_seconds"),
+                listOf(spellComponent("wait_0.5_seconds"), Items.CLOCK, MAGIC_BINDING, MAGIC_BINDING),
+                spellComponent("wait_1.0_seconds")
+            )
+            // Chance 50
+            add(
+                EMPTY_COMPONENT,
+                listOf(Items.EGG, Items.DISPENSER, Items.DROPPER, Items.WHEAT_SEEDS),
+                spellComponent("chance_50")
             )
         }
     }
@@ -333,7 +373,7 @@ object StaticDataAdder {
                     ).key(
                         "B",
                         ingredient()
-                            .item(VeneMain.MAGIC_BINDING)
+                            .item(MAGIC_BINDING)
                     ),
                 item(VeneMain.WAND_ITEM)
             )
@@ -354,7 +394,7 @@ object StaticDataAdder {
                         ingredient()
                             .item(Items.HONEYCOMB)
                     ),
-                JResult.itemStack(VeneMain.MAGIC_BINDING, 1)
+                JResult.itemStack(MAGIC_BINDING, 1)
             )
         )
     }
@@ -399,7 +439,7 @@ object StaticDataAdder {
 
     fun items() {
         Registry.register(Registry.ITEM, Identifier(MOD_ID, "wand"), VeneMain.WAND_ITEM)
-        Registry.register(Registry.ITEM, Identifier(MOD_ID, "magic_binding"), VeneMain.MAGIC_BINDING)
+        Registry.register(Registry.ITEM, Identifier(MOD_ID, "magic_binding"), MAGIC_BINDING)
         Registry.register(Registry.ITEM, Identifier(MOD_ID, "empty_component"), VeneMain.EMPTY_SPELL_COMPONENT)
         Registry.register(
             Registry.ITEM,

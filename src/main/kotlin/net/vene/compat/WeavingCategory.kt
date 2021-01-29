@@ -14,6 +14,7 @@ import me.shedaniel.rei.api.TransferRecipeCategory
 import me.shedaniel.rei.api.widgets.Widgets
 import me.shedaniel.rei.gui.widget.Widget
 import net.minecraft.client.util.math.MatrixStack
+import net.minecraft.text.TranslatableText
 import net.minecraft.util.Identifier
 import net.vene.VeneMain
 
@@ -24,7 +25,7 @@ class WeavingCategory : TransferRecipeCategory<WeavingDisplay> {
     }
 
     override fun getCategoryName(): String {
-        return "Weaving"
+        return TranslatableText("vene.screen.compat.category.weaving").parse(null, null, 1).string
     }
 
     override fun renderRedSlots(matrices: MatrixStack?, widgets: MutableList<Widget>?, bounds: Rectangle?, display: WeavingDisplay?, redSlots: IntList?) {}
@@ -55,19 +56,19 @@ class WeavingCategory : TransferRecipeCategory<WeavingDisplay> {
                     .disableBackground().markOutput()
             )
             widgets.add(
-                Widgets.createSlot(Point(centerX, centerY - offset)).entries(listOf(items[1]))
+                Widgets.createSlot(Point(centerX - offset, centerY - offset)).entries(listOf(items[1]))
                     .disableBackground().markOutput()
             )
             widgets.add(
-                Widgets.createSlot(Point(centerX, centerY + offset)).entries(listOf(items[2]))
+                Widgets.createSlot(Point(centerX - offset, centerY + offset)).entries(listOf(items[2]))
                     .disableBackground().markOutput()
             )
             widgets.add(
-                Widgets.createSlot(Point(centerX - offset, centerY)).entries(listOf(items[3]))
+                Widgets.createSlot(Point(centerX + offset, centerY - offset)).entries(listOf(items[3]))
                     .disableBackground().markOutput()
             )
             widgets.add(
-                Widgets.createSlot(Point(centerX + offset, centerY)).entries(listOf(items[4]))
+                Widgets.createSlot(Point(centerX + offset, centerY + offset)).entries(listOf(items[4]))
                     .disableBackground().markOutput()
             )
         } catch (ignored: IndexOutOfBoundsException) {

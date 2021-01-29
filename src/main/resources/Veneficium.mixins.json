@@ -8,8 +8,8 @@
     "StringValueAccessorMixin"
   ],
   "client": [
-    "ArmMixin",
-    "SkinMixin"
+    "client.ArmMixin",
+    "client.SkinMixin"
   ],
   "injectors": {
     "defaultRequire": 1

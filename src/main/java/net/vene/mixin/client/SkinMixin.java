@@ -1,4 +1,4 @@
-package net.vene.mixin;
+package net.vene.mixin.client;
 
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.texture.NativeImage;
