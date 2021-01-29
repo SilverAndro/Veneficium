@@ -5,11 +5,14 @@
   "name": "Veneficium",
   "description": "A magic mod focused on customisation",
   "authors": [
-    "TheoreticallyUseful"
+    "TheoreticallyUseful / P03W"
   ],
-  "contact": {},
+  "contact": {
+    "sources": "https://github.com/P03W/Veneficium",
+    "issues": "https://github.com/P03W/Veneficium/issues"
+  },
   "license": "MPL-2.0",
-  "icon": "assets/veneficium/icon.png",
+  "icon": "assets/vene/icon.png",
   "environment": "*",
   "entrypoints": {
     "main": [
