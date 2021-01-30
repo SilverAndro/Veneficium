@@ -16,7 +16,7 @@ import net.vene.common.util.extension.getRawValue
 import net.vene.magic.spell_components.MagicEffect
 
 class WandSpellsComponent : ComponentV3 {
-    private var spells: MutableList<MagicEffect> = mutableListOf()
+    private var spells: MutableList<MagicEffect?> = mutableListOf()
 
     override fun readFromNbt(tag: CompoundTag) {
         // Iterates over all component lists in order
@@ -24,6 +24,9 @@ class WandSpellsComponent : ComponentV3 {
             saved_component as StringTag
 
             val componentName = saved_component.getRawValue()
+            if (componentName == "!empty") {
+                spells.add(null)
+            }
             for (possible_component in VeneMain.COSMETIC_COMPONENTS union VeneMain.RESULT_COMPONENTS union VeneMain.MOVE_COMPONENTS union VeneMain.MATERIAL_COMPONENTS) {
                 if (possible_component.name == componentName) {
                     spells.add(possible_component)
@@ -38,7 +41,7 @@ class WandSpellsComponent : ComponentV3 {
     override fun writeToNbt(tag: CompoundTag) {
         val tagList = ListTag()
         for (spell in spells) {
-            tagList.add(StringTag.of(spell.name))
+            tagList.add(StringTag.of(spell?.name ?: "!empty"))
         }
         tag.put("spells", tagList)
     }
@@ -56,11 +59,11 @@ class WandSpellsComponent : ComponentV3 {
 
     companion object {
         // Utility functions
-        fun getSpellsFrom(stack: ItemStack): MutableList<MagicEffect> {
+        fun getSpellsFrom(stack: ItemStack): MutableList<MagicEffect?> {
             return VeneMain.WAND_SPELLS_COMPONENT.get(stack).spells
         }
 
-        fun setSpells(stack: ItemStack, spells: MutableList<MagicEffect>) {
+        fun setSpells(stack: ItemStack, spells: MutableList<MagicEffect?>) {
             VeneMain.WAND_SPELLS_COMPONENT.get(stack).spells = spells
         }
     }

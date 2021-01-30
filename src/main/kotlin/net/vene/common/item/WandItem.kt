@@ -40,7 +40,9 @@ class WandItem(settings: Settings) : Item(settings) {
 
             // Add components to queue
             for (component in spells) {
-                queue.addToQueue(component)
+                if (component != null) {
+                    queue.addToQueue(component)
+                }
             }
 
             // Get what direction it should fire in
@@ -58,7 +60,9 @@ class WandItem(settings: Settings) : Item(settings) {
     override fun appendTooltip(stack: ItemStack?, world: World?, tooltip: MutableList<Text>?, context: TooltipContext?) {
         // For each component get its display name and add it
         for (component in stack?.let { WandSpellsComponent.getSpellsFrom(it) } ?: mutableListOf()) {
-            tooltip?.add(TranslatableText(StringUtil.displayFromUnderscored(component.name)))
+            if (component != null) {
+                tooltip?.add(TranslatableText(StringUtil.displayFromUnderscored(component.name)))
+            }
         }
     }
 }

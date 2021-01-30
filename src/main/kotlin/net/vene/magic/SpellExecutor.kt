@@ -40,9 +40,9 @@ class SpellExecutor(private val owner: PlayerEntity, private val world: ServerWo
     val events = EventInstance()
 
     fun tick() {
-        events.gameTick.fire(context)
-        queue.run(context)
+        //queue.run(context)
         physics()
+        events.gameTick.fire(context)
     }
 
     private fun display() {
@@ -101,8 +101,8 @@ class SpellExecutor(private val owner: PlayerEntity, private val world: ServerWo
                         } else {
                             // Achieved through trial and error, no real meaning
                             lifetime /= 2
-                            lifetime -= 20
-                            lifetime -= lifetime / 4
+                            lifetime -= 18
+                            lifetime -= lifetime / 3
                         }
                     }
                 } else if (!blockState.block.isCollidable()) {
@@ -115,6 +115,10 @@ class SpellExecutor(private val owner: PlayerEntity, private val world: ServerWo
                 }
                 lastChecked = toBlockPos
             }
+        }
+
+        if (totalSteps % 20 == 0) {
+            queue.run(context)
         }
 
         velocity = velocity.subtract(0.0, gravity, 0.0)

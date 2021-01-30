@@ -83,7 +83,7 @@ class WandEditScreenHandler(syncId: Int, playerInventory: PlayerInventory) : Scr
 
     override fun onContentChanged(inventory: Inventory) {
         val wand = inventory.getStack(0)
-        val spells: MutableList<MagicEffect> = mutableListOf()
+        val spells: MutableList<MagicEffect?> = mutableListOf()
 
         super.onContentChanged(inventory)
 
@@ -97,6 +97,8 @@ class WandEditScreenHandler(syncId: Int, playerInventory: PlayerInventory) : Scr
             for (i in 1 until 10) {
                 if (inventory.getStack(i).item is ComponentItem) {
                     spells.add((inventory.getStack(i).item as ComponentItem).effect)
+                } else {
+                    spells.add(null)
                 }
                 WandSpellsComponent.setSpells(wand, spells)
             }
@@ -124,12 +126,10 @@ class WandEditScreenHandler(syncId: Int, playerInventory: PlayerInventory) : Scr
             }
             // Logic for unpacking wand spells
             ignoreContentUpdates = true
-            var found = 0
-            WandSpellsComponent.getSpellsFrom(inventory.getStack(0)).forEach { wantedEffect ->
+            WandSpellsComponent.getSpellsFrom(inventory.getStack(0)).forEachIndexed { found: Int, wantedEffect ->
                 VeneMain.SPELL_COMPONENT_ITEMS.values.forEach {
                     if (it.effect == wantedEffect) {
                         inventory.setStack(found + 1, ItemStack(it))
-                        found++
                     }
                 }
             }

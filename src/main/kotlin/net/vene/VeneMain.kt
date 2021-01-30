@@ -52,8 +52,11 @@ import net.vene.magic.spell_components.types.CosmeticComponent
 import org.apache.logging.log4j.LogManager
 import org.apache.logging.log4j.Logger
 import net.minecraft.recipe.RecipeType
+import net.vene.common.util.math.MathUtil.factorial
 import net.vene.recipe.SCCSRecipe
 import net.vene.recipe.SCCSRecipeSerializer
+import java.text.DecimalFormat
+import kotlin.math.pow
 
 
 @Suppress("MemberVisibilityCanBePrivate")
@@ -134,6 +137,10 @@ class VeneMain : ModInitializer {
         devDebug("MaterialComponentCollection contains ${MATERIAL_COMPONENTS.size} entries")
         devDebug("MoveComponentCollection contains ${MOVE_COMPONENTS.size} entries")
         devDebug("ResultComponentCollection contains ${RESULT_COMPONENTS.size} entries")
+        val total = COSMETIC_COMPONENTS.size + MATERIAL_COMPONENTS.size + MOVE_COMPONENTS.size + RESULT_COMPONENTS.size
+        devDebug("Total components: $total")
+        val df = DecimalFormat("###,###,###")
+        devDebug("Total possible wand permutations: ${df.format((total + 1).factorial()/((total + 1) - 9).factorial())}")
 
         // Dump ARRP data if dev env or enabled
         if (FabricLoader.getInstance().isDevelopmentEnvironment || ConfigInstance.dumpRuntimeGeneratedAssets) {

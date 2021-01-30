@@ -10,6 +10,7 @@ import net.minecraft.util.math.BlockPos
 import net.minecraft.util.math.Direction
 import net.minecraft.util.math.MathHelper
 import net.minecraft.util.math.Vec3d
+import java.math.BigInteger
 import kotlin.math.PI
 
 object MathUtil {
@@ -49,5 +50,13 @@ object MathUtil {
         }
 
         return Direction.DOWN
+    }
+
+    fun Int.factorial(): BigInteger {
+        var factorial: BigInteger = BigInteger.ONE
+        for (i in 1..this) {
+            factorial *= BigInteger.valueOf(i.toLong())
+        }
+        return factorial
     }
 }
