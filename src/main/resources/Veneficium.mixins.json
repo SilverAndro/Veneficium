@@ -5,11 +5,12 @@
   "compatibilityLevel": "JAVA_8",
   "mixins": [
     "CollidableAccessorMixin",
-    "StringValueAccessorMixin"
+    "StringValueAccessorMixin",
   ],
   "client": [
     "client.ArmMixin",
-    "client.SkinMixin"
+    "client.SkinMixin",
+    "client.ModelPartMixin"
   ],
   "injectors": {
     "defaultRequire": 1

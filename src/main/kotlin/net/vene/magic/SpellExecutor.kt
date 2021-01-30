@@ -16,6 +16,7 @@ import net.minecraft.server.world.ServerWorld
 import net.minecraft.util.math.BlockPos
 import net.minecraft.util.math.Vec3d
 import net.vene.VeneMain
+import net.vene.common.util.extension.devDebug
 import net.vene.common.util.extension.isCollidable
 import net.vene.common.util.math.MathUtil
 import net.vene.common.util.math.VectorIterator
@@ -125,6 +126,7 @@ class SpellExecutor(private val owner: PlayerEntity, private val world: ServerWo
         lifetime--
         age++
         if (lifetime <= 0 || queue.isEmpty()) {
+            devDebug("Killing executor: $lifetime, $queue")
             VeneMain.SPELLS_TO_BE_REMOVED.add(this)
         }
     }
