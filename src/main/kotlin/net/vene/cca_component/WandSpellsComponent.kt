@@ -26,6 +26,7 @@ class WandSpellsComponent : ComponentV3 {
             val componentName = saved_component.getRawValue()
             if (componentName == "!empty") {
                 spells.add(null)
+                continue@next
             }
             for (possible_component in VeneMain.COSMETIC_COMPONENTS union VeneMain.RESULT_COMPONENTS union VeneMain.MOVE_COMPONENTS union VeneMain.MATERIAL_COMPONENTS) {
                 if (possible_component.name == componentName) {
