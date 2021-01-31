@@ -57,8 +57,10 @@ dependencies {
 
     // Adds an API dependency on the base cardinal components module (required by every other module)
     modApi "io.github.onyxstudios.Cardinal-Components-API:cardinal-components-base:${project.cca_version}"
+    include "io.github.onyxstudios.Cardinal-Components-API:cardinal-components-base:${project.cca_version}"
     // Adds an implementation dependency on the entity module
     modImplementation "io.github.onyxstudios.Cardinal-Components-API:cardinal-components-item:${project.cca_version}"
+    include "io.github.onyxstudios.Cardinal-Components-API:cardinal-components-item:${project.cca_version}"
 
     // ARRP
     modImplementation group: 'net.devtech', name: 'arrp', version: '0.3.4'
