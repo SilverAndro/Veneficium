@@ -101,7 +101,7 @@ class SpellExecutor(private val owner: PlayerEntity, private val world: ServerWo
                         } else {
                             // Achieved through trial and error, no real meaning
                             lifetime /= 2
-                            lifetime -= 18
+                            lifetime -= 17
                             lifetime -= lifetime / 3
                         }
                     }
