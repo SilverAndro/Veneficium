@@ -62,6 +62,7 @@ dependencies {
 
     // ARRP
     modImplementation group: 'net.devtech', name: 'arrp', version: '0.3.4'
+    include group: 'net.devtech', name: 'arrp', version: '0.3.4'
 
     // REI
     modCompileOnly "me.shedaniel:RoughlyEnoughItems-api:${project.rei_version}"
