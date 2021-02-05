@@ -7,10 +7,14 @@
 package net.vene.common.item.casting
 
 import net.minecraft.client.item.TooltipContext
+import net.minecraft.entity.LivingEntity
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.item.CrossbowItem
 import net.minecraft.item.ItemStack
+import net.minecraft.item.RangedWeaponItem
 import net.minecraft.server.world.ServerWorld
+import net.minecraft.sound.SoundCategory
+import net.minecraft.sound.SoundEvents
 import net.minecraft.text.Text
 import net.minecraft.text.TranslatableText
 import net.minecraft.util.Hand
@@ -27,8 +31,18 @@ import net.vene.magic.SpellExecutor
 import net.vene.magic.handling.SpellQueue
 import net.vene.magic.spell_components.collection.MoveComponentCollection
 import net.vene.magic.spell_components.collection.ResultComponentCollection
+import java.util.function.Consumer
+import java.util.function.Predicate
 
 class MagicCrossbow(settings: Settings) : CrossbowItem(settings), SpellProvider {
+    override fun getHeldProjectiles(): Predicate<ItemStack> {
+        return Predicate { true }
+    }
+
+    override fun getProjectiles(): Predicate<ItemStack> {
+        return Predicate { true }
+    }
+
     override fun isUsedOnRelease(stack: ItemStack?): Boolean {
         return true
     }
@@ -38,14 +52,31 @@ class MagicCrossbow(settings: Settings) : CrossbowItem(settings), SpellProvider 
         return if (isCharged(itemStack)) {
             setCharged(itemStack, false)
             fireSpell(world, user, hand)
-        } else if (!user.getArrowType(itemStack).isEmpty) {
+        } else {
             if (!isCharged(itemStack)) {
                 setCharged(itemStack, false)
                 user.setCurrentHand(hand)
             }
             TypedActionResult.consume(itemStack)
-        } else {
-            TypedActionResult.fail(itemStack)
+        }
+    }
+
+    override fun onStoppedUsing(stack: ItemStack, world: World, user: LivingEntity, remainingUseTicks: Int) {
+        val i = getMaxUseTime(stack) - remainingUseTicks
+        val f = getPullProgress(i, stack)
+        if (f >= 1.0f && !isCharged(stack)) {
+            setCharged(stack, true)
+            val soundCategory = if (user is PlayerEntity) SoundCategory.PLAYERS else SoundCategory.HOSTILE
+            world.playSound(
+                null,
+                user.x,
+                user.y,
+                user.z,
+                SoundEvents.ITEM_CROSSBOW_LOADING_END,
+                soundCategory,
+                1.0f,
+                1.0f / (RANDOM.nextFloat() * 0.5f + 1.0f) + 0.2f
+            )
         }
     }
 
@@ -74,6 +105,9 @@ class MagicCrossbow(settings: Settings) : CrossbowItem(settings), SpellProvider 
             user.itemCooldownManager[this] = ConfigInstance.crossbowCastDelay
             // Add it to active executors
             VeneMain.ACTIVE_SPELLS.add(executor)
+
+            // Damage item
+            stack.damage(1, user) { e: LivingEntity -> e.sendToolBreakStatus(hand) }
         }
         return TypedActionResult.consume(user.getStackInHand(hand))
     }
@@ -89,5 +123,13 @@ class MagicCrossbow(settings: Settings) : CrossbowItem(settings), SpellProvider 
 
     override fun getRarity(stack: ItemStack?): Rarity {
         return Rarity.EPIC
+    }
+
+    private fun getPullProgress(useTicks: Int, stack: ItemStack): Float {
+        var f = useTicks.toFloat() / getPullTime(stack).toFloat()
+        if (f > 1.0f) {
+            f = 1.0f
+        }
+        return f
     }
 }

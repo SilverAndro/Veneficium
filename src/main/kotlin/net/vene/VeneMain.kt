@@ -173,8 +173,8 @@ class VeneMain : ModInitializer {
                 .build()
 
         // Items
-        val WAND_ITEM: WandItem = WandItem(Item.Settings().group(ITEM_GROUP).maxCount(1))
-        val MAGIC_CROSSBOW_ITEM: CrossbowItem = MagicCrossbow(Item.Settings().group(ITEM_GROUP).maxCount(1))
+        val WAND_ITEM: WandItem = WandItem(Item.Settings().group(ITEM_GROUP).maxCount(1).maxDamage(600))
+        val MAGIC_CROSSBOW_ITEM: CrossbowItem = MagicCrossbow(Item.Settings().group(ITEM_GROUP).maxCount(1).maxDamage(450))
         val EMPTY_SPELL_COMPONENT = Item(Item.Settings().group(ITEM_GROUP_COMPONENTS).maxCount(1))
         val MAGIC_BINDING = Item(Item.Settings().group(ITEM_GROUP))
         val SPELL_COMPONENT_ITEMS: MutableMap<Identifier, ComponentItem> = mutableMapOf()

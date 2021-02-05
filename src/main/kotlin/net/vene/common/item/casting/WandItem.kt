@@ -7,6 +7,7 @@
 package net.vene.common.item.casting
 
 import net.minecraft.client.item.TooltipContext
+import net.minecraft.entity.LivingEntity
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.item.Item
 import net.minecraft.item.ItemStack
@@ -49,6 +50,9 @@ class WandItem(settings: Settings) : Item(settings), SpellProvider {
             user.itemCooldownManager[this] = ConfigInstance.wandCastDelay
             // Add it to active executors
             VeneMain.ACTIVE_SPELLS.add(executor)
+
+            // Damage item
+            stack.damage(1, user) { e: LivingEntity -> e.sendToolBreakStatus(hand) }
         }
         return TypedActionResult.consume(user?.getStackInHand(hand))
     }

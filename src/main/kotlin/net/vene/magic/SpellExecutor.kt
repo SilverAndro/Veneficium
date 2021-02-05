@@ -79,6 +79,10 @@ class SpellExecutor(private val owner: PlayerEntity, private val world: ServerWo
                 display()
             }
 
+            if (totalSteps % 10 == 0) {
+                queue.run(context)
+            }
+
             // If we haven't check this block yet
             if (!checked.contains(toBlockPos)) {
                 events.moveTick.fire(context)
