@@ -81,8 +81,8 @@ object MoveComponentCollection {
 
         context.executor.events.gameTick.register {
             if (LogicHelper.executeXTimes(context, executeCount, 20)) {
-                context.executor.velocity = context.executor.velocity.multiply(1.1)
-                context.executor.gravity *= 1.1
+                context.executor.velocity = context.executor.velocity.multiply(1.17)
+                context.executor.gravity *= 1.17
                 return@register EventListenerResult.STAY_CONTINUE
             }
             LogicHelper.fire(context, shouldUnregister)

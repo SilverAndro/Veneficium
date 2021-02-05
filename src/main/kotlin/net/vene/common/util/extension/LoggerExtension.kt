@@ -7,10 +7,11 @@
 package net.vene.common.util.extension
 
 import net.fabricmc.loader.api.FabricLoader
+import net.vene.ConfigInstance
 import net.vene.VeneMain
 
 fun devDebug(m: Any) {
-    if (FabricLoader.getInstance().isDevelopmentEnvironment) {
+    if (FabricLoader.getInstance().isDevelopmentEnvironment || ConfigInstance.enableDevMessages) {
         VeneMain.LOGGER.info(m)
     } else {
         VeneMain.LOGGER.debug(m)

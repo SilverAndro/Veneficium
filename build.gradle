@@ -73,6 +73,10 @@ dependencies {
     // Microconfig
     modImplementation 'com.github.P03W:Microconfig:1.0.7'
     include 'com.github.P03W:Microconfig:1.0.7'
+
+    // Multi item lib
+    modImplementation 'com.github.OroArmor:Multi-Item-Lib:1.1.1'
+    include 'com.github.OroArmor:Multi-Item-Lib:1.1.1'
 }
 
 processResources {
@@ -134,3 +138,5 @@ compileKotlin {
 }
 
 compileKotlin.kotlinOptions.jvmTarget = "1.8"
+
+build.dependsOn updateLicenses

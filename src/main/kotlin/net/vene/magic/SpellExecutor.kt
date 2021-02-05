@@ -57,6 +57,8 @@ class SpellExecutor(private val owner: PlayerEntity, private val world: ServerWo
 
     private var lastChecked: BlockPos? = null
     private fun physics() {
+        queue.run(context)
+
         val startingPos = pos
         var lastVelocity = velocity
 
@@ -115,10 +117,6 @@ class SpellExecutor(private val owner: PlayerEntity, private val world: ServerWo
                 }
                 lastChecked = toBlockPos
             }
-        }
-
-        if (totalSteps % 20 == 0) {
-            queue.run(context)
         }
 
         velocity = velocity.subtract(0.0, gravity, 0.0)

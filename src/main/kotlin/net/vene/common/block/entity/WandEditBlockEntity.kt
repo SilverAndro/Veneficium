@@ -14,7 +14,7 @@ import net.minecraft.screen.ScreenHandler
 import net.minecraft.text.Text
 import net.minecraft.text.TranslatableText
 import net.vene.VeneMain
-import net.vene.common.screen.WandEditScreenHandler
+import net.vene.client.screen.WandEditScreenHandler
 
 class WandEditBlockEntity : BlockEntity(VeneMain.WAND_EDIT_BLOCK_ENTITY), NamedScreenHandlerFactory {
     override fun createMenu(syncId: Int, inv: PlayerInventory, player: PlayerEntity): ScreenHandler {

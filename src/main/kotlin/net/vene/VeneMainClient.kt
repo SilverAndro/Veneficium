@@ -16,7 +16,15 @@ import net.minecraft.client.network.ClientPlayNetworkHandler
 import net.minecraft.network.PacketByteBuf
 import net.vene.common.block.entity.SCCSBlockEntity
 import net.vene.common.block.entity.render.SCCSBlockEntityRender
-import net.vene.common.screen.WandEditScreen
+import net.vene.client.screen.WandEditScreen
+import net.fabricmc.fabric.api.`object`.builder.v1.client.model.FabricModelPredicateProviderRegistry
+import net.minecraft.client.item.ModelPredicateProvider
+import net.minecraft.client.world.ClientWorld
+import net.minecraft.entity.LivingEntity
+import net.minecraft.item.CrossbowItem
+import net.minecraft.item.ItemStack
+import net.minecraft.util.Identifier
+import net.vene.common.item.casting.MagicCrossbow
 
 
 class VeneMainClient : ClientModInitializer {
@@ -42,6 +50,23 @@ class VeneMainClient : ClientModInitializer {
                     // prob a desync, should be fixed soon
                 }
             }
+        }
+
+        // Item renderers
+        FabricModelPredicateProviderRegistry.register(
+            Identifier("pull")
+        ) { stack: ItemStack, world: ClientWorld?, entity: LivingEntity? ->
+            return@register if (entity == null) { 0.0f } else {
+                if (entity.activeItem.item !== VeneMain.MAGIC_CROSSBOW_ITEM) 0.0f else (stack.maxUseTime - entity.itemUseTimeLeft).toFloat() / 20.0f
+            }
+        }
+
+        FabricModelPredicateProviderRegistry.register(Identifier("pulling")) { stack: ItemStack, world: ClientWorld?, entity: LivingEntity? ->
+            if (entity != null && entity.isUsingItem && entity.activeItem == stack) 1.0f else 0.0f
+        }
+
+        FabricModelPredicateProviderRegistry.register(Identifier("charged")) { stack: ItemStack, world: ClientWorld?, entity: LivingEntity? ->
+            if (entity != null && CrossbowItem.isCharged(stack)) 1.0f else 0.0f
         }
     }
 }

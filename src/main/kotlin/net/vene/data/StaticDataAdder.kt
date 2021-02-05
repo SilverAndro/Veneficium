@@ -6,6 +6,7 @@
 
 package net.vene.data
 
+import com.oroarmor.multi_item_lib.UniqueItemRegistry
 import net.devtech.arrp.api.RuntimeResourcePack
 import net.devtech.arrp.json.blockstate.JState.*
 import net.devtech.arrp.json.lang.JLang
@@ -40,6 +41,9 @@ object StaticDataAdder {
         lang.entry(
             "item.vene.wand",
             "Magic Wand"
+        ).entry(
+            "item.vene.magic_crossbow",
+            "Magic Crossbow"
         ).entry(
             "item.vene.magic_binding",
             "Magic Binding"
@@ -439,6 +443,8 @@ object StaticDataAdder {
 
     fun items() {
         Registry.register(Registry.ITEM, Identifier(MOD_ID, "wand"), VeneMain.WAND_ITEM)
+        Registry.register(Registry.ITEM, Identifier(MOD_ID, "magic_crossbow"), VeneMain.MAGIC_CROSSBOW_ITEM)
+        UniqueItemRegistry.CROSSBOW.addItemToRegistry(VeneMain.MAGIC_CROSSBOW_ITEM)
         Registry.register(Registry.ITEM, Identifier(MOD_ID, "magic_binding"), MAGIC_BINDING)
         Registry.register(Registry.ITEM, Identifier(MOD_ID, "empty_component"), VeneMain.EMPTY_SPELL_COMPONENT)
         Registry.register(

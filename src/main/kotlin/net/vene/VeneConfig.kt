@@ -12,7 +12,11 @@ import mc.microconfig.MicroConfig
 
 class VeneConfig : ConfigData {
     @JvmField
-    @Comment("Debugging - This will generate a massive amount of debug output that traces the actions taken by every spell every tick")
+    @Comment("Debugging - This will enable output of development debug messages")
+    var enableDevMessages = false
+
+    @JvmField
+    @Comment("Debugging - This will generate a massive amount of debug output that traces the actions taken by every spell every tick, requires enableDevMessages")
     var spellQueueTraceback = false
 
     @JvmField
@@ -26,6 +30,10 @@ class VeneConfig : ConfigData {
     @JvmField
     @Comment("Delay until wands can be used again after crafting (in ticks)")
     var wandCastDelay = 40
+
+    @JvmField
+    @Comment("Delay until magic crossbows can be used again after crafting (in ticks)")
+    var crossbowCastDelay = 0
 }
 
 val ConfigInstance: VeneConfig by lazy { MicroConfig.getOrCreate("veneficium", VeneConfig()) }

@@ -35,7 +35,7 @@ import net.vene.common.block.WandEditBlock
 import net.vene.common.block.entity.SCCSBlockEntity
 import net.vene.common.block.entity.WandEditBlockEntity
 import net.vene.common.item.ComponentItem
-import net.vene.common.item.WandItem
+import net.vene.common.item.casting.WandItem
 import net.vene.magic.SpellExecutor
 import net.vene.magic.spell_components.types.MaterialComponent
 import net.vene.magic.spell_components.types.MoveComponent
@@ -44,7 +44,7 @@ import net.vene.magic.spell_components.collection.MaterialComponentCollection
 import net.vene.magic.spell_components.collection.MoveComponentCollection
 import net.vene.magic.spell_components.collection.ResultComponentCollection
 import net.vene.common.util.StringUtil
-import net.vene.common.screen.WandEditScreenHandler
+import net.vene.client.screen.WandEditScreenHandler
 import net.vene.common.util.extension.devDebug
 import net.vene.data.StaticDataAdder
 import net.vene.magic.spell_components.collection.CosmeticComponentCollection
@@ -52,11 +52,11 @@ import net.vene.magic.spell_components.types.CosmeticComponent
 import org.apache.logging.log4j.LogManager
 import org.apache.logging.log4j.Logger
 import net.minecraft.recipe.RecipeType
+import net.vene.common.item.casting.MagicCrossbow
 import net.vene.common.util.math.MathUtil.factorial
 import net.vene.recipe.SCCSRecipe
 import net.vene.recipe.SCCSRecipeSerializer
 import java.text.DecimalFormat
-import kotlin.math.pow
 
 
 @Suppress("MemberVisibilityCanBePrivate")
@@ -174,6 +174,7 @@ class VeneMain : ModInitializer {
 
         // Items
         val WAND_ITEM: WandItem = WandItem(Item.Settings().group(ITEM_GROUP).maxCount(1))
+        val MAGIC_CROSSBOW_ITEM: CrossbowItem = MagicCrossbow(Item.Settings().group(ITEM_GROUP).maxCount(1))
         val EMPTY_SPELL_COMPONENT = Item(Item.Settings().group(ITEM_GROUP_COMPONENTS).maxCount(1))
         val MAGIC_BINDING = Item(Item.Settings().group(ITEM_GROUP))
         val SPELL_COMPONENT_ITEMS: MutableMap<Identifier, ComponentItem> = mutableMapOf()

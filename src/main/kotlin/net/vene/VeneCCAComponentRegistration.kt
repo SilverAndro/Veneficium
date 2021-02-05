@@ -15,5 +15,6 @@ import net.vene.cca_component.WandSpellsComponent
 class VeneCCAComponentRegistration : ItemComponentInitializer {
     override fun registerItemComponentFactories(registry: ItemComponentFactoryRegistry) {
         registry.registerFor(Identifier(MOD_ID, "wand"), VeneMain.WAND_SPELLS_COMPONENT) {_ -> WandSpellsComponent()}
+        registry.registerFor(Identifier(MOD_ID, "magic_crossbow"), VeneMain.WAND_SPELLS_COMPONENT) {_ -> WandSpellsComponent()}
     }
 }
