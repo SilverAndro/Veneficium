@@ -25,6 +25,8 @@ import net.vene.common.util.StringUtil
 import net.vene.common.util.math.MathUtil
 import net.vene.magic.SpellExecutor
 import net.vene.magic.handling.SpellQueue
+import net.vene.magic.spell_components.collection.MoveComponentCollection
+import net.vene.magic.spell_components.collection.ResultComponentCollection
 
 class MagicCrossbow(settings: Settings) : CrossbowItem(settings), SpellProvider {
     override fun isUsedOnRelease(stack: ItemStack?): Boolean {
@@ -53,6 +55,9 @@ class MagicCrossbow(settings: Settings) : CrossbowItem(settings), SpellProvider 
             val queue = SpellQueue()
             val stack = user.getStackInHand(hand)
             val spells = WandSpellsComponent.getSpellsFrom(stack)
+
+            queue.addToQueue(MoveComponentCollection.LOW_GRAV)
+            queue.addToQueue(MoveComponentCollection.LOW_GRAV)
 
             // Add components to queue
             for (component in spells) {

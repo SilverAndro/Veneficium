@@ -127,7 +127,7 @@ class VeneMain : ModInitializer {
         StaticDataAdder.blockStates(RESOURCE_PACK)
 
         devDebug("Adding recipes")
-        StaticDataAdder.componentRecipes(RESOURCE_PACK)
+        StaticDataAdder.sccsRecipes(RESOURCE_PACK)
         StaticDataAdder.recipes(RESOURCE_PACK)
 
         devDebug("Adding loot tables")

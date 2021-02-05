@@ -28,7 +28,9 @@ import net.minecraft.util.registry.Registry
 import net.vene.VeneMain
 import net.vene.VeneMain.Companion.MAGIC_BINDING
 import net.vene.VeneMain.Companion.MOD_ID
+import net.vene.common.util.extension.cleanID
 import net.vene.common.util.extension.formattedID
+import net.vene.common.util.extension.id
 import java.nio.charset.Charset
 
 
@@ -77,8 +79,14 @@ object StaticDataAdder {
         pack.addBlockState(state(variant(model("vene:block/wand_edit"))), Identifier(MOD_ID, "wand_edit"))
     }
 
-    fun componentRecipes(pack: RuntimeResourcePack) {
+    fun sccsRecipes(pack: RuntimeResourcePack) {
         RecipeBuilder(pack) {
+            /**
+             * Other
+             */
+            // Magic crossbow
+            addOther(Items.CROSSBOW, listOf(VeneMain.WAND_ITEM, MAGIC_BINDING, spellComponent("low_gravity"), spellComponent("low_gravity")), VeneMain.MAGIC_CROSSBOW_ITEM)
+
             /**
              * Cosmetic
              */
@@ -480,7 +488,22 @@ object StaticDataAdder {
                 append("\"result\":${result.formattedID()}")
                 append("}")
             }
-            pack.addResource(ResourceType.SERVER_DATA, Identifier(MOD_ID, "recipes/components/${result.formattedID().split("/").last().replace("\"", "")}.json"), output.toByteArray(Charset.forName("UTF-8")))
+            pack.addResource(ResourceType.SERVER_DATA, Identifier(MOD_ID, "recipes/components/${result.cleanID().split("/").last()}.json"), output.toByteArray(Charset.forName("UTF-8")))
+        }
+
+        fun addOther(core: Item, ingredients: List<Item>, result: Item) {
+            val output = buildString {
+                append("{\"type\":\"vene:sccs\",")
+                append("\"core\":${core.formattedID()},")
+                append("\"ingredients\": [")
+                ingredients.forEachIndexed { i: Int, item: Item ->
+                    append(if (ingredients.lastIndex != i) item.formattedID() + "," else item.formattedID())
+                }
+                append("],")
+                append("\"result\":${result.formattedID()}")
+                append("}")
+            }
+            pack.addResource(ResourceType.SERVER_DATA, Identifier(MOD_ID, "recipes/${result.id().path}.json"), output.toByteArray(Charset.forName("UTF-8")))
         }
     }
 }

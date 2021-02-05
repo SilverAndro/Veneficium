@@ -10,10 +10,8 @@ import net.minecraft.item.Item
 import net.minecraft.util.Identifier
 import net.minecraft.util.registry.Registry
 
-fun Item.formattedID(): String {
-    return '"' + Registry.ITEM.getId(this).toString() + '"'
-}
+fun Item.formattedID() = '"' + Registry.ITEM.getId(this).toString() + '"'
 
-fun Item.id(): Identifier {
-    return Registry.ITEM.getId(this)
-}
+fun Item.cleanID() = Registry.ITEM.getId(this).toString()
+
+fun Item.id() = Registry.ITEM.getId(this)
