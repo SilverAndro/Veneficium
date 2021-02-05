@@ -33,7 +33,7 @@ class VeneConfig : ConfigData {
 
     @JvmField
     @Comment("Delay until magic crossbows can be used again after crafting (in ticks)")
-    var crossbowCastDelay = 0
+    var crossbowCastDelay = 60
 }
 
 val ConfigInstance: VeneConfig by lazy { MicroConfig.getOrCreate("veneficium", VeneConfig()) }
