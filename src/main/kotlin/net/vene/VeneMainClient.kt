@@ -55,17 +55,21 @@ class VeneMainClient : ClientModInitializer {
         // Item renderers
         FabricModelPredicateProviderRegistry.register(
             Identifier("pull")
-        ) { stack: ItemStack, world: ClientWorld?, entity: LivingEntity? ->
+        ) { stack: ItemStack, _: ClientWorld?, entity: LivingEntity? ->
             return@register if (entity == null) { 0.0f } else {
-                if (entity.activeItem.item !== VeneMain.MAGIC_CROSSBOW_ITEM) 0.0f else (stack.maxUseTime - entity.itemUseTimeLeft).toFloat() / 20.0f
+                if (entity.activeItem.item !== VeneMain.MAGIC_CROSSBOW_ITEM) {
+                    0.0f
+                } else {
+                    (CrossbowItem.getPullTime(stack) - entity.itemUseTimeLeft) / CrossbowItem.getPullTime(stack).toFloat()
+                }
             }
         }
 
-        FabricModelPredicateProviderRegistry.register(Identifier("pulling")) { stack: ItemStack, world: ClientWorld?, entity: LivingEntity? ->
+        FabricModelPredicateProviderRegistry.register(Identifier("pulling")) { stack: ItemStack, _: ClientWorld?, entity: LivingEntity? ->
             if (entity != null && entity.isUsingItem && entity.activeItem == stack) 1.0f else 0.0f
         }
 
-        FabricModelPredicateProviderRegistry.register(Identifier("charged")) { stack: ItemStack, world: ClientWorld?, entity: LivingEntity? ->
+        FabricModelPredicateProviderRegistry.register(Identifier("charged")) { stack: ItemStack, _: ClientWorld?, entity: LivingEntity? ->
             if (entity != null && CrossbowItem.isCharged(stack)) 1.0f else 0.0f
         }
     }
