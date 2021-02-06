@@ -52,7 +52,7 @@ data class SCCSRecipe(val identifier: Identifier, val core: Item, val ingredient
     }
 }
 
-// Actual recipes are under root/init/StaticDataAdder.kt
+// Actual recipes are under root/init/StaticDataHandler.kt
 object SCCSRecipeList {
     private val recipes: MutableList<SCCSRecipe> = mutableListOf()
 

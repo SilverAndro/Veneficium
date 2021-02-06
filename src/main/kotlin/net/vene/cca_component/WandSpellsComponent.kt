@@ -11,8 +11,11 @@ import net.minecraft.item.ItemStack
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.nbt.ListTag
 import net.minecraft.nbt.StringTag
+import net.minecraft.nbt.Tag
 import net.vene.VeneMain
+import net.vene.common.item.ComponentItem
 import net.vene.common.util.extension.getRawValue
+import net.vene.data.StaticDataHandler
 import net.vene.magic.spell_components.MagicEffect
 
 class WandSpellsComponent : ComponentV3 {
@@ -66,6 +69,36 @@ class WandSpellsComponent : ComponentV3 {
 
         fun setSpells(stack: ItemStack, spells: MutableList<MagicEffect?>) {
             VeneMain.WAND_SPELLS_COMPONENT.get(stack).spells = spells
+        }
+
+        fun getComponentItems(stack: ItemStack): List<ComponentItem> {
+            val out = mutableListOf<ComponentItem>()
+
+            next@ for (saved_component in getSpellsFrom(stack)) {
+                if (saved_component == null) {
+                    continue@next
+                }
+
+                val componentName = saved_component.name
+                if (componentName == "!empty") {
+                    continue@next
+                }
+
+                for (possible_component in VeneMain.COSMETIC_COMPONENTS union VeneMain.RESULT_COMPONENTS union VeneMain.MOVE_COMPONENTS union VeneMain.MATERIAL_COMPONENTS) {
+                    if (possible_component.name == componentName) {
+                        try {
+                            out.add(StaticDataHandler.spellComponent(possible_component.name) as ComponentItem)
+                        } catch (ignored: Throwable) {}
+                        finally {
+                            continue@next
+                        }
+                    }
+                }
+
+                VeneMain.LOGGER.error("Unable to deserialize spell component $saved_component, skipping")
+            }
+
+            return out
         }
     }
 }

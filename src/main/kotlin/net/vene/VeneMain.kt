@@ -46,7 +46,7 @@ import net.vene.magic.spell_components.collection.ResultComponentCollection
 import net.vene.common.util.StringUtil
 import net.vene.client.screen.WandEditScreenHandler
 import net.vene.common.util.extension.devDebug
-import net.vene.data.StaticDataAdder
+import net.vene.data.StaticDataHandler
 import net.vene.magic.spell_components.collection.CosmeticComponentCollection
 import net.vene.magic.spell_components.types.CosmeticComponent
 import org.apache.logging.log4j.LogManager
@@ -76,10 +76,10 @@ class VeneMain : ModInitializer {
         RRPCallback.EVENT.register(RRPCallback { a: MutableList<ResourcePack> -> a.add(RESOURCE_PACK) })
 
         devDebug("Adding Extra lang entries to lang")
-        StaticDataAdder.lang(lang)
+        StaticDataHandler.lang(lang)
 
         devDebug("Registering and Generating Items")
-        StaticDataAdder.items()
+        StaticDataHandler.items()
         // Dynamically create component items
         // This is the most blessed code ive ever written
 
@@ -108,7 +108,7 @@ class VeneMain : ModInitializer {
         }
 
         devDebug("Registering Blocks")
-        StaticDataAdder.blocks()
+        StaticDataHandler.blocks()
 
         devDebug("Registering event listeners")
         ServerTickEvents.END_SERVER_TICK.register(ServerTickEvents.EndTick {
@@ -124,14 +124,14 @@ class VeneMain : ModInitializer {
 
         devDebug("Adding files to RRP")
         RESOURCE_PACK.addLang(Identifier(MOD_ID, "en_us"), lang)
-        StaticDataAdder.blockStates(RESOURCE_PACK)
+        StaticDataHandler.blockStates(RESOURCE_PACK)
 
         devDebug("Adding recipes")
-        StaticDataAdder.sccsRecipes(RESOURCE_PACK)
-        StaticDataAdder.recipes(RESOURCE_PACK)
+        StaticDataHandler.sccsRecipes(RESOURCE_PACK)
+        StaticDataHandler.recipes(RESOURCE_PACK)
 
         devDebug("Adding loot tables")
-        StaticDataAdder.lootTables(RESOURCE_PACK)
+        StaticDataHandler.lootTables(RESOURCE_PACK)
 
         devDebug("CosmeticComponentCollection contains ${COSMETIC_COMPONENTS.size} entries")
         devDebug("MaterialComponentCollection contains ${MATERIAL_COMPONENTS.size} entries")

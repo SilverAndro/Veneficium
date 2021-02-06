@@ -12,12 +12,15 @@ import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.item.CrossbowItem
 import net.minecraft.item.ItemStack
 import net.minecraft.item.RangedWeaponItem
+import net.minecraft.nbt.CompoundTag
+import net.minecraft.nbt.ListTag
 import net.minecraft.server.world.ServerWorld
 import net.minecraft.sound.SoundCategory
 import net.minecraft.sound.SoundEvents
 import net.minecraft.text.Text
 import net.minecraft.text.TranslatableText
 import net.minecraft.util.Hand
+import net.minecraft.util.ItemScatterer
 import net.minecraft.util.Rarity
 import net.minecraft.util.TypedActionResult
 import net.minecraft.util.math.Vec3d
@@ -87,6 +90,8 @@ class MagicCrossbow(settings: Settings) : CrossbowItem(settings), SpellProvider 
             val stack = user.getStackInHand(hand)
             val spells = WandSpellsComponent.getSpellsFrom(stack)
 
+            clearProjectiles(stack)
+
             queue.addToQueue(MoveComponentCollection.LOW_GRAV)
             queue.addToQueue(MoveComponentCollection.LOW_GRAV)
 
@@ -107,9 +112,24 @@ class MagicCrossbow(settings: Settings) : CrossbowItem(settings), SpellProvider 
             VeneMain.ACTIVE_SPELLS.add(executor)
 
             // Damage item
-            stack.damage(1, user) { e: LivingEntity -> e.sendToolBreakStatus(hand) }
+            stack.damage(1, user) { e: LivingEntity ->
+                WandSpellsComponent.getComponentItems(stack).forEach {
+                    ItemScatterer.spawn(world, e.pos.x, e.pos.y, e.pos.z, ItemStack(it))
+                }
+                e.sendToolBreakStatus(hand)
+            }
         }
         return TypedActionResult.consume(user.getStackInHand(hand))
+    }
+
+    // Just to clean up what would otherwise be dumb tags that add on forever
+    private fun clearProjectiles(crossbow: ItemStack) {
+        val compoundTag = crossbow.tag
+        if (compoundTag != null) {
+            val listTag = compoundTag.getList("ChargedProjectiles", 9)
+            listTag.clear()
+            compoundTag.put("ChargedProjectiles", listTag)
+        }
     }
 
     override fun appendTooltip(stack: ItemStack?, world: World?, tooltip: MutableList<Text>?, context: TooltipContext?) {

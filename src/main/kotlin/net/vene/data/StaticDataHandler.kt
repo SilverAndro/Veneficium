@@ -36,7 +36,7 @@ import java.nio.charset.Charset
 
 // "Static" functions for init-ing data
 // Most usages are in VeneMain
-object StaticDataAdder {
+object StaticDataHandler {
     private val EMPTY_COMPONENT = VeneMain.EMPTY_SPELL_COMPONENT
 
     fun lang(lang: JLang) {
@@ -467,7 +467,7 @@ object StaticDataAdder {
         )
     }
 
-    private fun spellComponent(name: String): Item {
+    fun spellComponent(name: String): Item {
         return VeneMain.SPELL_COMPONENT_ITEMS[Identifier(MOD_ID, name)]!!
     }
 

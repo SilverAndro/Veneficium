@@ -15,6 +15,7 @@ import net.minecraft.server.world.ServerWorld
 import net.minecraft.text.Text
 import net.minecraft.text.TranslatableText
 import net.minecraft.util.Hand
+import net.minecraft.util.ItemScatterer
 import net.minecraft.util.Rarity
 import net.minecraft.util.TypedActionResult
 import net.minecraft.util.math.Vec3d
@@ -52,7 +53,12 @@ class WandItem(settings: Settings) : Item(settings), SpellProvider {
             VeneMain.ACTIVE_SPELLS.add(executor)
 
             // Damage item
-            stack.damage(1, user) { e: LivingEntity -> e.sendToolBreakStatus(hand) }
+            stack.damage(1, user) { e: LivingEntity ->
+                WandSpellsComponent.getComponentItems(stack).forEach {
+                    ItemScatterer.spawn(world, e.pos.x, e.pos.y, e.pos.z, ItemStack(it))
+                }
+                e.sendToolBreakStatus(hand)
+            }
         }
         return TypedActionResult.consume(user?.getStackInHand(hand))
     }
