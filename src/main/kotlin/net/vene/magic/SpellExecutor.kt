@@ -34,7 +34,7 @@ class SpellExecutor(private val owner: PlayerEntity, private val world: ServerWo
     var trailEffect: ParticleEffect? = ParticleTypes.ENCHANTED_HIT
 
     var age = 0
-    var lifetime = 20 * 7
+    var lifetime = 20 * 6
     var gravity = 0.03
 
     val events = EventInstance()

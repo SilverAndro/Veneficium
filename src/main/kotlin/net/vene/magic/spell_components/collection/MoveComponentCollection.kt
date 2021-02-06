@@ -96,4 +96,14 @@ object MoveComponentCollection {
 
         HandlerOperation.STAY_CONTINUE
     }
+
+    val LIFETIME_UP = MoveComponent("lifetime_up") { context, modifiers, queue ->
+        context.executor.lifetime += 20
+        HandlerOperation.REMOVE_CONTINUE
+    }
+
+    val LIFETIME_DOWN = MoveComponent("lifetime_down") { context, modifiers, queue ->
+        context.executor.lifetime -= 20
+        HandlerOperation.REMOVE_CONTINUE
+    }
 }
