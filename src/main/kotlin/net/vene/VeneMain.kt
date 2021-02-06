@@ -43,7 +43,6 @@ import net.vene.magic.spell_components.types.ResultComponent
 import net.vene.magic.spell_components.collection.MaterialComponentCollection
 import net.vene.magic.spell_components.collection.MoveComponentCollection
 import net.vene.magic.spell_components.collection.ResultComponentCollection
-import net.vene.common.util.StringUtil
 import net.vene.client.screen.WandEditScreenHandler
 import net.vene.common.util.extension.devDebug
 import net.vene.data.StaticDataHandler
@@ -53,6 +52,7 @@ import org.apache.logging.log4j.LogManager
 import org.apache.logging.log4j.Logger
 import net.minecraft.recipe.RecipeType
 import net.vene.common.item.casting.MagicCrossbow
+import net.vene.common.util.displayFromUnderscored
 import net.vene.common.util.math.MathUtil.factorial
 import net.vene.recipe.SCCSRecipe
 import net.vene.recipe.SCCSRecipeSerializer
@@ -100,7 +100,7 @@ class VeneMain : ModInitializer {
             // Add translation
             lang.entry(
                     "item.vene.${component.type.toString().toLowerCase()}.${component.name}",
-                    StringUtil.displayFromUnderscored(component.name)
+                    component.name.displayFromUnderscored()
             )
 
             // Auto model so no json handling for new components

@@ -6,15 +6,13 @@
 
 package net.vene.common.util
 
-object StringUtil {
-    // Formats underscored names for display
-    fun displayFromUnderscored(input: String): String {
-        val split = input.split("_")
+// Formats underscored names for display
+fun String.displayFromUnderscored(): String {
+    val split = this.split("_")
 
-        return buildString {
-            for (i in split.indices) {
-                append(split[i].capitalize() + " ")
-            }
-        }.trim()
-    }
+    return buildString {
+        for (i in split.indices) {
+            append(split[i].capitalize() + " ")
+        }
+    }.trim()
 }

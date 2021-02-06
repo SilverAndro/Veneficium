@@ -23,9 +23,10 @@ import net.minecraft.world.World
 import net.vene.ConfigInstance
 import net.vene.VeneMain
 import net.vene.cca_component.WandSpellsComponent
+import net.vene.common.util.appendTooltipFromStack
+import net.vene.common.util.displayFromUnderscored
 import net.vene.magic.SpellExecutor
 import net.vene.magic.handling.SpellQueue
-import net.vene.common.util.StringUtil
 import net.vene.common.util.math.MathUtil
 
 class WandItem(settings: Settings) : Item(settings), SpellProvider {
@@ -67,12 +68,9 @@ class WandItem(settings: Settings) : Item(settings), SpellProvider {
         return Rarity.EPIC
     }
 
-    override fun appendTooltip(stack: ItemStack?, world: World?, tooltip: MutableList<Text>?, context: TooltipContext?) {
-        // For each component get its display name and add it
-        for (component in stack?.let { WandSpellsComponent.getSpellsFrom(it) } ?: mutableListOf()) {
-            if (component != null) {
-                tooltip?.add(TranslatableText(StringUtil.displayFromUnderscored(component.name)))
-            }
+    override fun appendTooltip(stack: ItemStack, world: World?, tooltip: MutableList<Text>?, context: TooltipContext?) {
+        if (tooltip != null) {
+            appendTooltipFromStack(stack, tooltip, context ?: TooltipContext.Default.NORMAL)
         }
     }
 }

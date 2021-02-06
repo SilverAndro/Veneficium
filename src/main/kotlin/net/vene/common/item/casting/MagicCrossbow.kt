@@ -11,14 +11,11 @@ import net.minecraft.entity.LivingEntity
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.item.CrossbowItem
 import net.minecraft.item.ItemStack
-import net.minecraft.item.RangedWeaponItem
-import net.minecraft.nbt.CompoundTag
-import net.minecraft.nbt.ListTag
 import net.minecraft.server.world.ServerWorld
 import net.minecraft.sound.SoundCategory
 import net.minecraft.sound.SoundEvents
+import net.minecraft.text.LiteralText
 import net.minecraft.text.Text
-import net.minecraft.text.TranslatableText
 import net.minecraft.util.Hand
 import net.minecraft.util.ItemScatterer
 import net.minecraft.util.Rarity
@@ -28,13 +25,11 @@ import net.minecraft.world.World
 import net.vene.ConfigInstance
 import net.vene.VeneMain
 import net.vene.cca_component.WandSpellsComponent
-import net.vene.common.util.StringUtil
+import net.vene.common.util.appendTooltipFromStack
 import net.vene.common.util.math.MathUtil
 import net.vene.magic.SpellExecutor
 import net.vene.magic.handling.SpellQueue
 import net.vene.magic.spell_components.collection.MoveComponentCollection
-import net.vene.magic.spell_components.collection.ResultComponentCollection
-import java.util.function.Consumer
 import java.util.function.Predicate
 
 class MagicCrossbow(settings: Settings) : CrossbowItem(settings), SpellProvider {
@@ -132,12 +127,9 @@ class MagicCrossbow(settings: Settings) : CrossbowItem(settings), SpellProvider 
         }
     }
 
-    override fun appendTooltip(stack: ItemStack?, world: World?, tooltip: MutableList<Text>?, context: TooltipContext?) {
-        // For each component get its display name and add it
-        for (component in stack?.let { WandSpellsComponent.getSpellsFrom(it) } ?: mutableListOf()) {
-            if (component != null) {
-                tooltip?.add(TranslatableText(StringUtil.displayFromUnderscored(component.name)))
-            }
+    override fun appendTooltip(stack: ItemStack, world: World?, tooltip: MutableList<Text>?, context: TooltipContext?) {
+        if (tooltip != null) {
+            appendTooltipFromStack(stack, tooltip, context ?: TooltipContext.Default.NORMAL)
         }
     }
 

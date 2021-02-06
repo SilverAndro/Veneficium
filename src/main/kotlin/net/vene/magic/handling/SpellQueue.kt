@@ -62,8 +62,12 @@ class SpellQueue {
         }
     }
 
-    // Not private in case I want to mess with the queue from a component safely
-    @Suppress("MemberVisibilityCanBePrivate")
+    /**
+     * Not private to allow "safely" messing with queue from other components
+     *
+     * Only MATERIAL_MOVE and the REMOVE operations actually do anything
+     * And FREEZE technically works but is somewhat sketchy
+     */
     fun handleOp(operation: HandlerOperation, magicEffect: MagicEffect): OpResult {
         when (operation) {
             HandlerOperation.REMOVE_CONTINUE -> {
@@ -86,7 +90,7 @@ class SpellQueue {
                     componentList.remove(magicEffect)
                     OpResult(increment = false, stop = false)
                 } else {
-                    // remove continue
+                    // Functionally equivalent to REMOVE_CONTINUE
                     componentList.remove(magicEffect)
                     OpResult(increment = false, stop = false)
                 }

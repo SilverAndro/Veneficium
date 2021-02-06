@@ -261,4 +261,13 @@ object ResultComponentCollection {
         }
         HandlerOperation.REMOVE_CONTINUE
     }
+
+    val CHANCE_25 = ResultComponent("chance_25") { context, modifiers, queue ->
+        if (Random.nextBoolean() && Random.nextBoolean()) {
+            try {
+                queue.handleOp(HandlerOperation.REMOVE_CONTINUE, queue.componentList[queue.tmpIndex + 1])
+            } catch (ignored: IndexOutOfBoundsException) {}
+        }
+        HandlerOperation.REMOVE_CONTINUE
+    }
 }
