@@ -14,6 +14,7 @@ import net.minecraft.nbt.StringTag
 import net.minecraft.nbt.Tag
 import net.vene.VeneMain
 import net.vene.common.item.ComponentItem
+import net.vene.common.item.casting.SpellProvider
 import net.vene.common.util.extension.getRawValue
 import net.vene.data.StaticDataHandler
 import net.vene.magic.spell_components.MagicEffect
@@ -62,6 +63,10 @@ class WandSpellsComponent : ComponentV3 {
     }
 
     companion object {
+        fun get(stack: ItemStack): WandSpellsComponent {
+            return VeneMain.WAND_SPELLS_COMPONENT.get(stack)
+        }
+
         // Utility functions
         fun getSpellsFrom(stack: ItemStack): MutableList<MagicEffect?> {
             return VeneMain.WAND_SPELLS_COMPONENT.get(stack).spells

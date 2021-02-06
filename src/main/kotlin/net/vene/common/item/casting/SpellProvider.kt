@@ -6,4 +6,6 @@
 
 package net.vene.common.item.casting
 
-interface SpellProvider {}
+interface SpellProvider {
+    fun getMaxSpells(): Int
+}

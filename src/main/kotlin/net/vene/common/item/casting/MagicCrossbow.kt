@@ -144,4 +144,8 @@ class MagicCrossbow(settings: Settings) : CrossbowItem(settings), SpellProvider 
         }
         return f
     }
+
+    override fun getMaxSpells(): Int {
+        return 9
+    }
 }

@@ -73,4 +73,8 @@ class WandItem(settings: Settings) : Item(settings), SpellProvider {
             appendTooltipFromStack(stack, tooltip, context ?: TooltipContext.Default.NORMAL)
         }
     }
+
+    override fun getMaxSpells(): Int {
+        return 9
+    }
 }

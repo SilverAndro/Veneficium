@@ -17,7 +17,6 @@ import net.vene.VeneMain
 import net.vene.cca_component.WandSpellsComponent
 import net.vene.common.inventory.WandEditInventory
 import net.vene.common.item.ComponentItem
-import net.vene.common.item.casting.WandItem
 import net.vene.magic.spell_components.MagicEffect
 import net.vene.client.screen.slot.ComponentOnlySlot
 import net.vene.client.screen.slot.WandOnlySlot
@@ -88,13 +87,43 @@ class WandEditScreenHandler(syncId: Int, playerInventory: PlayerInventory) : Scr
 
         super.onContentChanged(inventory)
 
+        val oldWand = lastKnownInventory.getStack(0)
+
         // Ignore known changes, we only really care about the player inserting/removing stuff
         if (ignoreContentUpdates) {
             return
         }
 
+        // Wands swapped
+        if (oldWand.item is SpellProvider && wand.item is SpellProvider && WandSpellsComponent.get(oldWand) != WandSpellsComponent.get(wand)) {
+            // Save old spells to old wand
+            for (i in 1 until 10) {
+                if (inventory.getStack(i).item is ComponentItem) {
+                    spells.add((inventory.getStack(i).item as ComponentItem).effect)
+                } else {
+                    spells.add(null)
+                }
+                WandSpellsComponent.setSpells(oldWand, spells)
+            }
+
+            // Unpack new spells
+            // Logic for unpacking wand spells
+            ignoreContentUpdates = true
+            for (i in 1 until 10) {
+                inventory.setStack(i, ItemStack.EMPTY)
+            }
+            WandSpellsComponent.getSpellsFrom(wand).forEachIndexed { found: Int, wantedEffect ->
+                VeneMain.SPELL_COMPONENT_ITEMS.values.forEach {
+                    if (it.effect == wantedEffect) {
+                        inventory.setStack(found + 1, ItemStack(it))
+                    }
+                }
+            }
+            ignoreContentUpdates = false
+        }
+
         // Wand stayed in
-        if (lastKnownInventory.getStack(0).item is SpellProvider && inventory.getStack(0).item is SpellProvider) {
+        if (oldWand.item is SpellProvider && wand.item is SpellProvider && WandSpellsComponent.get(oldWand) == WandSpellsComponent.get(wand)) {
             for (i in 1 until 10) {
                 if (inventory.getStack(i).item is ComponentItem) {
                     spells.add((inventory.getStack(i).item as ComponentItem).effect)
@@ -106,7 +135,7 @@ class WandEditScreenHandler(syncId: Int, playerInventory: PlayerInventory) : Scr
         }
 
         // Wand taken out
-        if (lastKnownInventory.getStack(0).item is SpellProvider && inventory.getStack(0).item !is SpellProvider) {
+        if (oldWand.item is SpellProvider && wand.item !is SpellProvider) {
             ignoreContentUpdates = true
             inventory.clear()
             ignoreContentUpdates = false
@@ -119,7 +148,7 @@ class WandEditScreenHandler(syncId: Int, playerInventory: PlayerInventory) : Scr
         }
 
         // Wand put in
-        if (lastKnownInventory.getStack(0).item !is SpellProvider && inventory.getStack(0).item is SpellProvider) {
+        if (oldWand.item !is SpellProvider && wand.item is SpellProvider) {
             slots.forEach {
                 if (it is ComponentOnlySlot) {
                     it.active = true
@@ -127,7 +156,7 @@ class WandEditScreenHandler(syncId: Int, playerInventory: PlayerInventory) : Scr
             }
             // Logic for unpacking wand spells
             ignoreContentUpdates = true
-            WandSpellsComponent.getSpellsFrom(inventory.getStack(0)).forEachIndexed { found: Int, wantedEffect ->
+            WandSpellsComponent.getSpellsFrom(wand).forEachIndexed { found: Int, wantedEffect ->
                 VeneMain.SPELL_COMPONENT_ITEMS.values.forEach {
                     if (it.effect == wantedEffect) {
                         inventory.setStack(found + 1, ItemStack(it))
