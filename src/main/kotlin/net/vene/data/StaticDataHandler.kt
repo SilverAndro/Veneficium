@@ -19,11 +19,16 @@ import net.devtech.arrp.json.recipe.JRecipe
 import net.devtech.arrp.json.recipe.JRecipe.shaped
 import net.devtech.arrp.json.recipe.JResult
 import net.devtech.arrp.json.recipe.JResult.item
+import net.minecraft.block.DispenserBlock
+import net.minecraft.block.dispenser.DispenserBehavior
 import net.minecraft.item.BlockItem
 import net.minecraft.item.Item
 import net.minecraft.item.Items
 import net.minecraft.resource.ResourceType
+import net.minecraft.state.property.DirectionProperty
+import net.minecraft.state.property.Property
 import net.minecraft.util.Identifier
+import net.minecraft.util.math.Vec3d
 import net.minecraft.util.registry.Registry
 import net.vene.VeneMain
 import net.vene.VeneMain.Companion.MAGIC_BINDING
@@ -32,6 +37,7 @@ import net.vene.common.util.extension.cleanID
 import net.vene.common.util.extension.formattedID
 import net.vene.common.util.extension.id
 import java.nio.charset.Charset
+import java.util.*
 
 
 // "Static" functions for init-ing data
@@ -392,6 +398,27 @@ object StaticDataHandler {
         )
 
         pack.addRecipe(
+            Identifier(MOD_ID, "infused_stick"), shaped(
+                pattern(
+                    " PS",
+                    " S ",
+                    "SP "
+                ),
+                keys()
+                    .key(
+                        "S",
+                        ingredient()
+                            .item(Items.STICK)
+                    ).key(
+                        "P",
+                        ingredient()
+                            .item(Items.ENDER_PEARL)
+                    ),
+                item(VeneMain.INFUSED_STICK)
+            )
+        )
+
+        pack.addRecipe(
             Identifier(MOD_ID, "magic_binding"), JRecipe.shapeless(
                 ingredients()
                     .add(
@@ -452,6 +479,7 @@ object StaticDataHandler {
     fun items() {
         Registry.register(Registry.ITEM, Identifier(MOD_ID, "wand"), VeneMain.WAND_ITEM)
         Registry.register(Registry.ITEM, Identifier(MOD_ID, "magic_crossbow"), VeneMain.MAGIC_CROSSBOW_ITEM)
+        Registry.register(Registry.ITEM, Identifier(MOD_ID, "infused_stick"), VeneMain.INFUSED_STICK)
         UniqueItemRegistry.CROSSBOW.addItemToRegistry(VeneMain.MAGIC_CROSSBOW_ITEM)
         Registry.register(Registry.ITEM, Identifier(MOD_ID, "magic_binding"), MAGIC_BINDING)
         Registry.register(Registry.ITEM, Identifier(MOD_ID, "empty_component"), VeneMain.EMPTY_SPELL_COMPONENT)
@@ -465,6 +493,16 @@ object StaticDataHandler {
             Identifier(MOD_ID, "sccs"),
             BlockItem(VeneMain.SCCS_BLOCK, Item.Settings().group(VeneMain.ITEM_GROUP))
         )
+    }
+
+    fun dispenserBehaviors() {
+        DispenserBlock.registerBehavior(VeneMain.WAND_ITEM) { pointer, stack ->
+            val facing = pointer.blockState[DispenserBlock.FACING].vector
+            val blockPos = pointer.blockPos.add(facing)
+            val firing = Vec3d.ofCenter(blockPos).subtract(facing.x / 4.0, facing.y / 4.0, facing.z / 4.0)
+            println(firing)
+            stack
+        }
     }
 
     fun spellComponent(name: String): Item {

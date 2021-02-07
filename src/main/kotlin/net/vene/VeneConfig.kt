@@ -28,12 +28,16 @@ class VeneConfig : ConfigData {
     var explosionsCreateMaterials = true
 
     @JvmField
-    @Comment("Delay until wands can be used again after crafting (in ticks)")
+    @Comment("Delay until wands can be used again after casting (in ticks)")
     var wandCastDelay = 40
 
     @JvmField
-    @Comment("Delay until magic crossbows can be used again after crafting (in ticks)")
+    @Comment("Delay until magic crossbows can be used again after casting (in ticks)")
     var crossbowCastDelay = 60
+
+    @JvmField
+    @Comment("Delay until infused sticks can be used again after casting (in ticks)")
+    var infusedStickCastDelay = 40
 }
 
 val ConfigInstance: VeneConfig by lazy { MicroConfig.getOrCreate("veneficium", VeneConfig()) }

@@ -112,6 +112,7 @@ class WandEditScreenHandler(syncId: Int, playerInventory: PlayerInventory) : Scr
             for (i in 1 until 10) {
                 inventory.setStack(i, ItemStack.EMPTY)
             }
+            enableSlots((wand.item as SpellProvider).getMaxSpells())
             WandSpellsComponent.getSpellsFrom(wand).forEachIndexed { found: Int, wantedEffect ->
                 VeneMain.SPELL_COMPONENT_ITEMS.values.forEach {
                     if (it.effect == wantedEffect) {
@@ -124,7 +125,7 @@ class WandEditScreenHandler(syncId: Int, playerInventory: PlayerInventory) : Scr
 
         // Wand stayed in
         if (oldWand.item is SpellProvider && wand.item is SpellProvider && WandSpellsComponent.get(oldWand) == WandSpellsComponent.get(wand)) {
-            for (i in 1 until 10) {
+            for (i in 1..(wand.item as SpellProvider).getMaxSpells()) {
                 if (inventory.getStack(i).item is ComponentItem) {
                     spells.add((inventory.getStack(i).item as ComponentItem).effect)
                 } else {
@@ -140,20 +141,12 @@ class WandEditScreenHandler(syncId: Int, playerInventory: PlayerInventory) : Scr
             inventory.clear()
             ignoreContentUpdates = false
 
-            slots.forEach {
-                if (it is ComponentOnlySlot) {
-                    it.active = false
-                }
-            }
+            enableSlots(0)
         }
 
         // Wand put in
         if (oldWand.item !is SpellProvider && wand.item is SpellProvider) {
-            slots.forEach {
-                if (it is ComponentOnlySlot) {
-                    it.active = true
-                }
-            }
+            enableSlots((wand.item as SpellProvider).getMaxSpells())
             // Logic for unpacking wand spells
             ignoreContentUpdates = true
             WandSpellsComponent.getSpellsFrom(wand).forEachIndexed { found: Int, wantedEffect ->
@@ -169,6 +162,23 @@ class WandEditScreenHandler(syncId: Int, playerInventory: PlayerInventory) : Scr
         // Basically a deep copy because I kept having issues with lastKnownInventory syncing with inventory
         for (x in 0 until 10) {
             lastKnownInventory.setStack(x, inventory.getStack(x).copy())
+        }
+    }
+
+    private fun enableSlots(count: Int) {
+        // Lock all slots
+        slots.forEach {
+            if (it is ComponentOnlySlot) {
+                it.active = false
+            }
+        }
+
+        // Open the requested amount
+        for (i in 1..count) {
+            val slot = slots[i - 1]
+            if (slot is ComponentOnlySlot) {
+                slot.active = true
+            }
         }
     }
 

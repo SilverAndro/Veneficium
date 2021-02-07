@@ -51,6 +51,7 @@ import net.vene.magic.spell_components.types.CosmeticComponent
 import org.apache.logging.log4j.LogManager
 import org.apache.logging.log4j.Logger
 import net.minecraft.recipe.RecipeType
+import net.vene.common.item.casting.InfusedStick
 import net.vene.common.item.casting.MagicCrossbow
 import net.vene.common.util.displayFromUnderscored
 import net.vene.common.util.math.MathUtil.factorial
@@ -133,6 +134,9 @@ class VeneMain : ModInitializer {
         devDebug("Adding loot tables")
         StaticDataHandler.lootTables(RESOURCE_PACK)
 
+        devDebug("Adding dispenser behaviors")
+        StaticDataHandler.dispenserBehaviors()
+
         devDebug("CosmeticComponentCollection contains ${COSMETIC_COMPONENTS.size} entries")
         devDebug("MaterialComponentCollection contains ${MATERIAL_COMPONENTS.size} entries")
         devDebug("MoveComponentCollection contains ${MOVE_COMPONENTS.size} entries")
@@ -175,6 +179,8 @@ class VeneMain : ModInitializer {
         // Items
         val WAND_ITEM: WandItem = WandItem(Item.Settings().group(ITEM_GROUP).maxCount(1).maxDamage(600))
         val MAGIC_CROSSBOW_ITEM: CrossbowItem = MagicCrossbow(Item.Settings().group(ITEM_GROUP).maxCount(1).maxDamage(450))
+        val INFUSED_STICK: InfusedStick = InfusedStick(Item.Settings().group(ITEM_GROUP).maxCount(1).maxDamage(30))
+
         val EMPTY_SPELL_COMPONENT = Item(Item.Settings().group(ITEM_GROUP_COMPONENTS).maxCount(1))
         val MAGIC_BINDING = Item(Item.Settings().group(ITEM_GROUP))
         val SPELL_COMPONENT_ITEMS: MutableMap<Identifier, ComponentItem> = mutableMapOf()
