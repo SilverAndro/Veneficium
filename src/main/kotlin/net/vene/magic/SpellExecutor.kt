@@ -25,10 +25,17 @@ import net.vene.magic.handling.SpellQueue
 import kotlin.random.Random
 
 // This is basically a projectile but implemented as only math and particles because the entity system pains me
-class SpellExecutor(private val owner: PlayerEntity, private val world: ServerWorld, var pos: Vec3d, var velocity : Vec3d, private val queue: SpellQueue) {
+class SpellExecutor(
+    private val owner: PlayerEntity?,
+    startPos: Vec3d?,
+    private val world: ServerWorld,
+    var pos: Vec3d,
+    var velocity: Vec3d,
+    private val queue: SpellQueue
+) {
     // I don't remember why this is lazy, but it was probably initialisation order stuff
     private val context by lazy {
-        SpellContext(world, SpellContext.SpellCaster(owner, owner.pos, velocity), this)
+        SpellContext(world, SpellContext.SpellCaster(owner, owner?.pos ?: startPos ?: Vec3d.ZERO, velocity), this)
     }
 
     var trailEffect: ParticleEffect? = ParticleTypes.ENCHANTED_HIT
@@ -96,7 +103,8 @@ class SpellExecutor(private val owner: PlayerEntity, private val world: ServerWo
                 if (!blockState.isAir && blockState.block.isCollidable()) {
                     if (lastChecked != null) {
                         // Save the direction we hit from and fire the hitGround event
-                        context.dataStorage["hit_ground_direction"] = MathUtil.blockPosChangeToDirection(lastChecked!!, toBlockPos)
+                        context.dataStorage["hit_ground_direction"] =
+                            MathUtil.blockPosChangeToDirection(lastChecked!!, toBlockPos)
                         events.hitGround.fire(context)
 
                         // Something changed our velocity (i.e. bounce component)
@@ -114,12 +122,12 @@ class SpellExecutor(private val owner: PlayerEntity, private val world: ServerWo
                 } else if (!blockState.block.isCollidable()) {
                     if (blockState.block is FluidBlock) {
                         velocity = velocity.multiply(0.85)
+                    } else {
+                        // Save this as an air block
+                        context.dataStorage["last_air_block"] = lastChecked ?: toBlockPos
                     }
-                }else {
-                    // Save this as an air block
-                    context.dataStorage["last_air_block"] = lastChecked ?: toBlockPos
+                    lastChecked = toBlockPos
                 }
-                lastChecked = toBlockPos
             }
         }
 

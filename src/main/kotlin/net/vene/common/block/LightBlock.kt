@@ -52,7 +52,7 @@ class LightBlock(settings: Settings?) : Block(settings) {
         return true
     }
 
-    override fun getRenderType(state: BlockState?): BlockRenderType? {
+    override fun getRenderType(state: BlockState?): BlockRenderType {
         return BlockRenderType.INVISIBLE
     }
 

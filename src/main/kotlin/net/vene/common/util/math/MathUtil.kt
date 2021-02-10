@@ -10,8 +10,8 @@ import net.minecraft.util.math.BlockPos
 import net.minecraft.util.math.Direction
 import net.minecraft.util.math.MathHelper
 import net.minecraft.util.math.Vec3d
+import java.lang.Math.PI
 import java.math.BigInteger
-import kotlin.math.PI
 
 object MathUtil {
     // Taken from bow code I think? Not a fan of the magic numbers but it works

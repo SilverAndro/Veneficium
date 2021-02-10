@@ -7,26 +7,24 @@
 package net.vene
 
 import net.fabricmc.api.ClientModInitializer
+import net.fabricmc.fabric.api.`object`.builder.v1.client.model.FabricModelPredicateProviderRegistry
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking
 import net.fabricmc.fabric.api.client.rendereregistry.v1.BlockEntityRendererRegistry
 import net.fabricmc.fabric.api.client.screenhandler.v1.ScreenRegistry
 import net.fabricmc.fabric.api.networking.v1.PacketSender
 import net.minecraft.client.MinecraftClient
 import net.minecraft.client.network.ClientPlayNetworkHandler
-import net.minecraft.network.PacketByteBuf
-import net.vene.common.block.entity.SCCSBlockEntity
-import net.vene.common.block.entity.render.SCCSBlockEntityRender
-import net.vene.client.screen.WandEditScreen
-import net.fabricmc.fabric.api.`object`.builder.v1.client.model.FabricModelPredicateProviderRegistry
-import net.minecraft.client.item.ModelPredicateProvider
 import net.minecraft.client.world.ClientWorld
 import net.minecraft.entity.LivingEntity
 import net.minecraft.item.CrossbowItem
 import net.minecraft.item.ItemStack
+import net.minecraft.network.PacketByteBuf
 import net.minecraft.util.Identifier
-import net.vene.common.item.casting.MagicCrossbow
+import net.vene.client.screen.WandEditScreen
+import net.vene.common.block.entity.SCCSBlockEntity
+import net.vene.common.block.entity.render.SCCSBlockEntityRender
 
-
+@Suppress("unused")
 class VeneMainClient : ClientModInitializer {
     override fun onInitializeClient() {
         // Screen

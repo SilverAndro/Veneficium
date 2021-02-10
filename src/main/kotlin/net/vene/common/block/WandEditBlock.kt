@@ -25,11 +25,11 @@ import net.vene.common.block.entity.WandEditBlockEntity
 
 
 class WandEditBlock(settings: Settings) : BlockWithEntity(settings) {
-    override fun createBlockEntity(blockView: BlockView): BlockEntity? {
+    override fun createBlockEntity(blockView: BlockView): BlockEntity {
         return WandEditBlockEntity()
     }
 
-    override fun onUse(state: BlockState, world: World, pos: BlockPos?, player: PlayerEntity, hand: Hand?, hit: BlockHitResult?): ActionResult? {
+    override fun onUse(state: BlockState, world: World, pos: BlockPos?, player: PlayerEntity, hand: Hand?, hit: BlockHitResult?): ActionResult {
         // Open the wand edit screen if we can
         if (!world.isClient) {
             val screenHandlerFactory = state.createScreenHandlerFactory(world, pos)
@@ -40,7 +40,7 @@ class WandEditBlock(settings: Settings) : BlockWithEntity(settings) {
         return ActionResult.SUCCESS
     }
 
-    override fun getRenderType(state: BlockState?): BlockRenderType? {
+    override fun getRenderType(state: BlockState?): BlockRenderType {
         return BlockRenderType.MODEL
     }
 

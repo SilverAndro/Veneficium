@@ -5,7 +5,7 @@
   "compatibilityLevel": "JAVA_8",
   "mixins": [
     "CollidableAccessorMixin",
-    "StringValueAccessorMixin",
+    "StringValueAccessorMixin"
   ],
   "client": [
     "client.ArmMixin",

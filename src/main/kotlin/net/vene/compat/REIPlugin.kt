@@ -18,7 +18,7 @@ import javax.lang.model.type.TypeVariable
 
 class REIPlugin : REIPluginV0 {
     override fun getPluginIdentifier(): Identifier {
-        return Identifier(VeneMain.MOD_ID, "rei_plugin");
+        return Identifier(VeneMain.MOD_ID, "rei_plugin")
     }
 
     override fun registerOthers(recipeHelper: RecipeHelper) {

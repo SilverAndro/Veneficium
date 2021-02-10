@@ -20,24 +20,23 @@ import net.devtech.arrp.json.recipe.JRecipe.shaped
 import net.devtech.arrp.json.recipe.JResult
 import net.devtech.arrp.json.recipe.JResult.item
 import net.minecraft.block.DispenserBlock
-import net.minecraft.block.dispenser.DispenserBehavior
 import net.minecraft.item.BlockItem
 import net.minecraft.item.Item
+import net.minecraft.item.ItemStack
 import net.minecraft.item.Items
 import net.minecraft.resource.ResourceType
-import net.minecraft.state.property.DirectionProperty
-import net.minecraft.state.property.Property
 import net.minecraft.util.Identifier
+import net.minecraft.util.math.BlockPointer
 import net.minecraft.util.math.Vec3d
 import net.minecraft.util.registry.Registry
 import net.vene.VeneMain
 import net.vene.VeneMain.Companion.MAGIC_BINDING
 import net.vene.VeneMain.Companion.MOD_ID
+import net.vene.common.item.casting.SpellProvider
 import net.vene.common.util.extension.cleanID
 import net.vene.common.util.extension.formattedID
 import net.vene.common.util.extension.id
 import java.nio.charset.Charset
-import java.util.*
 
 
 // "Static" functions for init-ing data
@@ -496,13 +495,34 @@ object StaticDataHandler {
     }
 
     fun dispenserBehaviors() {
-        DispenserBlock.registerBehavior(VeneMain.WAND_ITEM) { pointer, stack ->
+        val behavior = { pointer: BlockPointer, stack: ItemStack ->
             val facing = pointer.blockState[DispenserBlock.FACING].vector
             val blockPos = pointer.blockPos.add(facing)
             val firing = Vec3d.ofCenter(blockPos).subtract(facing.x / 4.0, facing.y / 4.0, facing.z / 4.0)
-            println(firing)
+            if (stack.item is SpellProvider) {
+                val random = java.util.Random()
+                (stack.item as SpellProvider)
+                    .fireSpells(
+                        firing,
+                        Vec3d
+                            .of(facing)
+                            .add(
+                                (random.nextGaussian() / 20),
+                                (random.nextGaussian() / 20),
+                                (random.nextGaussian() / 20)
+                            )
+                            .multiply(2.0),
+                        pointer.world,
+                        stack,
+                        null
+                    )
+            }
             stack
         }
+
+        DispenserBlock.registerBehavior(VeneMain.WAND_ITEM, behavior)
+        DispenserBlock.registerBehavior(VeneMain.INFUSED_STICK, behavior)
+        DispenserBlock.registerBehavior(VeneMain.MAGIC_CROSSBOW_ITEM, behavior)
     }
 
     fun spellComponent(name: String): Item {

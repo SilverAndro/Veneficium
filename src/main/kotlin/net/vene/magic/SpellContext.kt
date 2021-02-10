@@ -6,8 +6,8 @@
 
 package net.vene.magic
 
-import net.minecraft.entity.Entity
 import net.minecraft.entity.LivingEntity
+import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.server.world.ServerWorld
 import net.minecraft.util.math.BlockPos
 import net.minecraft.util.math.Vec3d
@@ -18,9 +18,9 @@ class SpellContext(val world: ServerWorld, val caster: SpellCaster, val executor
     var dataStorage: MutableMap<String, Any> = mutableMapOf()
 
     init {
-        targets.add(SpellTarget(caster.entity.blockPos, caster.entity as LivingEntity))
+        targets.add(SpellTarget(caster.entity?.blockPos ?: BlockPos.ORIGIN, caster.entity as LivingEntity?))
     }
 
-    data class SpellCaster(val entity: Entity, val castedPosition: Vec3d, val castedDirection: Vec3d)
+    data class SpellCaster(val entity: PlayerEntity?, val castedPosition: Vec3d, val castedDirection: Vec3d)
     data class SpellTarget(val pos: BlockPos, val entity: LivingEntity?)
 }

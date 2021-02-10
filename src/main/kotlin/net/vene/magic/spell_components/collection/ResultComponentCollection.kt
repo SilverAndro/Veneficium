@@ -216,6 +216,8 @@ object ResultComponentCollection {
             val material = modifiers.removeLast()
             if (context.world.getBlockState(spellTarget.pos).isAir) {
                 context.world.setBlockState(spellTarget.pos, material.block.defaultState)
+            } else if (context.dataStorage["last_air_block"] != null) {
+                context.world.setBlockState(context.dataStorage["last_air_block"] as BlockPos, material.block.defaultState)
             }
         }
         HandlerOperation.REMOVE_CONTINUE

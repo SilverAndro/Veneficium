@@ -7,7 +7,6 @@
 package net.vene.common.inventory
 
 import net.minecraft.inventory.SimpleInventory
-import net.minecraft.item.ItemStack
 import net.minecraft.screen.ScreenHandler
 
 class WandEditInventory(private val handler: ScreenHandler) : SimpleInventory(10) {

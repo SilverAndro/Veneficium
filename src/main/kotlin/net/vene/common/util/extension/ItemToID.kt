@@ -7,7 +7,6 @@
 package net.vene.common.util.extension
 
 import net.minecraft.item.Item
-import net.minecraft.util.Identifier
 import net.minecraft.util.registry.Registry
 
 fun Item.formattedID() = '"' + Registry.ITEM.getId(this).toString() + '"'
