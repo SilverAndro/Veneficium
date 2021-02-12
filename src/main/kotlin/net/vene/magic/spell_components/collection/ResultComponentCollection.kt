@@ -16,18 +16,17 @@ import net.minecraft.util.math.Vec3d
 import net.minecraft.util.shape.VoxelShapes
 import net.minecraft.world.explosion.Explosion
 import net.vene.ConfigInstance
-import net.vene.VeneConfig
 import net.vene.VeneMain
-import net.vene.magic.SpellContext.SpellTarget
-import net.vene.magic.event.EventListenerResult
-import net.vene.magic.handling.HandlerOperation
-import net.vene.magic.spell_components.ComponentFactories
-import net.vene.magic.spell_components.types.ResultComponent
 import net.vene.common.util.LogicHelper.didFire
 import net.vene.common.util.LogicHelper.executeOnce
 import net.vene.common.util.LogicHelper.fire
 import net.vene.common.util.LogicHelper.reset
 import net.vene.common.util.extension.blockpos
+import net.vene.magic.SpellContext.SpellTarget
+import net.vene.magic.event.EventListenerResult
+import net.vene.magic.handling.HandlerOperation
+import net.vene.magic.spell_components.ComponentFactories
+import net.vene.magic.spell_components.types.ResultComponent
 import kotlin.random.Random
 
 @Suppress("unused")
@@ -44,8 +43,8 @@ object ResultComponentCollection {
 
         executeOnce(context, keyRegistered) {
             context.executor.events.hitGround.register {
-                if (context.dataStorage["last_air_block"] is BlockPos) {
-                    context.targets.add(SpellTarget(context.dataStorage["last_air_block"] as BlockPos, null))
+                if (context.data.contains("last_air_block")) {
+                    context.targets.add(SpellTarget(context.data.get("last_air_block"), null))
                 } else {
                     context.targets.add(SpellTarget(context.executor.pos.blockpos(), null))
                 }
@@ -104,8 +103,8 @@ object ResultComponentCollection {
                     return@register EventListenerResult.REMOVE_CONTINUE
                 }
 
-                if (context.dataStorage["last_air_block"] is BlockPos) {
-                    context.targets.add(SpellTarget(context.dataStorage["last_air_block"] as BlockPos, null))
+                if (context.data.contains("last_air_block")) {
+                    context.targets.add(SpellTarget(context.data.get("last_air_block"), null))
                 } else {
                     context.targets.add(SpellTarget(context.executor.pos.blockpos(), null))
                 }
@@ -216,8 +215,8 @@ object ResultComponentCollection {
             val material = modifiers.removeLast()
             if (context.world.getBlockState(spellTarget.pos).isAir) {
                 context.world.setBlockState(spellTarget.pos, material.block.defaultState)
-            } else if (context.dataStorage["last_air_block"] != null) {
-                context.world.setBlockState(context.dataStorage["last_air_block"] as BlockPos, material.block.defaultState)
+            } else if (context.data.contains("last_air_block")) {
+                context.world.setBlockState(context.data.get("last_air_block"), material.block.defaultState)
             }
         }
         HandlerOperation.REMOVE_CONTINUE

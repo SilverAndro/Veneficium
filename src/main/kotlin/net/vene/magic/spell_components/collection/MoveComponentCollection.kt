@@ -7,10 +7,10 @@
 package net.vene.magic.spell_components.collection
 
 import net.minecraft.util.math.Direction
-import net.vene.magic.spell_components.types.MoveComponent
+import net.vene.common.util.LogicHelper
 import net.vene.magic.event.EventListenerResult
 import net.vene.magic.handling.HandlerOperation
-import net.vene.common.util.LogicHelper
+import net.vene.magic.spell_components.types.MoveComponent
 
 @Suppress("unused")
 object MoveComponentCollection {
@@ -44,7 +44,7 @@ object MoveComponentCollection {
 
                 context.executor.pos = context.executor.pos.subtract(velocity.multiply(0.01))
 
-                context.executor.velocity = when (context.dataStorage["hit_ground_direction"] as Direction) {
+                context.executor.velocity = when (context.data.get<Direction>("hit_ground_direction")) {
                     Direction.DOWN, Direction.UP -> context.executor.velocity.multiply(1.0, -1.0, 1.0)
                     Direction.NORTH, Direction.SOUTH -> context.executor.velocity.multiply(1.0, 1.0, -1.0)
                     Direction.WEST, Direction.EAST -> context.executor.velocity.multiply(-1.0, 1.0, 1.0)

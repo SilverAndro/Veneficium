@@ -11,11 +11,12 @@ import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.server.world.ServerWorld
 import net.minecraft.util.math.BlockPos
 import net.minecraft.util.math.Vec3d
+import net.vene.magic.handling.ContextDataHolder
 
 class SpellContext(val world: ServerWorld, val caster: SpellCaster, val executor: SpellExecutor) {
     var targets: MutableList<SpellTarget> = mutableListOf()
 
-    var dataStorage: MutableMap<String, Any> = mutableMapOf()
+    val data = ContextDataHolder()
 
     init {
         targets.add(SpellTarget(caster.entity?.blockPos ?: BlockPos.ORIGIN, caster.entity as LivingEntity?))

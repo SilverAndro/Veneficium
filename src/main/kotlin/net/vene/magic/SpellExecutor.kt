@@ -21,6 +21,7 @@ import net.vene.common.util.extension.isCollidable
 import net.vene.common.util.math.MathUtil
 import net.vene.common.util.math.VectorIterator
 import net.vene.magic.event.EventInstance
+import net.vene.magic.handling.DataContainer
 import net.vene.magic.handling.SpellQueue
 import kotlin.random.Random
 
@@ -47,7 +48,6 @@ class SpellExecutor(
     val events = EventInstance()
 
     fun tick() {
-        //queue.run(context)
         physics()
         events.gameTick.fire(context)
     }
@@ -103,8 +103,10 @@ class SpellExecutor(
                 if (!blockState.isAir && blockState.block.isCollidable()) {
                     if (lastChecked != null) {
                         // Save the direction we hit from and fire the hitGround event
-                        context.dataStorage["hit_ground_direction"] =
+                        context.data.set(DataContainer(
+                            "hit_ground_direction",
                             MathUtil.blockPosChangeToDirection(lastChecked!!, toBlockPos)
+                        ))
                         events.hitGround.fire(context)
 
                         // Something changed our velocity (i.e. bounce component)
@@ -124,7 +126,7 @@ class SpellExecutor(
                         velocity = velocity.multiply(0.85)
                     } else {
                         // Save this as an air block
-                        context.dataStorage["last_air_block"] = lastChecked ?: toBlockPos
+                        context.data.set(DataContainer("last_air_block", lastChecked ?: toBlockPos))
                     }
                     lastChecked = toBlockPos
                 }

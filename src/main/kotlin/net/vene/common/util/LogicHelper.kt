@@ -7,6 +7,7 @@
 package net.vene.common.util
 
 import net.vene.magic.SpellContext
+import net.vene.magic.handling.DataContainer
 
 @Suppress("MemberVisibilityCanBePrivate")
 object LogicHelper {
@@ -14,8 +15,8 @@ object LogicHelper {
      * Returns true if the key has not been set before
      */
     fun executeOnce(context: SpellContext, key: String): Boolean {
-        return if (context.dataStorage[key] != true) {
-            context.dataStorage[key] = true
+        return if (!context.data.contains(key)) {
+            context.data.set(DataContainer(key, true))
             true
         } else {
             false
@@ -26,12 +27,12 @@ object LogicHelper {
      * Returns true if the key has been set less than X times before
      */
     fun executeXTimes(context: SpellContext, key: String, count: Int): Boolean {
-        if (!context.dataStorage.containsKey(key)) {
-            context.dataStorage[key] = 0
+        if (!context.data.contains(key)) {
+            context.data.set(DataContainer(key, 0))
         }
 
-        return if ((context.dataStorage[key] as Int) < count) {
-            context.dataStorage[key] = context.dataStorage[key] as Int + 1
+        return if (context.data.get<Int>(key) < count) {
+            context.data.set(DataContainer(key, context.data.get<Int>(key) + 1))
             true
         } else {
             false
@@ -42,21 +43,21 @@ object LogicHelper {
      * Sets a flag to true
      */
     fun fire(context: SpellContext, key: String) {
-        context.dataStorage[key] = true
+        context.data.set(DataContainer(key, true))
     }
 
     /**
      * Checks if a flag is true
      */
     fun didFire(context: SpellContext, key: String): Boolean {
-        return context.dataStorage[key] == true
+        return context.data.contains(key) && context.data.get(key)
     }
 
     /**
      * Resets the states of the key for further components
      */
     fun reset(context: SpellContext, key: String) {
-        context.dataStorage.remove(key)
+        context.data.remove(key)
     }
 
     /**
