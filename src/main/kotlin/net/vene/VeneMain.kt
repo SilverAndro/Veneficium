@@ -24,39 +24,41 @@ import net.minecraft.block.Block
 import net.minecraft.block.Material
 import net.minecraft.block.entity.BlockEntityType
 import net.minecraft.item.*
+import net.minecraft.recipe.RecipeType
 import net.minecraft.resource.ResourcePack
 import net.minecraft.screen.ScreenHandlerType
 import net.minecraft.util.Identifier
 import net.minecraft.util.registry.Registry
 import net.vene.cca_component.WandSpellsComponent
+import net.vene.client.screen.WandEditScreenHandler
 import net.vene.common.block.LightBlock
 import net.vene.common.block.SCCSBlock
 import net.vene.common.block.WandEditBlock
 import net.vene.common.block.entity.SCCSBlockEntity
 import net.vene.common.block.entity.WandEditBlockEntity
 import net.vene.common.item.ComponentItem
+import net.vene.common.item.casting.InfusedStick
+import net.vene.common.item.casting.MagicCrossbow
 import net.vene.common.item.casting.WandItem
+import net.vene.common.util.displayFromUnderscored
+import net.vene.common.util.extension.devDebug
+import net.vene.common.util.math.MathUtil.factorial
+import net.vene.compat.api.VeneficiumSpellRegisterEntrypoint
+import net.vene.data.StaticDataHandler
 import net.vene.magic.SpellExecutor
-import net.vene.magic.spell_components.types.MaterialComponent
-import net.vene.magic.spell_components.types.MoveComponent
-import net.vene.magic.spell_components.types.ResultComponent
+import net.vene.magic.spell_components.MagicEffect
+import net.vene.magic.spell_components.collection.CosmeticComponentCollection
 import net.vene.magic.spell_components.collection.MaterialComponentCollection
 import net.vene.magic.spell_components.collection.MoveComponentCollection
 import net.vene.magic.spell_components.collection.ResultComponentCollection
-import net.vene.client.screen.WandEditScreenHandler
-import net.vene.common.util.extension.devDebug
-import net.vene.data.StaticDataHandler
-import net.vene.magic.spell_components.collection.CosmeticComponentCollection
 import net.vene.magic.spell_components.types.CosmeticComponent
-import org.apache.logging.log4j.LogManager
-import org.apache.logging.log4j.Logger
-import net.minecraft.recipe.RecipeType
-import net.vene.common.item.casting.InfusedStick
-import net.vene.common.item.casting.MagicCrossbow
-import net.vene.common.util.displayFromUnderscored
-import net.vene.common.util.math.MathUtil.factorial
+import net.vene.magic.spell_components.types.MaterialComponent
+import net.vene.magic.spell_components.types.MoveComponent
+import net.vene.magic.spell_components.types.ResultComponent
 import net.vene.recipe.SCCSRecipe
 import net.vene.recipe.SCCSRecipeSerializer
+import org.apache.logging.log4j.LogManager
+import org.apache.logging.log4j.Logger
 import java.text.DecimalFormat
 
 
@@ -81,18 +83,26 @@ class VeneMain : ModInitializer {
 
         devDebug("Registering and Generating Items")
         StaticDataHandler.items()
+
+        devDebug("Calling entrypoints...")
+        FabricLoader.getInstance()
+            .getEntrypointContainers("veneficium", VeneficiumSpellRegisterEntrypoint::class.java)
+            .forEach {
+                it.entrypoint.onGenerateSpells()
+            }
+
         // Dynamically create component items
         // This is the most blessed code ive ever written
 
         // Combine all lists of components into one iterable
-        for (component in COSMETIC_COMPONENTS union MATERIAL_COMPONENTS union MOVE_COMPONENTS union RESULT_COMPONENTS) {
+        for (component in ALL_COMPONENTS) {
             // Create an item for the component
             val item = ComponentItem(Item.Settings().group(ITEM_GROUP_COMPONENTS).maxCount(1), component)
             // Register the item
             Registry.register(
-                    Registry.ITEM,
-                    Identifier(MOD_ID, "${component.type.toString().toLowerCase()}/${component.name}"),
-                    item
+                Registry.ITEM,
+                Identifier(MOD_ID, "${component.type.toString().toLowerCase()}/${component.name}"),
+                item
             )
 
             // Put it into the big component list
@@ -100,12 +110,21 @@ class VeneMain : ModInitializer {
 
             // Add translation
             lang.entry(
-                    "item.vene.${component.type.toString().toLowerCase()}.${component.name}",
-                    component.name.displayFromUnderscored()
+                "item.vene.${component.type.toString().toLowerCase()}.${component.name}",
+                component.name.displayFromUnderscored()
             )
 
             // Auto model so no json handling for new components
-            RESOURCE_PACK.addModel(JModel.model("item/generated").textures(JTextures().layer0("vene:item/${component.type.toString().toLowerCase()}/${component.name}")), Identifier(MOD_ID, "item/${component.type.toString().toLowerCase()}/${component.name}"))
+            RESOURCE_PACK.addModel(
+                JModel.model("item/generated").textures(
+                    JTextures().layer0(
+                        "vene:item/${
+                            component.type.toString().toLowerCase()
+                        }/${component.name}"
+                    )
+                ),
+                Identifier(MOD_ID, "item/${component.type.toString().toLowerCase()}/${component.name}")
+            )
         }
 
         devDebug("Registering Blocks")
@@ -144,7 +163,7 @@ class VeneMain : ModInitializer {
         val total = COSMETIC_COMPONENTS.size + MATERIAL_COMPONENTS.size + MOVE_COMPONENTS.size + RESULT_COMPONENTS.size
         devDebug("Total components: $total")
         val df = DecimalFormat("###,###,###")
-        devDebug("Total possible wand permutations: ${df.format((total + 1).factorial()/((total + 1) - 9).factorial())}")
+        devDebug("Total possible wand permutations: ${df.format((total + 1).factorial() / ((total + 1) - 9).factorial())}")
 
         // Dump ARRP data if dev env or enabled
         if (FabricLoader.getInstance().isDevelopmentEnvironment || ConfigInstance.dumpRuntimeGeneratedAssets) {
@@ -167,18 +186,20 @@ class VeneMain : ModInitializer {
         val MATERIAL_COMPONENTS: MutableList<MaterialComponent> = mutableListOf()
         val MOVE_COMPONENTS: MutableList<MoveComponent> = mutableListOf()
         val RESULT_COMPONENTS: MutableList<ResultComponent> = mutableListOf()
+        val ALL_COMPONENTS: MutableList<MagicEffect> = mutableListOf()
 
         // Item groups
         val ITEM_GROUP: ItemGroup = FabricItemGroupBuilder.create(Identifier(MOD_ID, "items"))
-                .icon { ItemStack(WAND_ITEM) }
-                .build()
+            .icon { ItemStack(WAND_ITEM) }
+            .build()
         val ITEM_GROUP_COMPONENTS: ItemGroup = FabricItemGroupBuilder.create(Identifier(MOD_ID, "components"))
-                .icon { ItemStack(Items.BOOK) }
-                .build()
+            .icon { ItemStack(Items.BOOK) }
+            .build()
 
         // Items
         val WAND_ITEM: WandItem = WandItem(Item.Settings().group(ITEM_GROUP).maxCount(1).maxDamage(600))
-        val MAGIC_CROSSBOW_ITEM: CrossbowItem = MagicCrossbow(Item.Settings().group(ITEM_GROUP).maxCount(1).maxDamage(450))
+        val MAGIC_CROSSBOW_ITEM: CrossbowItem =
+            MagicCrossbow(Item.Settings().group(ITEM_GROUP).maxCount(1).maxDamage(450))
         val INFUSED_STICK: InfusedStick = InfusedStick(Item.Settings().group(ITEM_GROUP).maxCount(1).maxDamage(30))
 
         val EMPTY_SPELL_COMPONENT = Item(Item.Settings().group(ITEM_GROUP_COMPONENTS).maxCount(1))
@@ -187,25 +208,40 @@ class VeneMain : ModInitializer {
 
         // Blocks
         val LIGHT_BLOCK: Block = LightBlock(
-                FabricBlockSettings
-                        .of(Material.PORTAL)
-                        .hardness(0.0f)
-                        .collidable(false)
-                        .luminance(15)
-                        .resistance(0.0f)
-                        .dropsNothing()
-                        .nonOpaque()
-                        .allowsSpawning { _, _, _, _ -> false }
+            FabricBlockSettings
+                .of(Material.PORTAL)
+                .hardness(0.0f)
+                .collidable(false)
+                .luminance(15)
+                .resistance(0.0f)
+                .dropsNothing()
+                .nonOpaque()
+                .allowsSpawning { _, _, _, _ -> false }
         )
-        val WAND_EDIT_BLOCK = WandEditBlock(FabricBlockSettings.of(Material.WOOD).nonOpaque().breakByTool(FabricToolTags.AXES).breakByHand(true).requiresTool().resistance(1.0f).hardness(1.0f).strength(1.0f))
-        val SCCS_BLOCK = SCCSBlock(FabricBlockSettings.of(Material.METAL).nonOpaque().breakByTool(FabricToolTags.PICKAXES, 1).breakByHand(false).requiresTool().resistance(2.0f).hardness(2.0f).strength(2.0f))
+        val WAND_EDIT_BLOCK = WandEditBlock(
+            FabricBlockSettings.of(Material.WOOD).nonOpaque().breakByTool(FabricToolTags.AXES).breakByHand(true)
+                .requiresTool().resistance(1.0f).hardness(1.0f).strength(1.0f)
+        )
+        val SCCS_BLOCK = SCCSBlock(
+            FabricBlockSettings.of(Material.METAL).nonOpaque().breakByTool(FabricToolTags.PICKAXES, 1)
+                .breakByHand(false).requiresTool().resistance(2.0f).hardness(2.0f).strength(2.0f)
+        )
 
         // Block Entities
-        var WAND_EDIT_BLOCK_ENTITY: BlockEntityType<WandEditBlockEntity> = Registry.register(Registry.BLOCK_ENTITY_TYPE, Identifier(MOD_ID, "wand_edit"), BlockEntityType.Builder.create(::WandEditBlockEntity, WAND_EDIT_BLOCK).build(null))
-        var SCCS_BLOCK_ENTITY: BlockEntityType<SCCSBlockEntity> = Registry.register(Registry.BLOCK_ENTITY_TYPE, Identifier(MOD_ID, "sccs"), BlockEntityType.Builder.create(::SCCSBlockEntity, SCCS_BLOCK).build(null))
+        var WAND_EDIT_BLOCK_ENTITY: BlockEntityType<WandEditBlockEntity> = Registry.register(
+            Registry.BLOCK_ENTITY_TYPE,
+            Identifier(MOD_ID, "wand_edit"),
+            BlockEntityType.Builder.create(::WandEditBlockEntity, WAND_EDIT_BLOCK).build(null)
+        )
+        var SCCS_BLOCK_ENTITY: BlockEntityType<SCCSBlockEntity> = Registry.register(
+            Registry.BLOCK_ENTITY_TYPE,
+            Identifier(MOD_ID, "sccs"),
+            BlockEntityType.Builder.create(::SCCSBlockEntity, SCCS_BLOCK).build(null)
+        )
 
         // Screen Handlers
-        val WAND_EDIT_SCREEN_HANDLER: ScreenHandlerType<WandEditScreenHandler> = ScreenHandlerRegistry.registerSimple(Identifier(MOD_ID, "wand_edit"), ::WandEditScreenHandler)
+        val WAND_EDIT_SCREEN_HANDLER: ScreenHandlerType<WandEditScreenHandler> =
+            ScreenHandlerRegistry.registerSimple(Identifier(MOD_ID, "wand_edit"), ::WandEditScreenHandler)
 
         // Recipes
         val SCCS_RECIPE: RecipeType<SCCSRecipe> = Registry.register(Registry.RECIPE_TYPE, Identifier(MOD_ID, "sccs"),
@@ -215,10 +251,12 @@ class VeneMain : ModInitializer {
                 }
             }
         )
-        val SCCS_RECIPE_SERIALIZER: SCCSRecipeSerializer = Registry.register(Registry.RECIPE_SERIALIZER, Identifier(MOD_ID, "sccs"), SCCSRecipeSerializer())
+        val SCCS_RECIPE_SERIALIZER: SCCSRecipeSerializer =
+            Registry.register(Registry.RECIPE_SERIALIZER, Identifier(MOD_ID, "sccs"), SCCSRecipeSerializer())
 
         // Components
-        val WAND_SPELLS_COMPONENT: ComponentKey<WandSpellsComponent> = ComponentRegistryV3.INSTANCE.getOrCreate(Identifier(MOD_ID, "spell_list"), WandSpellsComponent::class.java)
+        val WAND_SPELLS_COMPONENT: ComponentKey<WandSpellsComponent> =
+            ComponentRegistryV3.INSTANCE.getOrCreate(Identifier(MOD_ID, "spell_list"), WandSpellsComponent::class.java)
 
         // PacketIDs
         val UPDATE_HELD_ITEM: Identifier = Identifier(MOD_ID, "update_held_item")

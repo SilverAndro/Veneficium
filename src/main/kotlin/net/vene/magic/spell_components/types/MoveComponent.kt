@@ -11,7 +11,7 @@ import net.vene.magic.spell_components.MagicEffect
 import net.vene.magic.spell_components.SpellRunnable
 
 class MoveComponent(override val name: String, spellMethod: SpellRunnable) : MagicEffect(name, spellMethod) {
-    override val type: ComponentType = ComponentType.MOVE
+    override val type: BuiltinComponentType = BuiltinComponentType.MOVE
 
     override fun toString(): String {
         return "MoveEffect[$name]"
@@ -19,5 +19,6 @@ class MoveComponent(override val name: String, spellMethod: SpellRunnable) : Mag
 
     init {
         VeneMain.MOVE_COMPONENTS.add(this)
+        VeneMain.ALL_COMPONENTS.add(this)
     }
 }

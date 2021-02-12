@@ -7,13 +7,12 @@
 package net.vene.magic.handling
 
 import net.vene.ConfigInstance
-import net.vene.VeneConfig
 import net.vene.VeneMain
-import net.vene.magic.SpellContext
-import net.vene.magic.spell_components.types.ComponentType
-import net.vene.magic.spell_components.MagicEffect
-import net.vene.magic.spell_components.types.MaterialComponent
 import net.vene.common.util.extension.devDebug
+import net.vene.magic.SpellContext
+import net.vene.magic.spell_components.MagicEffect
+import net.vene.magic.spell_components.types.BuiltinComponentType
+import net.vene.magic.spell_components.types.MaterialComponent
 
 class SpellQueue {
     val componentList: MutableList<MagicEffect> = mutableListOf()
@@ -65,7 +64,7 @@ class SpellQueue {
     /**
      * Not private to allow "safely" messing with queue from other components
      *
-     * Only MATERIAL_MOVE and the REMOVE operations actually do anything
+     * Only MATERIAL_MOVE and the REMOVE operations actually do anything by themselves
      * And FREEZE technically works but is somewhat sketchy
      */
     fun handleOp(operation: HandlerOperation, magicEffect: MagicEffect): OpResult {
@@ -85,7 +84,7 @@ class SpellQueue {
                 return OpResult(increment = false, stop = true)
             }
             HandlerOperation.MATERIAL_MOVE -> {
-                return if (magicEffect.type == ComponentType.MATERIAL) {
+                return if (magicEffect.type == BuiltinComponentType.MATERIAL) {
                     modifiers.add(magicEffect as MaterialComponent)
                     componentList.remove(magicEffect)
                     OpResult(increment = false, stop = false)

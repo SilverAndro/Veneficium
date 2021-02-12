@@ -11,10 +11,8 @@ import net.minecraft.item.ItemStack
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.nbt.ListTag
 import net.minecraft.nbt.StringTag
-import net.minecraft.nbt.Tag
 import net.vene.VeneMain
 import net.vene.common.item.ComponentItem
-import net.vene.common.item.casting.SpellProvider
 import net.vene.common.util.extension.getRawValue
 import net.vene.data.StaticDataHandler
 import net.vene.magic.spell_components.MagicEffect
@@ -32,7 +30,7 @@ class WandSpellsComponent : ComponentV3 {
                 spells.add(null)
                 continue@next
             }
-            for (possible_component in VeneMain.COSMETIC_COMPONENTS union VeneMain.RESULT_COMPONENTS union VeneMain.MOVE_COMPONENTS union VeneMain.MATERIAL_COMPONENTS) {
+            for (possible_component in VeneMain.ALL_COMPONENTS) {
                 if (possible_component.name == componentName) {
                     spells.add(possible_component)
                     continue@next
@@ -89,7 +87,7 @@ class WandSpellsComponent : ComponentV3 {
                     continue@next
                 }
 
-                for (possible_component in VeneMain.COSMETIC_COMPONENTS union VeneMain.RESULT_COMPONENTS union VeneMain.MOVE_COMPONENTS union VeneMain.MATERIAL_COMPONENTS) {
+                for (possible_component in VeneMain.ALL_COMPONENTS) {
                     if (possible_component.name == componentName) {
                         try {
                             out.add(StaticDataHandler.spellComponent(possible_component.name) as ComponentItem)

@@ -4,10 +4,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-package net.vene.magic.handling
+package net.vene.compat.api
 
-class DataContainer<out T>(val key: String, private val data: T) {
-    fun get(): T {
-        return data
-    }
+interface VeneficiumSpellRegisterEntrypoint {
+    fun onGenerateSpells()
 }

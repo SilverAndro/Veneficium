@@ -11,7 +11,7 @@ import net.vene.magic.spell_components.MagicEffect
 import net.vene.magic.spell_components.SpellRunnable
 
 class ResultComponent(override val name: String, spellMethod: SpellRunnable) : MagicEffect(name, spellMethod) {
-    override val type: ComponentType = ComponentType.RESULT
+    override val type: BuiltinComponentType = BuiltinComponentType.RESULT
 
     override fun toString(): String {
         return "ResultEffect[$name]"
@@ -19,5 +19,6 @@ class ResultComponent(override val name: String, spellMethod: SpellRunnable) : M
 
     init {
         VeneMain.RESULT_COMPONENTS.add(this)
+        VeneMain.ALL_COMPONENTS.add(this)
     }
 }

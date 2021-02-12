@@ -4,10 +4,13 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-package net.vene.magic.handling
+package net.vene.magic.spell_components.types
 
-class DataContainer<out T>(val key: String, private val data: T) {
-    fun get(): T {
-        return data
-    }
+enum class BuiltinComponentType: ComponentType {
+    MOVE,
+    MATERIAL,
+    RESULT,
+    COSMETIC
 }
+
+interface ComponentType

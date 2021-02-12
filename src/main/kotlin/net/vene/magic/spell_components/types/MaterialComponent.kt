@@ -12,7 +12,7 @@ import net.vene.magic.handling.HandlerOperation
 import net.vene.magic.spell_components.MagicEffect
 
 class MaterialComponent(override val name: String, val block: Block) : MagicEffect(name, { _, _, _ -> HandlerOperation.MATERIAL_MOVE }) {
-    override val type = ComponentType.MATERIAL
+    override val type = BuiltinComponentType.MATERIAL
 
     override fun toString(): String {
         return "MaterialEffect[$name, $block]"
@@ -20,5 +20,6 @@ class MaterialComponent(override val name: String, val block: Block) : MagicEffe
 
     init {
         VeneMain.MATERIAL_COMPONENTS.add(this)
+        VeneMain.ALL_COMPONENTS.add(this)
     }
 }

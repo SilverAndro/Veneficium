@@ -11,7 +11,7 @@ import net.vene.magic.spell_components.MagicEffect
 import net.vene.magic.spell_components.SpellRunnable
 
 class CosmeticComponent(override val name: String, spellMethod: SpellRunnable) : MagicEffect(name, spellMethod) {
-    override val type: ComponentType = ComponentType.COSMETIC
+    override val type: BuiltinComponentType = BuiltinComponentType.COSMETIC
 
     override fun toString(): String {
         return "CosmeticEffect[$name]"
@@ -19,5 +19,6 @@ class CosmeticComponent(override val name: String, spellMethod: SpellRunnable) :
 
     init {
         VeneMain.COSMETIC_COMPONENTS.add(this)
+        VeneMain.ALL_COMPONENTS.add(this)
     }
 }
