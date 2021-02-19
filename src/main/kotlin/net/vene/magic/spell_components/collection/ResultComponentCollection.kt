@@ -37,6 +37,11 @@ object ResultComponentCollection {
     This group is for components that add targets
 
     */
+    val DROP_TARGET = ResultComponent("drop_target") { context, modifiers, queue ->
+        context.targets = context.targets.dropLast(1).toMutableList()
+        HandlerOperation.REMOVE_CONTINUE
+    }
+
     val TARGET_GROUND_HIT = ResultComponent("target_ground") { context, modifiers, queue ->
         val keyFired = "target_ground_fired"
         val keyRegistered = "target_ground_registered"
