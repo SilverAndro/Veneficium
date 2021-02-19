@@ -299,6 +299,12 @@ object StaticDataHandler {
                 listOf(Items.EGG, Items.DISPENSER, Items.DROPPER, Items.WHEAT_SEEDS),
                 spellComponent("chance_50")
             )
+            // Await Death
+            add(
+                EMPTY_COMPONENT,
+                listOf(Items.ROTTEN_FLESH, Items.CLOCK, Items.EXPERIENCE_BOTTLE, Items.EXPERIENCE_BOTTLE),
+                spellComponent("await_death")
+            )
         }
     }
 
