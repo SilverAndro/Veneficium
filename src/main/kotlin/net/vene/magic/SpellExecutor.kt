@@ -141,9 +141,17 @@ class SpellExecutor(
 
         lifetime--
         age++
-        if (lifetime <= 0 || queue.isEmpty()) {
-            devDebug("Killing executor: $lifetime, $queue")
+        if (lifetime <= 0 && !queue.isEmpty()) {
+            devDebug("Killing executor due to lifetime: $lifetime")
             VeneMain.SPELLS_TO_BE_REMOVED.add(this)
+            VeneMain.LOOSE_QUEUES[queue] = context
+
+            events.spellDeath.fire(context)
+        } else if (queue.isEmpty()) {
+            devDebug("Killing executor due to empty queue: $queue")
+            VeneMain.SPELLS_TO_BE_REMOVED.add(this)
+
+            // No need to fire on death, nothing is waiting on it
         }
     }
 }

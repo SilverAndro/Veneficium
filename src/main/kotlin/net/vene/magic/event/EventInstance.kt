@@ -10,4 +10,5 @@ class EventInstance {
     val moveTick = SpellEvent()
     val gameTick = SpellEvent()
     val hitGround = SpellEvent()
+    val spellDeath = SpellEvent()
 }

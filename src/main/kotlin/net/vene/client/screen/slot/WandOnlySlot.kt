@@ -10,7 +10,6 @@ import net.minecraft.inventory.Inventory
 import net.minecraft.item.ItemStack
 import net.minecraft.screen.slot.Slot
 import net.vene.common.item.casting.SpellProvider
-import net.vene.common.item.casting.WandItem
 
 // Only allows wand items to go in it
 class WandOnlySlot(inventory: Inventory, index: Int, x: Int, y: Int) : Slot(inventory, index, x, y) {

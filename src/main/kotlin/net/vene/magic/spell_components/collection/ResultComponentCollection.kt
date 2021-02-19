@@ -271,4 +271,23 @@ object ResultComponentCollection {
         }
         HandlerOperation.REMOVE_CONTINUE
     }
+
+    val AWAIT_DEATH = ResultComponent("await_death") { context, modifiers, queue ->
+        val keyFired = "await_death_fired"
+        val keyRegistered = "await_death_registered"
+
+        executeOnce(context, keyRegistered) {
+            context.executor.events.spellDeath.register {
+                fire(context, keyFired)
+                EventListenerResult.REMOVE_CONTINUE
+            }
+        }
+
+        if (didFire(context, keyFired)) {
+            reset(context, listOf(keyFired, keyRegistered))
+            HandlerOperation.REMOVE_CONTINUE
+        } else {
+            HandlerOperation.STAY_STOP
+        }
+    }
 }

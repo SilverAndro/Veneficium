@@ -23,7 +23,10 @@ import net.fabricmc.loader.api.FabricLoader
 import net.minecraft.block.Block
 import net.minecraft.block.Material
 import net.minecraft.block.entity.BlockEntityType
-import net.minecraft.item.*
+import net.minecraft.item.CrossbowItem
+import net.minecraft.item.Item
+import net.minecraft.item.ItemGroup
+import net.minecraft.item.ItemStack
 import net.minecraft.recipe.RecipeType
 import net.minecraft.resource.ResourcePack
 import net.minecraft.screen.ScreenHandlerType
@@ -45,7 +48,9 @@ import net.vene.common.util.extension.devDebug
 import net.vene.common.util.math.MathUtil.factorial
 import net.vene.compat.api.VeneficiumSpellRegisterEntrypoint
 import net.vene.data.StaticDataHandler
+import net.vene.magic.SpellContext
 import net.vene.magic.SpellExecutor
+import net.vene.magic.handling.SpellQueue
 import net.vene.magic.spell_components.MagicEffect
 import net.vene.magic.spell_components.collection.CosmeticComponentCollection
 import net.vene.magic.spell_components.collection.MaterialComponentCollection
@@ -138,6 +143,17 @@ class VeneMain : ModInitializer {
             for (removed in SPELLS_TO_BE_REMOVED) {
                 ACTIVE_SPELLS.remove(removed)
             }
+
+            for (pair in LOOSE_QUEUES) {
+                val queue = pair.key
+                val context = pair.value
+                context.executor.events.gameTick.fire(context)
+                queue.run(context)
+                LOOSE_QUEUES_COUNT[queue] = (LOOSE_QUEUES_COUNT[queue] ?: 0) + 1
+            }
+
+            LOOSE_QUEUES.filter { it.key.isEmpty() || LOOSE_QUEUES_COUNT[it.key] ?: 1000 > 100 }.forEach { (queue, _) -> LOOSE_QUEUES.remove(queue) }
+
             SPELLS_TO_BE_REMOVED.clear()
         })
 
@@ -190,10 +206,10 @@ class VeneMain : ModInitializer {
 
         // Item groups
         val ITEM_GROUP: ItemGroup = FabricItemGroupBuilder.create(Identifier(MOD_ID, "items"))
-            .icon { ItemStack(WAND_ITEM) }
+            .icon { ItemStack(SCCS_BLOCK) }
             .build()
         val ITEM_GROUP_COMPONENTS: ItemGroup = FabricItemGroupBuilder.create(Identifier(MOD_ID, "components"))
-            .icon { ItemStack(Items.BOOK) }
+            .icon { ItemStack(StaticDataHandler.spellComponent("chance_50")) }
             .build()
 
         // Items
@@ -264,5 +280,7 @@ class VeneMain : ModInitializer {
         // Misc
         val ACTIVE_SPELLS: MutableList<SpellExecutor> = mutableListOf()
         val SPELLS_TO_BE_REMOVED: MutableList<SpellExecutor> = mutableListOf()
+        val LOOSE_QUEUES: MutableMap<SpellQueue, SpellContext> = mutableMapOf()
+        val LOOSE_QUEUES_COUNT: MutableMap<SpellQueue, Int> = mutableMapOf()
     }
 }

@@ -13,7 +13,7 @@ import net.minecraft.util.math.BlockPos
 import net.minecraft.util.math.Vec3d
 import net.vene.magic.handling.ContextDataHolder
 
-class SpellContext(val world: ServerWorld, val caster: SpellCaster, val executor: SpellExecutor) {
+class SpellContext(val world: ServerWorld, val caster: SpellCaster, var executor: SpellExecutor) {
     var targets: MutableList<SpellTarget> = mutableListOf()
 
     val data = ContextDataHolder()
