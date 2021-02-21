@@ -163,7 +163,7 @@ object ResultComponentCollection {
     This group is for components that have some effect on the world
 
     */
-    val DAMAGE_ENTITY = ResultComponent("damage_entity") { context, modifiers, queue ->
+    val DAMAGE_ENTITY = ResultComponent("damage_entity", 0.01) { context, modifiers, queue ->
         val spellTarget = context.targets.last()
         if (spellTarget.entity != null) {
             spellTarget.entity.damage(DamageSource.magic(context.caster.entity, null), 4f)
@@ -171,7 +171,7 @@ object ResultComponentCollection {
         HandlerOperation.REMOVE_CONTINUE
     }
 
-    val EXPLODE = ResultComponent("explode") { context, modifiers, queue ->
+    val EXPLODE = ResultComponent("explode", 0.02) { context, modifiers, queue ->
         val spellTarget = context.targets.last()
         val explosion = context.world.createExplosion(null, spellTarget.pos.x + 0.5, spellTarget.pos.y + 0.5, spellTarget.pos.z + 0.5, 1.6F, false, Explosion.DestructionType.DESTROY)
         if (modifiers.lastOrNull() != null && ConfigInstance.explosionsCreateMaterials) {
@@ -185,7 +185,7 @@ object ResultComponentCollection {
         HandlerOperation.REMOVE_CONTINUE
     }
 
-    val LARGE_EXPLODE = ResultComponent("large_explode") { context, modifiers, queue ->
+    val LARGE_EXPLODE = ResultComponent("large_explode", 0.05) { context, modifiers, queue ->
         val spellTarget = context.targets.last()
         val explosion = context.world.createExplosion(null, spellTarget.pos.x + 0.5, spellTarget.pos.y + 0.5, spellTarget.pos.z + 0.5, 3.2F, false, Explosion.DestructionType.DESTROY)
         if (modifiers.lastOrNull() != null && ConfigInstance.explosionsCreateMaterials) {
@@ -199,7 +199,7 @@ object ResultComponentCollection {
         HandlerOperation.REMOVE_CONTINUE
     }
 
-    val CREATE_FORCE = ResultComponent("create_force") { context, modifiers, queue ->
+    val CREATE_FORCE = ResultComponent("create_force", 0.07) { context, modifiers, queue ->
         val spellTarget = context.targets.last()
         context.world.createExplosion(null, spellTarget.pos.x + 0.5, spellTarget.pos.y + 0.5, spellTarget.pos.z + 0.5, -1.5f, false, Explosion.DestructionType.NONE)
         HandlerOperation.REMOVE_CONTINUE
