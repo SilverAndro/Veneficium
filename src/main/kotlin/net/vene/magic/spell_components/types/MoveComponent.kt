@@ -10,7 +10,7 @@ import net.vene.VeneMain
 import net.vene.magic.spell_components.MagicEffect
 import net.vene.magic.spell_components.SpellRunnable
 
-class MoveComponent(override val name: String, spellMethod: SpellRunnable) : MagicEffect(name, spellMethod) {
+class MoveComponent(override val name: String, override val instability: Double = 0.0, spellMethod: SpellRunnable) : MagicEffect(name, instability, spellMethod) {
     override val type: BuiltinComponentType = BuiltinComponentType.MOVE
 
     override fun toString(): String {

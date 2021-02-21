@@ -13,6 +13,7 @@ import net.vene.magic.SpellContext
 import net.vene.magic.spell_components.MagicEffect
 import net.vene.magic.spell_components.types.BuiltinComponentType
 import net.vene.magic.spell_components.types.MaterialComponent
+import kotlin.random.Random
 
 class SpellQueue {
     val componentList: MutableList<MagicEffect> = mutableListOf()
@@ -29,6 +30,12 @@ class SpellQueue {
         frozenContinue = 0
         while (tmpIndex < componentList.size) {
             val magicEffect = componentList[tmpIndex]
+            if (Random.nextDouble() < magicEffect.instability) {
+                devDebug("Not executing component $magicEffect due to instability")
+                tmpIndex++
+                continue
+            }
+
             if (ConfigInstance.spellQueueTraceback) {
                 devDebug("Executing component $magicEffect")
             }

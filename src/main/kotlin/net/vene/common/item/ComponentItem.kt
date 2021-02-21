@@ -6,8 +6,26 @@
 
 package net.vene.common.item
 
+import net.minecraft.client.item.TooltipContext
 import net.minecraft.item.Item
+import net.minecraft.item.ItemStack
+import net.minecraft.text.Text
+import net.minecraft.text.TranslatableText
+import net.minecraft.util.Formatting
+import net.minecraft.world.World
 import net.vene.magic.spell_components.MagicEffect
+import kotlin.math.floor
 
-// Only for differentiation and storing effects with items
-class ComponentItem(settings: Settings, val effect: MagicEffect) : Item(settings)
+class ComponentItem(settings: Settings, val effect: MagicEffect) : Item(settings) {
+    override fun appendTooltip(
+        stack: ItemStack,
+        world: World?,
+        tooltip: MutableList<Text>,
+        context: TooltipContext
+    ) {
+        if (effect.instability > 0) {
+            tooltip.add(TranslatableText("vene.instability", floor(effect.instability * 100).toInt()).formatted(Formatting.GRAY))
+        }
+        super.appendTooltip(stack, world, tooltip, context)
+    }
+}

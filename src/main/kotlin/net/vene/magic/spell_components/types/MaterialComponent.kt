@@ -11,7 +11,7 @@ import net.vene.VeneMain
 import net.vene.magic.handling.HandlerOperation
 import net.vene.magic.spell_components.MagicEffect
 
-class MaterialComponent(override val name: String, val block: Block) : MagicEffect(name, { _, _, _ -> HandlerOperation.MATERIAL_MOVE }) {
+class MaterialComponent(override val name: String, val block: Block, override val instability: Double = 0.0, ) : MagicEffect(name, instability, { _, _, _ -> HandlerOperation.MATERIAL_MOVE }) {
     override val type = BuiltinComponentType.MATERIAL
 
     override fun toString(): String {

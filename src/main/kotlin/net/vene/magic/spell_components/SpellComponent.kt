@@ -14,7 +14,7 @@ import net.vene.magic.spell_components.types.MaterialComponent
 
 typealias SpellRunnable = (SpellContext, modifiers: MutableList<MaterialComponent>, SpellQueue) -> HandlerOperation
 
-abstract class MagicEffect(open val name: String, private val spellMethod: SpellRunnable) {
+abstract class MagicEffect(open val name: String, open val instability: Double = 0.0, private val spellMethod: SpellRunnable) {
     abstract val type: ComponentType
 
     open fun exec(context: SpellContext, modifiers: MutableList<MaterialComponent>, queue: SpellQueue) : HandlerOperation {

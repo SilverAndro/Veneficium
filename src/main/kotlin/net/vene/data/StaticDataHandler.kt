@@ -75,6 +75,9 @@ object StaticDataHandler {
         ).entry(
             "block.vene.wand_edit",
             "Wand Edit Block"
+        ).entry(
+            "vene.instability",
+            "Instability: %d%%"
         )
     }
 
@@ -90,7 +93,11 @@ object StaticDataHandler {
              * Other
              */
             // Magic crossbow
-            addOther(Items.CROSSBOW, listOf(VeneMain.WAND_ITEM, MAGIC_BINDING, spellComponent("low_gravity"), spellComponent("low_gravity")), VeneMain.MAGIC_CROSSBOW_ITEM)
+            addOther(
+                Items.CROSSBOW,
+                listOf(VeneMain.WAND_ITEM, MAGIC_BINDING, spellComponent("low_gravity"), spellComponent("low_gravity")),
+                VeneMain.MAGIC_CROSSBOW_ITEM
+            )
 
             /**
              * Cosmetic
@@ -180,7 +187,12 @@ object StaticDataHandler {
             // Reverse gravity
             add(
                 EMPTY_COMPONENT,
-                listOf(Items.PHANTOM_MEMBRANE, Items.PHANTOM_MEMBRANE, Items.FERMENTED_SPIDER_EYE, Items.FERMENTED_SPIDER_EYE),
+                listOf(
+                    Items.PHANTOM_MEMBRANE,
+                    Items.PHANTOM_MEMBRANE,
+                    Items.FERMENTED_SPIDER_EYE,
+                    Items.FERMENTED_SPIDER_EYE
+                ),
                 spellComponent("reverse_gravity")
             )
             // Bounce
@@ -272,13 +284,23 @@ object StaticDataHandler {
             // Wait 0.15 seconds
             add(
                 spellComponent("wait_0.05_seconds"),
-                listOf(spellComponent("wait_0.05_seconds"), spellComponent("wait_0.05_seconds"), MAGIC_BINDING, MAGIC_BINDING),
+                listOf(
+                    spellComponent("wait_0.05_seconds"),
+                    spellComponent("wait_0.05_seconds"),
+                    MAGIC_BINDING,
+                    MAGIC_BINDING
+                ),
                 spellComponent("wait_0.15_seconds")
             )
             // Wait 0.25 seconds
             add(
                 spellComponent("wait_0.15_seconds"),
-                listOf(spellComponent("wait_0.05_seconds"), spellComponent("wait_0.05_seconds"), MAGIC_BINDING, MAGIC_BINDING),
+                listOf(
+                    spellComponent("wait_0.05_seconds"),
+                    spellComponent("wait_0.05_seconds"),
+                    MAGIC_BINDING,
+                    MAGIC_BINDING
+                ),
                 spellComponent("wait_0.25_seconds")
             )
             // Wait 0.5 seconds
@@ -552,7 +574,11 @@ object StaticDataHandler {
                 append("\"result\":${result.formattedID()}")
                 append("}")
             }
-            pack.addResource(ResourceType.SERVER_DATA, Identifier(MOD_ID, "recipes/components/${result.cleanID().split("/").last()}.json"), output.toByteArray(Charset.forName("UTF-8")))
+            pack.addResource(
+                ResourceType.SERVER_DATA,
+                Identifier(MOD_ID, "recipes/components/${result.cleanID().split("/").last()}.json"),
+                output.toByteArray(Charset.forName("UTF-8"))
+            )
         }
 
         fun addOther(core: Item, ingredients: List<Item>, result: Item) {
@@ -567,7 +593,11 @@ object StaticDataHandler {
                 append("\"result\":${result.formattedID()}")
                 append("}")
             }
-            pack.addResource(ResourceType.SERVER_DATA, Identifier(MOD_ID, "recipes/${result.id().path}.json"), output.toByteArray(Charset.forName("UTF-8")))
+            pack.addResource(
+                ResourceType.SERVER_DATA,
+                Identifier(MOD_ID, "recipes/${result.id().path}.json"),
+                output.toByteArray(Charset.forName("UTF-8"))
+            )
         }
     }
 }
