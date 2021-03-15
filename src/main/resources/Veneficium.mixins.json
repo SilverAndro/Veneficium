@@ -5,12 +5,13 @@
   "compatibilityLevel": "JAVA_8",
   "mixins": [
     "CollidableAccessorMixin",
+    "SoundEventIDAccessor",
     "StringValueAccessorMixin"
   ],
   "client": [
     "client.ArmMixin",
-    "client.SkinMixin",
-    "client.ModelPartMixin"
+    "client.ModelPartMixin",
+    "client.SkinMixin"
   ],
   "injectors": {
     "defaultRequire": 1

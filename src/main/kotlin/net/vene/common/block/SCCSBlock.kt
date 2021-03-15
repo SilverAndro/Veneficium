@@ -26,6 +26,7 @@ import net.minecraft.util.math.Vec3d
 import net.minecraft.world.BlockView
 import net.minecraft.world.World
 import net.vene.common.block.entity.SCCSBlockEntity
+import net.vene.mixin.SoundEventIDAccessor
 
 
 class SCCSBlock(settings: Settings) : BlockWithEntity(settings) {
@@ -33,7 +34,14 @@ class SCCSBlock(settings: Settings) : BlockWithEntity(settings) {
         return SCCSBlockEntity()
     }
 
-    override fun onUse(state: BlockState, world: World, pos: BlockPos, player: PlayerEntity, hand: Hand, hit: BlockHitResult): ActionResult {
+    override fun onUse(
+        state: BlockState,
+        world: World,
+        pos: BlockPos,
+        player: PlayerEntity,
+        hand: Hand,
+        hit: BlockHitResult
+    ): ActionResult {
         // Don't do anything on the client
         if (world.isClient) {
             return ActionResult.SUCCESS
@@ -54,19 +62,23 @@ class SCCSBlock(settings: Settings) : BlockWithEntity(settings) {
             blockEntity.heldItemStack = ItemStack.EMPTY
 
             // Play some sounds
-            (player as ServerPlayerEntity).networkHandler.sendPacket(PlaySoundIdS2CPacket(
-                    SoundEvents.BLOCK_ENDER_CHEST_OPEN.id,
+            (player as ServerPlayerEntity).networkHandler.sendPacket(
+                PlaySoundIdS2CPacket(
+                    (SoundEvents.BLOCK_ENDER_CHEST_OPEN as SoundEventIDAccessor).id,
                     SoundCategory.BLOCKS,
                     Vec3d(pos.x + 0.5, pos.y + 0.5, pos.z + 0.5),
                     0.3F,
-                    2.8F)
+                    2.8F
+                )
             )
-            player.networkHandler.sendPacket(PlaySoundIdS2CPacket(
-                    SoundEvents.BLOCK_END_PORTAL_FRAME_FILL.id,
+            player.networkHandler.sendPacket(
+                PlaySoundIdS2CPacket(
+                    (SoundEvents.BLOCK_END_PORTAL_FRAME_FILL as SoundEventIDAccessor).id,
                     SoundCategory.BLOCKS,
                     Vec3d(pos.x + 0.5, pos.y + 0.5, pos.z + 0.5),
                     0.5F,
-                    3.8F)
+                    3.8F
+                )
             )
         } else {
             // Not an empty hand
@@ -84,19 +96,23 @@ class SCCSBlock(settings: Settings) : BlockWithEntity(settings) {
                 }
 
                 // Play some sounds
-                (player as ServerPlayerEntity).networkHandler.sendPacket(PlaySoundIdS2CPacket(
-                        SoundEvents.BLOCK_ENDER_CHEST_OPEN.id,
+                (player as ServerPlayerEntity).networkHandler.sendPacket(
+                    PlaySoundIdS2CPacket(
+                        (SoundEvents.BLOCK_ENDER_CHEST_OPEN as SoundEventIDAccessor).id,
                         SoundCategory.BLOCKS,
                         Vec3d(pos.x + 0.5, pos.y + 0.5, pos.z + 0.5),
                         0.3F,
-                        2.8F)
+                        2.8F
+                    )
                 )
-                player.networkHandler.sendPacket(PlaySoundIdS2CPacket(
-                        SoundEvents.BLOCK_END_PORTAL_FRAME_FILL.id,
+                player.networkHandler.sendPacket(
+                    PlaySoundIdS2CPacket(
+                        (SoundEvents.BLOCK_END_PORTAL_FRAME_FILL as SoundEventIDAccessor).id,
                         SoundCategory.BLOCKS,
                         Vec3d(pos.x + 0.5, pos.y + 0.5, pos.z + 0.5),
                         0.5F,
-                        3.8F)
+                        3.8F
+                    )
                 )
             }
         }
